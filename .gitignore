@@ -1,4 +1,3 @@
-
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
@@ -8,3 +7,21 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+###> IDE's
+/.idea
+###< IDE's
+
+###> Docker
+docker-compose.yml
+###< Docker
+
+###> symfony/phpunit-bridge ###
+.phpunit.result.cache
+/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

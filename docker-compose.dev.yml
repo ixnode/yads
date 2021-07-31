@@ -1,0 +1,137 @@
+version: "3.7"
+
+# configure services
+services:
+
+    # PHP 8.0.9 container with apache 2.4
+    php-apache:
+        build:
+            dockerfile: ${PHP_APACHE_SERVER_DOCKERFILE}
+            context: docker/.
+        image: ${PHP_APACHE_SERVER_IMAGE_NAME}
+        container_name: ${PHP_APACHE_SERVER_CONTAINER_NAME}
+        hostname: ${PHP_APACHE_SERVER_HOSTNAME}
+        restart: always
+        ports:
+            - ${EXPOSE_HTTP_PORT}:80
+        volumes:
+            - ./:/var/www/html/
+        networks:
+            - network-internal
+        environment:
+            # db configuration
+            ENV_DB_HOST: "${MARIADB_SERVER_HOSTNAME}"
+            ENV_DB_USER: "${MARIADB_SERVER_ROOT_USER}"
+            ENV_DB_PASS: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            ENV_DB_NAME: "${MARIADB_SERVER_DB}"
+            ENV_DB_PORT: "${MARIADB_SERVER_PORT}"
+            ENV_DB_VERSION: "${MARIADB_SERVER_VERSION}"
+            ENV_DB_DRIVER: "${MARIADB_SERVER_DRIVER}"
+            # db test configuration
+            ENV_DB_HOST_TEST: "${MARIADB_SERVER_HOSTNAME_TEST}"
+            ENV_DB_USER_TEST: "${MARIADB_SERVER_ROOT_USER}"
+            ENV_DB_PASS_TEST: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            ENV_DB_NAME_TEST: "${MARIADB_SERVER_DB_TEST}"
+            ENV_DB_PORT_TEST: "${MARIADB_SERVER_PORT}"
+            ENV_DB_VERSION_TEST: "${MARIADB_SERVER_VERSION}"
+            ENV_DB_DRIVER_TEST: "${MARIADB_SERVER_DRIVER}"
+            # mail configuration
+            ENV_MAIL_SERVER_TRANSPORT: "${MAIL_SERVER_TRANSPORT}"
+            ENV_MAIL_SERVER_HOST: "${MAIL_SERVER_HOST}"
+            ENV_MAIL_SERVER_PORT: "${MAIL_SERVER_PORT}"
+            # system configuration
+            ENV_SYSTEM_CONTEXT: "${SYSTEM_CONTEXT}"
+            ENV_SYSTEM_PROXY_HOST: "${SYSTEM_PROXY_HOST}"
+        depends_on:
+            - db
+            - db-test
+
+    # PHP 8.0.9 cli container
+    php:
+        build:
+            dockerfile: ${PHP_CLI_DOCKERFILE}
+            context: docker/.
+        image: ${PHP_CLI_IMAGE_NAME}
+        container_name: ${PHP_CLI_CONTAINER_NAME}
+        hostname: ${PHP_CLI_HOSTNAME}
+        restart: always
+        command: "cron -f"
+        working_dir: /var/www/html
+        volumes:
+            - ./:/var/www/html/
+        networks:
+            - network-internal
+        environment:
+            # db configuration
+            ENV_DB_HOST: "${MARIADB_SERVER_HOSTNAME}"
+            ENV_DB_USER: "${MARIADB_SERVER_ROOT_USER}"
+            ENV_DB_PASS: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            ENV_DB_NAME: "${MARIADB_SERVER_DB}"
+            ENV_DB_PORT: "${MARIADB_SERVER_PORT}"
+            ENV_DB_VERSION: "${MARIADB_SERVER_VERSION}"
+            ENV_DB_DRIVER: "${MARIADB_SERVER_DRIVER}"
+            # db test configuration
+            ENV_DB_HOST_TEST: "${MARIADB_SERVER_HOSTNAME_TEST}"
+            ENV_DB_USER_TEST: "${MARIADB_SERVER_ROOT_USER}"
+            ENV_DB_PASS_TEST: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            ENV_DB_NAME_TEST: "${MARIADB_SERVER_DB_TEST}"
+            ENV_DB_PORT_TEST: "${MARIADB_SERVER_PORT}"
+            ENV_DB_VERSION_TEST: "${MARIADB_SERVER_VERSION}"
+            ENV_DB_DRIVER_TEST: "${MARIADB_SERVER_DRIVER}"
+            # mail configuration
+            ENV_MAIL_SERVER_TRANSPORT: "${MAIL_SERVER_TRANSPORT}"
+            ENV_MAIL_SERVER_HOST: "${MAIL_SERVER_HOST}"
+            ENV_MAIL_SERVER_PORT: "${MAIL_SERVER_PORT}"
+            # system configuration
+            ENV_SYSTEM_CONTEXT: "${SYSTEM_CONTEXT}"
+            ENV_SYSTEM_PROXY_HOST: "${SYSTEM_PROXY_HOST}"
+        depends_on:
+            - db
+            - db-test
+
+    # MariaDB 10.6.3 Server
+    db:
+        build:
+            dockerfile: ${MARIADB_SERVER_DOCKERFILE}
+            context: docker/.
+        image: "${MARIADB_SERVER_IMAGE_NAME}"
+        container_name: "${MARIADB_SERVER_CONTAINER_NAME}"
+        hostname: "${MARIADB_SERVER_HOSTNAME}"
+        restart: always
+        ports:
+            - ${EXPOSE_MARIADB_PORT}:${MARIADB_SERVER_PORT}
+        environment:
+            MARIADB_ROOT_PASSWORD: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            MARIADB_DATABASE: "${MARIADB_SERVER_DB}"
+        volumes:
+            - mariadb-data:/var/lib/mysql
+        networks:
+            - network-internal
+
+    # MariaDB 10.6.3 Server
+    db-test:
+        build:
+            dockerfile: ${MARIADB_SERVER_DOCKERFILE}
+            context: docker/.
+        image: "${MARIADB_SERVER_IMAGE_NAME}"
+        container_name: "${MARIADB_SERVER_CONTAINER_NAME_TEST}"
+        hostname: "${MARIADB_SERVER_HOSTNAME_TEST}"
+        restart: always
+        ports:
+            - ${EXPOSE_MARIADB_PORT_TEST}:${MARIADB_SERVER_PORT}
+        environment:
+            MARIADB_ROOT_PASSWORD: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            MARIADB_DATABASE: "${MARIADB_SERVER_DB_TEST}"
+        networks:
+            - network-internal
+
+# configure volumes
+volumes:
+    mariadb-data:
+        name: "${MARIADB_SERVER_DATA_VOLUME_ID}"
+
+# configure networks
+networks:
+    network-internal:
+        external: false
+        name: ${NETWORK_NAME}
