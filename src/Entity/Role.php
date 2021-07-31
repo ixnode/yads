@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ApiResource]
 #[ORM\Table(name: 'role')]
-#[ORM\Entity]
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
 class Role
 {
     #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
@@ -115,6 +116,15 @@ class Role
     }
 
     /**
+     * Create created_at field.
+     */
+    #[ORM\PrePersist]
+    public function createCreatedAt(): void
+    {
+        $this->setCreatedAt(new DateTime('now'));
+    }
+
+    /**
      * Returns the updated at date of this entity.
      *
      * @return DateTimeInterface
@@ -135,5 +145,23 @@ class Role
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * Create updated_at field.
+     */
+    #[ORM\PrePersist]
+    public function createUpdatedAt(): void
+    {
+        $this->setUpdatedAt(new DateTime('now'));
+    }
+
+    /**
+     * Update updated_at field.
+     */
+    #[ORM\PreUpdate]
+    public function updateUpdatedAt(): void
+    {
+        $this->setUpdatedAt(new DateTime('now'));
     }
 }
