@@ -1,7 +1,52 @@
 api_platform:
+
+    # The title of the API.
+    title: '%env(PROJECT_NAME)%'
+
+    # The description of the API.
+    description: 'Madosa'
+
+    # The version of the API.
+    version: '1.0.0'
+
+    # Return IRIs as Absolute URLs.
+    #absolute_url: false
+
+    # Set this to false if you want Webby to disappear.
+    show_webby: true
+
+    # Enable the entrypoint.
+    enable_entrypoint: true
+
+    # Enable the docs.
+    enable_docs: true
+
+    # Add error formats
+    #error_formats:
+    #    jsonproblem: [ 'application/problem+json' ]
+    #    jsonld: [ 'application/ld+json' ]
+    #    jsonapi: [ 'application/vnd.api+json' ]
+
+    # Add exceptions
+    #exception_to_status:
+    #    # The 4 following handlers are registered by default, keep those lines to prevent unexpected side effects
+    #    Symfony\Component\Serializer\Exception\ExceptionInterface: 400 # Use a raw status code (recommended)
+    #    ApiPlatform\Core\Exception\InvalidArgumentException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_BAD_REQUEST
+    #    ApiPlatform\Core\Exception\FilterValidationException: 400
+    #    Doctrine\ORM\OptimisticLockException: 409
+    #
+    #    # Validation exception
+    #    ApiPlatform\Core\Bridge\Symfony\Validator\Exception\ValidationException: !php/const Symfony\Component\HttpFoundation\Response::HTTP_UNPROCESSABLE_ENTITY
+    #
+    #    # Custom mapping
+    #    App\Exception\DocumentNotFoundException: 404
+
     mapping:
         paths: ['%kernel.project_dir%/src/Entity']
+
     patch_formats:
         json: ['application/merge-patch+json']
+
     swagger:
         versions: [3]
+

@@ -4,6 +4,13 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.path.upload: '%env(UPLOAD_DIR)%'
+    api.base_url: '%env(resolve:API_BASE_URL)%'
+    api.context_path: 'contexts'
+    http_kernel.cors.allow_origin: [ '%env(CORS_ALLOW_ORIGIN)%' ]
+    http_kernel.cors.allow_methods: [ 'GET', 'OPTIONS' ] # 'POST', 'PUT', 'PATCH', 'DELETE'
+    http_kernel.cors.allow_headers: [ 'Content-Type', 'Authorization', 'Origin', 'X-Requested-With', 'Accept' ]
+    http_kernel.cors.allow_path: '%env(resolve:API_BASE_URL)%'
 
 services:
     # default configuration for services in *this* file

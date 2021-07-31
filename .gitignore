@@ -12,8 +12,12 @@
 /.idea
 ###< IDE's
 
+###> OS
+/.DS_Store
+###< OS
+
 ###> Docker
-docker-compose.yml
+/docker-compose.yml
 ###< Docker
 
 ###> symfony/phpunit-bridge ###
