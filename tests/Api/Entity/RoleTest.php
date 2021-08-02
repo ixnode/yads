@@ -2,14 +2,17 @@
 
 namespace App\Tests\Api\Entity;
 
+use App\DataProvider\RoleDataProvider;
 use App\Entity\Role;
 use App\Tests\Api\BaseApiTestCase;
+use Exception;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Class RoleTest
@@ -19,10 +22,49 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 class RoleTest extends BaseApiTestCase
 {
-    const TEST_DATA = [
-        'id' => 1,
-        'name' => 'user'
-    ];
+    protected RoleDataProvider $roleDataProvider;
+
+    /**
+     * This method is called before each test.
+     *
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->roleDataProvider = new RoleDataProvider();
+    }
+
+    /**
+     * @param ResponseInterface $response
+     * @return mixed[]
+     * @throws ClientExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     */
+    protected function getFilteredArrayFromResponse(ResponseInterface $response): array
+    {
+        $unsetArray = [
+            '@context',
+            '@id',
+            '@type',
+            'createdAt',
+            'updatedAt',
+        ];
+
+        $responseArray = $response->toArray();
+
+        foreach ($unsetArray as $unsetKey) {
+            if (array_key_exists($unsetKey, $responseArray)) {
+                unset($responseArray[$unsetKey]);
+            }
+        }
+
+        return $responseArray;
+    }
 
     /**
      * POST /api/v1/roles
@@ -33,6 +75,7 @@ class RoleTest extends BaseApiTestCase
      * @throws ClientExceptionInterface
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws Exception
      */
     public function testAddEntityLdJson(): void
     {
@@ -43,7 +86,7 @@ class RoleTest extends BaseApiTestCase
         /* Act */
         $response = $client->request('POST', $url, [
                 'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
-                'body' => json_encode(self::TEST_DATA)
+                'body' => $this->roleDataProvider->getEntityJson(),
             ]
         );
 
@@ -52,7 +95,7 @@ class RoleTest extends BaseApiTestCase
         $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertArrayHasKey('location', $response->getHeaders());
-        $this->assertEquals(self::TEST_DATA['name'], $response->toArray()['name']);
+        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
     }
 
     /**
@@ -64,6 +107,7 @@ class RoleTest extends BaseApiTestCase
      * @throws ClientExceptionInterface
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws Exception
      */
     public function testGetCollectionLdJson(): void
     {
@@ -100,13 +144,14 @@ class RoleTest extends BaseApiTestCase
      * @throws ClientExceptionInterface
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws Exception
      */
     public function testGetEntityLdJson(): void
     {
         /* Arrange */
-        $id = self::TEST_DATA['id'];
+        $entityArray = $this->roleDataProvider->getEntityArray();
         $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$id]);
+        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
 
         /* Act */
         $response = $client->request('GET', $url, [
@@ -118,12 +163,12 @@ class RoleTest extends BaseApiTestCase
         $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
         $this->assertJsonContains([
             '@context' => '/api/v1/contexts/Role',
-            '@id' => "/api/v1/roles/$id",
+            '@id' => sprintf('/api/v1/roles/%s', $entityArray['id']),
             '@type' => 'Role',
-            'id' => $id,
-            'name' => self::TEST_DATA['name'],
+            'id' => $entityArray['id'],
+            'name' => $entityArray['name'],
         ]);
-        $this->assertEquals(self::TEST_DATA['name'], $response->toArray()['name']);
+        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
         $this->assertMatchesResourceItemJsonSchema(Role::class);
     }
 
@@ -136,18 +181,19 @@ class RoleTest extends BaseApiTestCase
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
+     * @throws Exception
      */
     public function testReplaceEntityLdJson(): void
     {
         /* Arrange */
-        $id = self::TEST_DATA['id'];
+        $entityArray = $this->roleDataProvider->getEntityArray();
         $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$id]);
+        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
 
         /* Act */
         $response = $client->request('PUT', $url, [
             'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
-            'body' => json_encode(self::TEST_DATA)
+            'body' => $this->roleDataProvider->getEntityJson(),
         ]);
 
         /* Assert */
@@ -155,12 +201,12 @@ class RoleTest extends BaseApiTestCase
         $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
         $this->assertJsonContains([
             '@context' => '/api/v1/contexts/Role',
-            '@id' => "/api/v1/roles/$id",
+            '@id' => sprintf('/api/v1/roles/%s', $entityArray['id']),
             '@type' => 'Role',
-            'id' => $id,
-            'name' => self::TEST_DATA['name'],
+            'id' => $entityArray['id'],
+            'name' => $entityArray['name'],
         ]);
-        $this->assertEquals(self::TEST_DATA['name'], $response->toArray()['name']);
+        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
         $this->assertMatchesResourceItemJsonSchema(Role::class);
     }
 
@@ -173,18 +219,19 @@ class RoleTest extends BaseApiTestCase
      * @throws ClientExceptionInterface
      * @throws TransportExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws Exception
      */
     public function testUpdateEntityLdJson(): void
     {
         /* Arrange */
-        $id = self::TEST_DATA['id'];
+        $entityArray = $this->roleDataProvider->getEntityArray();
         $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$id]);
+        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
 
         /* Act */
         $response = $client->request('PATCH', $url, [
             'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_MERGE_JSON),
-            'body' => json_encode(self::TEST_DATA)
+            'body' => $this->roleDataProvider->getEntityJson(),
         ]);
 
         /* Assert */
@@ -192,12 +239,12 @@ class RoleTest extends BaseApiTestCase
         $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
         $this->assertJsonContains([
             '@context' => '/api/v1/contexts/Role',
-            '@id' => "/api/v1/roles/$id",
+            '@id' => sprintf('/api/v1/roles/%s', $entityArray['id']),
             '@type' => 'Role',
-            'id' => $id,
-            'name' => self::TEST_DATA['name'],
+            'id' => $entityArray['id'],
+            'name' => $entityArray['name'],
         ]);
-        $this->assertEquals(self::TEST_DATA['name'], $response->toArray()['name']);
+        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
         $this->assertMatchesResourceItemJsonSchema(Role::class);
     }
 
@@ -206,13 +253,14 @@ class RoleTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8 request
      *
      * @throws TransportExceptionInterface
+     * @throws Exception
      */
     public function testDeleteEntityLdJson(): void
     {
         /* Arrange */
-        $id = self::TEST_DATA['id'];
+        $entityArray = $this->roleDataProvider->getEntityArray();
         $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$id]);
+        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
 
         /* Act */
         $response = $client->request('DELETE', $url, [
