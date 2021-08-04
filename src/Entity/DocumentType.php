@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -15,14 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ApiResource]
 #[ORM\Table(name: 'document_type')]
-#[ORM\Entity]
-class DocumentType
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+class DocumentType extends BaseEntity
 {
-    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private int $id;
-
     #[ORM\Column(name: 'type', type: 'string', length: 255, nullable: false)]
     private string $type;
 
@@ -40,22 +36,6 @@ class DocumentType
 
     #[ORM\Column(name: 'icon', type: 'string', length: 255, nullable: true, options: ['default' => null])]
     private ?string $icon = null;
-
-    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
-    private DateTimeInterface $createdAt;
-
-    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
-    private DateTimeInterface $updatedAt;
-
-    /**
-     * Returns the id of this entity.
-     *
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     /**
      * Returns the type of this entity.
@@ -145,52 +125,6 @@ class DocumentType
     public function setIcon(?string $icon): self
     {
         $this->icon = $icon;
-
-        return $this;
-    }
-
-    /**
-     * Returns the created at date of this entity.
-     *
-     * @return DateTimeInterface
-     */
-    public function getCreatedAt(): DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Sets the created at date of this entity.
-     *
-     * @param DateTimeInterface $createdAt
-     * @return $this
-     */
-    public function setCreatedAt(DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Returns the updated at date of this entity.
-     *
-     * @return DateTimeInterface
-     */
-    public function getUpdatedAt(): DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Sets the updated at date of this entity.
-     *
-     * @param DateTimeInterface $updatedAt
-     * @return $this
-     */
-    public function setUpdatedAt(DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

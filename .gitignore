@@ -16,6 +16,10 @@
 .DS_Store
 ###< OS
 
+###> Others
+/work
+###< Others
+
 ###> Docker
 /docker-compose.yml
 ###< Docker
