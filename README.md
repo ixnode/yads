@@ -1,4 +1,6 @@
-# madosa
+# YADS
+
+> *Yet another document store*
 
 A manager for storing and visualising documents, document relationships and making all entities available via an API.
 
@@ -16,11 +18,11 @@ With the help of the API, document types and documents can be created. It is als
 	<summary>Click to view the output of docker-compose</summary>
 
 ```bash
-Creating network "network-internal-org-madosa-www" with the default driver
-Creating mariadb-10.6.3-org-madosa-www      ... done
-Creating mariadb-10.6.3-org-madosa-www-test ... done
-Creating php-8.0.9-apache-org.madosa.www    ... done
-Creating php-8.0.9-cli-org.madosa.www       ... done
+Creating network "network-internal-org-getyads-www" with the default driver
+Creating mariadb-10.6.3-org-getyads-www      ... done
+Creating mariadb-10.6.3-org-getyads-www-test ... done
+Creating php-8.0.9-cli-org.getyads.www       ... done
+Creating php-8.0.9-apache-org.getyads.www    ... done
 ```
 </details>
 
