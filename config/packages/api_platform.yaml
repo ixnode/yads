@@ -4,7 +4,7 @@ api_platform:
     title: '%env(PROJECT_NAME)%'
 
     # The description of the API.
-    description: 'Madosa'
+    description: 'YADS'
 
     # The version of the API.
     version: '1.0.0'
