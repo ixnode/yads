@@ -24,19 +24,22 @@ class DocumentValidator
      */
     public static function validate(Document $object, ExecutionContextInterface $context): void
     {
-        $documentType = $object->getDocumentType();
-
+        /* Get data */
         $data = (object)$object->getData();
-        $schema = (object)$documentType->getAllowedAttributes();
+
+        /* Get schema */
+        $schema = (object)$object->getDocumentType()->getAllowedAttributes();
 
         /* do the schema validation */
         $validator = new Validator();
         $validator->validate($data, $schema);
 
         if (!$validator->isValid()) {
+
             foreach ($validator->getErrors() as $error) {
                 $context->buildViolation($error['message'])
                     ->atPath('data')
+                    ->setCode('422')
                     ->addViolation();
             }
         }

@@ -17,6 +17,7 @@
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
         "sensio/framework-extra-bundle": "^6.1",
+        "symfony/apache-pack": "^1.0",
         "symfony/asset": "5.3.*",
         "symfony/console": "5.3.*",
         "symfony/dotenv": "5.3.*",
@@ -81,7 +82,17 @@
         "migrate-prod": "bin/console doctrine:migrations:migrate -n",
         "migrate-test": "bin/console doctrine:migrations:migrate -n --env=test",
         "load-fixtures-prod": "bin/console doctrine:fixtures:load -n",
-        "load-fixtures-test": "bin/console doctrine:fixtures:load -n --env=test --group=test"
+        "load-fixtures-test": "bin/console doctrine:fixtures:load -n --env=test --group=test",
+        "reinitialize-db-prod": [
+            "@drop-schema-prod",
+            "@create-schema-prod",
+            "@load-fixtures-prod"
+        ],
+        "reinitialize-db-test": [
+            "@drop-schema-test",
+            "@create-schema-test",
+            "@load-fixtures-test"
+        ]
     },
     "conflict": {
         "symfony/symfony": "*"
