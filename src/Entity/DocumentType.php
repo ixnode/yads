@@ -3,15 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class DocumentType
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-07-31)
+ * @version 1.0 (2021-08-04)
  * @package App\Entity
  */
 #[ApiResource]

@@ -3,14 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Graph
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-07-31)
+ * @version 1.0 (2021-08-04)
  * @package App\Entity
  */
 #[ApiResource]
@@ -20,25 +19,14 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(columns: ['document_source_id'], name: 'IDX_D0234567BAD26311')]
 #[ORM\Index(columns: ['document_target_id'], name: 'IDX_D0234567BAD26311')]
 #[ORM\Index(columns: ['role_id'], name: 'IDX_D0234567BAD26311')]
-#[ORM\Entity]
-class Graph
+#[ORM\Entity, ORM\HasLifecycleCallbacks]
+class Graph extends BaseEntity
 {
-    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
-    #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
-    private int $id;
-
     #[ORM\Column(name: 'graph_type_reversed', type: 'boolean', nullable: false)]
     private bool $graphTypeReversed = false;
 
     #[ORM\Column(name: 'weight', type: 'integer', nullable: false)]
     private int $weight = 0;
-
-    #[ORM\Column(name: 'created_at', type: 'datetime', nullable: false)]
-    private DateTimeInterface $createdAt;
-
-    #[ORM\Column(name: 'updated_at', type: 'datetime', nullable: false)]
-    private DateTimeInterface $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Document::class)]
     #[ORM\JoinColumn(name: 'document_source_id', referencedColumnName: 'id')]
@@ -55,16 +43,6 @@ class Graph
     #[ORM\ManyToOne(targetEntity: GraphType::class)]
     #[ORM\JoinColumn(name: 'graph_type_id', referencedColumnName: 'id')]
     private GraphType $graphType;
-
-    /**
-     * Returns the id of this entity.
-     *
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
 
     /**
      * Returns if this is a reversed graph entity.
@@ -108,52 +86,6 @@ class Graph
     public function setWeight(int $weight): self
     {
         $this->weight = $weight;
-
-        return $this;
-    }
-
-    /**
-     * Returns the created at date of this entity.
-     *
-     * @return DateTimeInterface
-     */
-    public function getCreatedAt(): DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Sets the created at date of this entity.
-     *
-     * @param DateTimeInterface $createdAt
-     * @return $this
-     */
-    public function setCreatedAt(DateTimeInterface $createdAt): self
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Returns the updated at date of this entity.
-     *
-     * @return DateTimeInterface
-     */
-    public function getUpdatedAt(): DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * Sets the updated at date of this entity.
-     *
-     * @param DateTimeInterface $updatedAt
-     * @return $this
-     */
-    public function setUpdatedAt(DateTimeInterface $updatedAt): self
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }
