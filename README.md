@@ -97,10 +97,10 @@ Stream the logs via symfony server:log
 ```
 </details>
 
-Depending on the output above, start now with [API Platform](https://api-platform.com/) at http://localhost:8004/api/v1/docs.html or get all entrypoints via API:
+Depending on the output above, start now with [API Platform](https://api-platform.com/) at https://localhost:8004/api/v1/docs.html or get all entrypoints via API:
 
 ```bash
-❯ curl -s http://localhost:8004/api/v1 \
+❯ curl -s https://localhost:8004/api/v1 \
   -H 'accept: application/ld+json' | jq .
 ```
 
