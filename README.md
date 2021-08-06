@@ -17,7 +17,7 @@ With the help of [Docker](https://docs.docker.com/get-docker/), setting up this 
 ❯ docker-compose exec yads composer reinitialize-db-prod
 ```
 
-Start now with API Platform at http://localhost:8080/api/v1/docs.html or get all entrypoints via API:
+Start now with [API Platform](https://api-platform.com/) at http://localhost:8080/api/v1/docs.html or get all entrypoints via API:
 
 ```bash
 ❯ curl -s http://localhost:8080/api/v1 \
@@ -97,7 +97,7 @@ Stream the logs via symfony server:log
 ```
 </details>
 
-Depending on the output above, start now with API Platform at http://localhost:8004/api/v1/docs.html or get all entrypoints via API:
+Depending on the output above, start now with [API Platform](https://api-platform.com/) at http://localhost:8004/api/v1/docs.html or get all entrypoints via API:
 
 ```bash
 ❯ curl -s http://localhost:8004/api/v1 \
