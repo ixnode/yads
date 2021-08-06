@@ -4,7 +4,7 @@ version: "3.7"
 services:
 
     # PHP 8.0.9 container with apache 2.4
-    php-apache:
+    yads-apache:
         build:
             dockerfile: ${PHP_APACHE_SERVER_DOCKERFILE}
             context: docker/.
@@ -47,7 +47,7 @@ services:
             - db-test
 
     # PHP 8.0.9 cli container
-    php:
+    yads:
         build:
             dockerfile: ${PHP_CLI_DOCKERFILE}
             context: docker/.
@@ -102,6 +102,8 @@ services:
             - ${EXPOSE_MARIADB_PORT}:${MARIADB_SERVER_PORT}
         environment:
             MARIADB_ROOT_PASSWORD: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            MARIADB_USER: "${MARIADB_SERVER_USER}"
+            MARIADB_PASSWORD: "${MARIADB_SERVER_PASSWORD}"
             MARIADB_DATABASE: "${MARIADB_SERVER_DB}"
         volumes:
             - mariadb-data:/var/lib/mysql
@@ -121,6 +123,8 @@ services:
             - ${EXPOSE_MARIADB_PORT_TEST}:${MARIADB_SERVER_PORT}
         environment:
             MARIADB_ROOT_PASSWORD: "${MARIADB_SERVER_ROOT_PASSWORD}"
+            MARIADB_USER: "${MARIADB_SERVER_USER_TEST}"
+            MARIADB_PASSWORD: "${MARIADB_SERVER_PASSWORD_TEST}"
             MARIADB_DATABASE: "${MARIADB_SERVER_DB_TEST}"
         networks:
             - network-internal

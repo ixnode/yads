@@ -2,49 +2,77 @@
 
 > *Yet another document store*
 
-A manager for storing and visualising documents, document relationships and making all entities available via an API.
+Store everything in one place, make connections and share it via an API.
 
-## 1. Run API
+## 1. Run Document Store and API
 
-With the help of the API, document types and documents can be created. It is also used to create the document relationships.
+With the help of [Docker](https://docs.docker.com/get-docker/), setting up this environment is a breeze.
 
-### 1.1 Start local environment
+### 1.1 In local environment
 
 ```bash
+❯ git clone https://github.com/ixnode/yads.git && cd yads
 ❯ docker-compose up -d
+❯ docker-compose exec yads composer install
+❯ docker-compose exec yads composer reinitialize-db-prod
 ```
 
-<details>
-	<summary>Click to view the output of docker-compose</summary>
+Start now with API Platform at http://localhost:8080/api/v1/docs.html or get all entrypoints via API:
 
 ```bash
-Creating network "network-internal-org-getyads-www" with the default driver
-Creating mariadb-10.6.3-org-getyads-www      ... done
-Creating mariadb-10.6.3-org-getyads-www-test ... done
-Creating php-8.0.9-cli-org.getyads.www       ... done
-Creating php-8.0.9-apache-org.getyads.www    ... done
+❯ curl -s http://localhost:8080/api/v1 \
+  -H 'accept: application/ld+json' | jq .
 ```
-</details>
 
-#### Command line
+API response:
+
+```json
+{
+  "@context": "/api/v1/contexts/Entrypoint",
+  "@id": "/api/v1",
+  "@type": "Entrypoint",
+  "document": "/api/v1/documents",
+  "documentTag": "/api/v1/document_tags",
+  "documentType": "/api/v1/document_types",
+  "graph": "/api/v1/graphs",
+  "graphRule": "/api/v1/graph_rules",
+  "graphType": "/api/v1/graph_types",
+  "role": "/api/v1/roles",
+  "tag": "/api/v1/tags"
+}
+```
+
+#### DB access
+
+|         | DB        | Test DB     |
+|---------|-----------|-------------|
+| *host*: | 127.0.0.1 | 127.0.0.1   |
+| *port*: | `3333`    | `3334`      |
+| *db*:   | `yads`    | `yads-test` |
+| *user*: | `yads`    | `yads`      |
+| *pass*: | `yads`    | `yads`      |
 
 ```bash
-❯ docker-compose exec php php -v
+❯ mysql -h127.0.0.1 -P3333 -uyads -pyads yads
+```
+
+```bash
+❯ mysql -h127.0.0.1 -P3334 -uyads -pyads yads-test
+```
+
+#### Some command line commands
+
+```bash
+❯ docker-compose exec yads php -v
 PHP 8.0.9 (cli) (built: Jul 30 2021 00:29:20) ( NTS )
 Copyright (c) The PHP Group
 Zend Engine v4.0.9, Copyright (c) Zend Technologies
     with Zend OPcache v8.0.9, Copyright (c), by Zend Technologies
-❯ docker-compose exec php bin/console -V
+❯ docker-compose exec yads bin/console -V
 Symfony 5.3.6 (env: dev, debug: true)
-❯ docker-compose exec php composer -V
+❯ docker-compose exec yads composer -V
 Composer version 2.1.5 2021-07-23 10:35:47
 ```
-
-#### URLs
-
-* API Platform: http://localhost:8080/api/v1/docs.html
-* DB port: `3333`
-* Test DB port: `3334`
 
 #### Choice / alternative
 
@@ -69,12 +97,12 @@ Stream the logs via symfony server:log
 ```
 </details>
 
-#### Alternative URLs
+Depending on the output above, start now with API Platform at http://localhost:8004/api/v1/docs.html or get all entrypoints via API:
 
-* API Platform: https://localhost:8004/api/v1/docs.html
-* DB port: `3333`
-* Test DB port: `3334`
-
+```bash
+❯ curl -s http://localhost:8004/api/v1 \
+  -H 'accept: application/ld+json' | jq .
+```
 
 ### 1.2 Upkeep
 
@@ -105,6 +133,8 @@ Stream the logs via symfony server:log
    > loading App\DataFixtures\AppFixtures
 ```
 </details>
+
+
 
 ## 2. Examples
 
