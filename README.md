@@ -1,5 +1,9 @@
 <p align="center"><img src="docs/images/yads.svg" width="350px" /></p>
 
+# YADS
+
+> *Yet another document store*
+
 Store everything in one place, make connections and share it via an API.
 
 ## 1. Run Document Store and API
