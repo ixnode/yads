@@ -1,6 +1,6 @@
 # YADS
 
-<div style="text-align:center"><img src="docs/images/yads.svg" width="500px" /></div>
+<p align="center"><img src="docs/images/yads.svg" width="350px" /></p>
 
 > *Yet another document store*
 
