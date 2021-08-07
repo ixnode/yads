@@ -1,6 +1,4 @@
-# YADS
-
-> *Yet another document store*
+<p align="center"><img src="docs/images/yads.svg" width="350px" /></p>
 
 Store everything in one place, make connections and share it via an API.
 
