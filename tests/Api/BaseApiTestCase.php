@@ -143,36 +143,6 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Returns the content according to given type.
-     *
-     * @param string $requestType
-     * @param mixed[] $data
-     * @param string $endpoint
-     * @return mixed[]
-     * @throws Exception
-     */
-    protected function getContent(string $requestType, array $data, string $endpoint): array
-    {
-        $entityName = $this->getClassShort();
-
-        return match ($requestType) {
-            self::REQUEST_TYPE_LIST => [
-                '@context' => $this->getContext(),
-                '@id' => $endpoint,
-                '@type' => 'hydra:Collection',
-                'hydra:member' => [],
-                'hydra:totalItems' => 0,
-            ],
-            self::REQUEST_TYPE_CREATE => array_merge_recursive([
-                '@context' => $this->getContext(),
-                '@id' => sprintf('%s/%d', $endpoint, intval($data['id'])),
-                '@type' => 'DocumentType',
-            ], $data),
-            default => throw new Exception(sprintf('Not supported request type "%s".', $requestType)),
-        };
-    }
-
-    /**
      * Returns the key value pairs of given data array.
      *
      * @param mixed[] $data
@@ -468,28 +438,18 @@ abstract class BaseApiTestCase extends ApiTestCase
      * Returns options for request.
      *
      * @param string $requestType
-     * @param string[]|ArrayHolder[] $body
+     * @param ?string $body
      * @return string[][]
      * @throws Exception
      */
-    protected function getOptions(string $requestType, array $body): array
+    protected function getOptions(string $requestType, ?string $body): array
     {
         $options = [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ],
+            'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
         ];
 
-        /* Replace ArrayHolder */
-        foreach ($body as &$value) {
-            if ($value instanceof ArrayHolder) {
-                $value = $value->conjure(self::$arrayHolder);
-            }
-        }
-
         if ($requestType === BaseApiTestCase::REQUEST_TYPE_CREATE) {
-            $options = array_merge_recursive($options, ['body' => json_encode($body)]);
+            $options = array_merge_recursive($options, ['body' => $body]);
         }
 
         return $options;
