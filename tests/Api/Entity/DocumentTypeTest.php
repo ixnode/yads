@@ -75,6 +75,9 @@ class DocumentTypeTest extends BaseApiTestCase
         );
         $this->assertEquals($apiTestCaseWrapper->getResponseType(), $response->getStatusCode());
         $this->assertEquals($apiTestCaseWrapper->getResult(), $responseArray);
+
+        /* Addition */
+        self::$arrayHolder->add($apiTestCaseWrapper->getName(), $responseArray);
     }
 
     /**
