@@ -37,16 +37,6 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Returns the DocumentType entity class.
-     *
-     * @return string
-     */
-    protected function getClass(): string
-    {
-        return Role::class;
-    }
-
-    /**
      * @param ResponseInterface $response
      * @return array[]
      * @throws ClientExceptionInterface

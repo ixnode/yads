@@ -52,10 +52,6 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     const REQUEST_TYPE_DELETE = 'delete';
 
-    const API_PATH = '/api/v1';
-
-    const CONTEXTS_NAME = 'contexts';
-
     static ArrayHolder $arrayHolder;
 
     protected ?string $apiPrefix = null;
@@ -92,25 +88,6 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Returns the entity class.
-     *
-     * @return string
-     */
-    abstract protected function getClass(): string;
-
-    /**
-     * Returns the short representation of entity class.
-     *
-     * @return string
-     */
-    protected function getClassShort(): string
-    {
-        $exploded = explode('\\', $this->getClass());
-
-        return end($exploded);
-    }
-
-    /**
      * Returns the endpoint of given parameters and path.
      *
      * @param Client $client
@@ -130,39 +107,6 @@ abstract class BaseApiTestCase extends ApiTestCase
         $baseUrl = $container->getParameter('api.base_url');
 
         return implode('/', [$baseUrl, $path, ...$parameter]);
-    }
-
-    /**
-     * Returns the Context of this class.
-     *
-     * @return string
-     */
-    protected function getContext(): string
-    {
-        return sprintf('%s/%s/%s', self::API_PATH, self::CONTEXTS_NAME, $this->getClassShort());
-    }
-
-    /**
-     * Returns the key value pairs of given data array.
-     *
-     * @param mixed[] $data
-     * @param string[] $keys
-     * @return mixed[]
-     * @throws Exception
-     */
-    protected function getKeyValuePair(array $data, array $keys): array
-    {
-        $keyValuePair = [];
-
-        foreach ($keys as $key) {
-            if (!array_key_exists($key, $data)) {
-                throw new Exception(sprintf('The given key "%s" does not exist.', $key));
-            }
-
-            $keyValuePair[$key] = $data[$key];
-        }
-
-        return $keyValuePair;
     }
 
     /**
