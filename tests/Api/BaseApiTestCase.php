@@ -195,64 +195,6 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Get expected array to validate.
-     *
-     * @param ResponseInterface $response
-     * @param ArrayHolder[]|array[] $expectedBase
-     * @param ?array[] $reference
-     * @return ArrayHolder[]|array[]
-     *
-     * @throws ClientExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     * @throws Exception
-     */
-    public function getExpected(ResponseInterface $response, array $expectedBase, array $reference = null)
-    {
-        $responseArray = $response->toArray();
-
-        /* Get id from current response. */
-        $id = array_key_exists(self::ID_NAME, $responseArray) ? $responseArray[self::ID_NAME] : '???';
-
-        /* Body reference index */
-        $bodyIndexes = [];
-
-        /* Rebuild $expectedBase */
-        array_walk($expectedBase, function(&$a, $key) use ($id, &$bodyIndexes) {
-
-            /* Change $id with current on from response */
-            if ($a === '$id') {
-                $a = $id;
-            }
-
-            /* Find $body reference */
-            if ($a === '$body') {
-                $bodyIndexes[] = $key;
-            }
-        });
-
-        /* Replace reference ($body) */
-        $bodyIndex = count($bodyIndexes);
-        if ($reference !== null) {
-            while ($bodyIndex) {
-                unset($expectedBase[--$bodyIndex]);
-                $expectedBase = array_merge($reference, $expectedBase);
-            }
-        }
-
-        /* Replace ArrayHolder */
-        foreach ($expectedBase as &$value) {
-            if ($value instanceof ArrayHolder) {
-                $value = $value->conjure(self::$arrayHolder);
-            }
-        }
-
-        return $expectedBase;
-    }
-
-    /**
      * Returns the header for request.
      *
      * @param string $accept
@@ -265,24 +207,6 @@ abstract class BaseApiTestCase extends ApiTestCase
             'accept' => $accept,
             'Content-Type' => $contentType,
         ];
-    }
-
-    /**
-     * Returns request method by given request type.
-     *
-     * @param string $requestType
-     * @return string
-     * @throws Exception
-     */
-    public function getRequestMethod(string $requestType): string
-    {
-        return match ($requestType) {
-            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ => Request::METHOD_GET,
-            self::REQUEST_TYPE_CREATE => Request::METHOD_POST,
-            self::REQUEST_TYPE_UPDATE => Request::METHOD_PUT,
-            self::REQUEST_TYPE_DELETE => Request::METHOD_DELETE,
-            default => throw new Exception(sprintf('Unknown request type "%s".', $requestType)),
-        };
     }
 
     /**
@@ -343,59 +267,5 @@ abstract class BaseApiTestCase extends ApiTestCase
         }
 
         return $type;
-    }
-
-    /**
-     * Returns the URI of given endpoint and id.
-     *
-     * @param string[] $endpoint
-     * @param ArrayHolder $arrayHolder
-     * @return string
-     * @throws Exception
-     */
-    protected function getUri(array $endpoint, ArrayHolder $arrayHolder): string
-    {
-        foreach ($endpoint as &$endpointPart) {
-            $array = explode('::', $endpointPart);
-
-            if (count($array) === 1) {
-                continue;
-            }
-
-            list($key, $indexSpecifier) = $array;
-
-            if (!$arrayHolder->has($key)) {
-                throw new Exception(sprintf('A response with key "%s" is not available', $key));
-            }
-
-            /* Replace $id with real id. */
-            $endpointPart = match ($indexSpecifier) {
-                '$id' => $arrayHolder->get($key, self::ID_NAME),
-                default => throw new Exception(sprintf('Unknown index specifier "%s".', $indexSpecifier)),
-            };
-        }
-
-        return ($this->apiPrefix ?? '').implode('/', $endpoint);
-    }
-
-    /**
-     * Returns options for request.
-     *
-     * @param string $requestType
-     * @param ?string $body
-     * @return string[][]
-     * @throws Exception
-     */
-    protected function getOptions(string $requestType, ?string $body): array
-    {
-        $options = [
-            'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
-        ];
-
-        if ($requestType === BaseApiTestCase::REQUEST_TYPE_CREATE) {
-            $options = array_merge_recursive($options, ['body' => $body]);
-        }
-
-        return $options;
     }
 }
