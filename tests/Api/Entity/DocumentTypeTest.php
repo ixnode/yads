@@ -29,9 +29,17 @@ namespace App\Tests\Api\Entity;
 use App\Context\DocumentTypeContext;
 use App\DataProvider\DocumentTypeDataProvider;
 use App\Entity\DocumentType;
+use App\Exception\ArrayHolderMissingException;
+use App\Exception\ContainerLoadException;
+use App\Exception\JsonDecodeException;
+use App\Exception\JsonEncodeException;
+use App\Exception\MissingApiClientException;
+use App\Exception\MissingKeyException;
+use App\Exception\NamespaceAlreadyExistsException;
+use App\Exception\RaceConditionApiRequestException;
+use App\Exception\UnknownRequestTypeException;
 use App\Tests\Api\ApiTestCaseWrapper;
 use App\Tests\Api\BaseApiTestCase;
-use Exception;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -73,10 +81,18 @@ class DocumentTypeTest extends BaseApiTestCase
      *
      * @param ApiTestCaseWrapper $testCase
      * @throws ClientExceptionInterface
+     * @throws ContainerLoadException
+     * @throws JsonDecodeException
+     * @throws JsonEncodeException
+     * @throws MissingApiClientException
+     * @throws NamespaceAlreadyExistsException
+     * @throws RaceConditionApiRequestException
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws UnknownRequestTypeException
+     * @throws ArrayHolderMissingException
+     * @throws MissingKeyException
      */
     public function testWrapper(ApiTestCaseWrapper $testCase): void
     {
@@ -98,7 +114,6 @@ class DocumentTypeTest extends BaseApiTestCase
      * Data provider.
      *
      * @return array[]
-     * @throws Exception
      */
     public function dataProvider(): array
     {
