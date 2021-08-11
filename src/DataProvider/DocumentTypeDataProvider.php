@@ -23,7 +23,6 @@ class DocumentTypeDataProvider extends BaseDataProvider
     public function getArray(): array
     {
         return [
-            'id' => 1,
             'type' => 'task',
             'allowedAttributes' => [
                 '$id' => 'document.data.task.schema.json',

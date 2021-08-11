@@ -2,6 +2,8 @@
 
 namespace App\Context;
 
+use App\Utils\ArrayHolder;
+
 /**
  * Class BaseContext
  *
@@ -100,15 +102,21 @@ abstract class BaseContext
      * Returns the context of this class (detail).
      *
      * @param int $id
-     * @param mixed[] $entity
+     * @param ?mixed[] $entity
      * @return mixed[]
      */
-    public function getContextDetail(int $id, array $entity): array
+    public function getContextDetail(int $id, ?array $entity): array
     {
-        return [
+        $context = [
             '@context' => $this->getContext(),
-            '@id' => sprintf('%s/%d', '/api/v1/document_types', $id),
+            '@id' => sprintf('%s/%d', $this->getPath(), $id),
             '@type' => 'DocumentType',
-        ] + $entity;
+        ];
+
+        if ($entity !== null) {
+            $context = $context + $entity;
+        }
+
+        return $context;
     }
 }

@@ -59,10 +59,10 @@ class DocumentTypeTest extends BaseApiTestCase
     {
         /* Arrange */
         $apiTestCaseWrapper->setApiClient(self::createClient());
+        $apiTestCaseWrapper->setArrayHolder(self::$arrayHolder);
 
         /* Act */
         $response = $apiTestCaseWrapper->request();
-        $responseArray = $apiTestCaseWrapper->getApiResponseArray();
 
         /* Assert */
         $this->assertResponseIsSuccessful();
@@ -74,10 +74,10 @@ class DocumentTypeTest extends BaseApiTestCase
             )
         );
         $this->assertEquals($apiTestCaseWrapper->getResponseType(), $response->getStatusCode());
-        $this->assertEquals($apiTestCaseWrapper->getResult(), $responseArray);
+        $this->assertEquals($apiTestCaseWrapper->getResult(), $apiTestCaseWrapper->getApiResponseArray());
 
         /* Addition */
-        self::$arrayHolder->add($apiTestCaseWrapper->getName(), $responseArray);
+        self::$arrayHolder->add($apiTestCaseWrapper->getName(), $apiTestCaseWrapper->getApiResponseArray());
     }
 
     /**
@@ -102,11 +102,11 @@ class DocumentTypeTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'list_document_types_empty',
-                    'document_types',
+                    $documentTypeContext->getPathName(),
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     Response::HTTP_OK,
+                    $documentTypeContext,
                     null,
-                    $documentTypeContext->getContextList()
                 )
             ],
 
@@ -119,15 +119,12 @@ class DocumentTypeTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'create_document_type',
-                    'document_types',
+                    $documentTypeContext->getPathName(),
                     ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     Response::HTTP_CREATED,
-                    $documentTypeDataProvider->getEntityArray([], ['id']),
-                    $documentTypeContext->getContextDetail(
-                        $documentTypeDataProvider->getEntityArray()['id'],
-                        $documentTypeDataProvider->getEntityArray()
-                    ),
-                    ['createdAt', 'updatedAt', ],
+                    $documentTypeContext, // the context creator
+                    $documentTypeDataProvider->getEntityArray(), // body
+                    ['createdAt', 'updatedAt', ], // ignore these fields from response
                 )
             ],
 
@@ -140,19 +137,13 @@ class DocumentTypeTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'list_document_types_all',
-                    'document_types',
+                    (new DocumentTypeContext())->getPathName(),
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     Response::HTTP_OK,
+                    $documentTypeContext, // the context creator
                     null,
-                    $documentTypeContext->getContextList(
-                        [
-                            [
-                                '@id' => $documentTypeContext->getPathId($documentTypeDataProvider->getEntityArray()['id']),
-                                '@type' => $documentTypeContext->getType(),
-                            ] + $documentTypeDataProvider->getEntityArray()
-                        ]
-                    ),
                     ['hydra:member' => ['createdAt', 'updatedAt', ]],
+                    ['create_document_type']
                 )
             ],
         ];

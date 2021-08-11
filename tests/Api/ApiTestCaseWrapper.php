@@ -4,6 +4,8 @@ namespace App\Tests\Api;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
+use App\Context\BaseContext;
+use App\Utils\ArrayHolder;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -43,6 +45,8 @@ final class ApiTestCaseWrapper
 
     const LINE_BREAK = "\n";
 
+    const ID_NAME = 'id';
+
     protected string $name;
 
     protected string $path;
@@ -50,6 +54,8 @@ final class ApiTestCaseWrapper
     protected string $requestType;
 
     protected int $responseType;
+
+    protected BaseContext $baseContext;
 
     /** @var ?mixed[]  */
     protected ?array $body;
@@ -60,9 +66,14 @@ final class ApiTestCaseWrapper
     /** @var ?mixed[]  */
     protected ?array $unset;
 
-    protected Client $apiClient;
+    /** @var mixed[]  */
+    protected array $namespaces;
 
-    protected ResponseInterface $apiResponse;
+    protected ?Client $apiClient = null;
+
+    protected ?ArrayHolder $arrayHolder = null;
+
+    protected ?ResponseInterface $apiResponse = null;
 
     /**
      * ApiTestCaseWrapper constructor
@@ -71,19 +82,21 @@ final class ApiTestCaseWrapper
      * @param string $path
      * @param string $requestType
      * @param int $responseType
+     * @param BaseContext $baseContext
      * @param ?mixed[] $body
-     * @param ?mixed[] $result
      * @param ?mixed[] $unset
+     * @param mixed[] $namespaces
      */
-    public function __construct(string $name, string $path, string $requestType, int $responseType, ?array $body, ?array $result = [], ?array $unset = [])
+    public function __construct(string $name, string $path, string $requestType, int $responseType, BaseContext $baseContext, ?array $body, ?array $unset = [], array $namespaces = [])
     {
         $this->name = $name;
         $this->path = $path;
         $this->requestType = $requestType;
         $this->responseType = $responseType;
+        $this->baseContext = $baseContext;
         $this->body = $body;
-        $this->result = $result;
         $this->unset = $unset;
+        $this->namespaces = $namespaces;
     }
 
     /**
@@ -179,6 +192,29 @@ final class ApiTestCaseWrapper
     }
 
     /**
+     * Returns the context of this class.
+     *
+     * @return BaseContext
+     */
+    public function getBaseContext(): BaseContext
+    {
+        return $this->baseContext;
+    }
+
+    /**
+     * Sets the context of this class.
+     *
+     * @param BaseContext $baseContext
+     * @return self
+     */
+    public function setBaseContext(BaseContext $baseContext): self
+    {
+        $this->baseContext = $baseContext;
+
+        return $this;
+    }
+
+    /**
      * Returns the body of this test case wrapper as array.
      *
      * @return ?mixed[]
@@ -220,52 +256,6 @@ final class ApiTestCaseWrapper
     public function setBody(?array $body): self
     {
         $this->body = $body;
-
-        return $this;
-    }
-
-    /**
-     * Returns the result of this test case wrapper as array.
-     *
-     * @return ?mixed[]
-     */
-    public function getResult(): ?array
-    {
-        return $this->result;
-    }
-
-    /**
-     * Returns the result of this test case wrapper as json.
-     *
-     * @param int $flags
-     * @param int $depth
-     * @return ?string
-     * @throws Exception
-     */
-    public function getResultJson(int $flags = 0, int $depth = 512): ?string
-    {
-        if ($this->result === null) {
-            return null;
-        }
-
-        $json = json_encode($this->result, $flags, $depth);
-
-        if ($json === false) {
-            throw new Exception('An error occurred while converting array into an array.');
-        }
-
-        return $json;
-    }
-
-    /**
-     * Sets the result of this test case wrapper as array.
-     *
-     * @param ?mixed[] $result
-     * @return self
-     */
-    public function setResult(?array $result): self
-    {
-        $this->result = $result;
 
         return $this;
     }
@@ -317,11 +307,31 @@ final class ApiTestCaseWrapper
     }
 
     /**
+     * Returns the namespaces of this class.
+     *
+     * @return mixed[]
+     */
+    public function getNamespaces(): array
+    {
+        return $this->namespaces;
+    }
+
+    /**
+     * Sets the namespaces of this class.
+     *
+     * @param mixed[] $namespaces
+     */
+    public function setNamespaces(array $namespaces): void
+    {
+        $this->namespaces = $namespaces;
+    }
+
+    /**
      * Returns the API client.
      *
-     * @return Client
+     * @return ?Client
      */
-    public function getApiClient(): Client
+    public function getApiClient(): ?Client
     {
         return $this->apiClient;
     }
@@ -340,11 +350,34 @@ final class ApiTestCaseWrapper
     }
 
     /**
+     * Returns the array holder.
+     *
+     * @return ?ArrayHolder
+     */
+    public function getArrayHolder(): ?ArrayHolder
+    {
+        return $this->arrayHolder;
+    }
+
+    /**
+     * Sets the array holder.
+     *
+     * @param ArrayHolder $arrayHolder
+     * @return self
+     */
+    public function setArrayHolder(ArrayHolder $arrayHolder): self
+    {
+        $this->arrayHolder = $arrayHolder;
+
+        return $this;
+    }
+
+    /**
      * Returns the API response.
      *
-     * @return ResponseInterface
+     * @return ?ResponseInterface
      */
-    public function getApiResponse(): ResponseInterface
+    public function getApiResponse(): ?ResponseInterface
     {
         return $this->apiResponse;
     }
@@ -361,7 +394,11 @@ final class ApiTestCaseWrapper
      */
     public function getApiResponseArray(): array
     {
-        $array = json_decode($this->getApiResponse()->getContent(), true);
+        if ($this->apiResponse === null) {
+            throw new Exception('A request is required before calling the method "getApiResponseArray".');
+        }
+
+        $array = json_decode($this->apiResponse->getContent(), true);
 
         if ($array === false) {
             throw new Exception('Unable to decode JSON string.');
@@ -415,9 +452,12 @@ final class ApiTestCaseWrapper
      */
     public function getEndpoint(array $parameter = array()): string
     {
-        $client = $this->getApiClient();
+        if ($this->apiClient === null) {
+            throw new Exception('The api client must be set before calling the method "getEndpoint".');
+        }
+
         $path = $this->getPath();
-        $container = $client->getContainer();
+        $container = $this->apiClient->getContainer();
 
         if ($container === null) {
             throw new Exception('Container could not be loaded.');
@@ -505,11 +545,93 @@ final class ApiTestCaseWrapper
      *
      * @return ResponseInterface
      * @throws TransportExceptionInterface
+     * @throws Exception
      */
     public function request(): ResponseInterface
     {
+        if ($this->apiClient === null) {
+            throw new Exception('The api client must be set before calling the method "request".');
+        }
+
         $this->apiResponse = $this->apiClient->request($this->getRequestMethod(), $this->getEndpoint(), $this->getOptions());
 
         return $this->apiResponse;
+    }
+
+    /**
+     * Returns the result of this test case wrapper as array.
+     *
+     * @return ?mixed[]
+     * @throws Exception
+     * @throws TransportExceptionInterface
+     */
+    public function getResult(): ?array
+    {
+        if ($this->apiResponse === null) {
+            throw new Exception('A request is required before calling the method "getResult".');
+        }
+
+        if ($this->arrayHolder === null) {
+            throw new Exception('The array holder must be set before calling the method "getResult".');
+        }
+
+        $responseArray = $this->getApiResponseArray();
+
+        switch ($this->getRequestType()) {
+
+            /* Returns full context for type list */
+            case self::REQUEST_TYPE_LIST:
+                $member = [];
+                foreach ($this->namespaces as $namespace) {
+                    /* Remove key '@context' from arrayHolder */
+                    $member[] = array_filter(
+                        $this->arrayHolder->get($namespace),
+                        function (string $key) { return $key !== '@context'; },
+                        ARRAY_FILTER_USE_KEY
+                    );
+                }
+
+                return $this->baseContext->getContextList($member);
+
+            /* Returns full context for type create */
+            case self::REQUEST_TYPE_CREATE:
+                if (!array_key_exists(self::ID_NAME, $responseArray)) {
+                    throw new Exception(sprintf('"%s" key is missing within API request.', self::ID_NAME));
+                }
+
+                $id = $responseArray[self::ID_NAME];
+                $body = $this->body !== null ? $this->body : [];
+
+                return $this->baseContext->getContextDetail(
+                    $id,
+                    $body + ['id' => $id]
+                );
+
+            default:
+                throw new Exception('Unknown request type.');
+        }
+    }
+
+    /**
+     * Returns the result of this test case wrapper as json.
+     *
+     * @param int $flags
+     * @param int $depth
+     * @return ?string
+     * @throws Exception
+     */
+    public function getResultJson(int $flags = 0, int $depth = 512): ?string
+    {
+        if ($this->result === null) {
+            return null;
+        }
+
+        $json = json_encode($this->result, $flags, $depth);
+
+        if ($json === false) {
+            throw new Exception('An error occurred while converting array into an array.');
+        }
+
+        return $json;
     }
 }
