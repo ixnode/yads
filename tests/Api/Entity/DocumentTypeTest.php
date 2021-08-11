@@ -137,6 +137,7 @@ class DocumentTypeTest extends BaseApiTestCase
                     null, // body
                     null, // expected
                     [], // ignore these fields from response
+                    [] // add these members to request check
                 )
             ],
 
@@ -154,6 +155,7 @@ class DocumentTypeTest extends BaseApiTestCase
                     $documentTypeDataProvider->getEntityArray(), // body
                     $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
+                    [] // add these members to request check
                 )
             ],
 
@@ -170,8 +172,8 @@ class DocumentTypeTest extends BaseApiTestCase
                     $documentTypeContext, // the context creator
                     null, // body
                     null, // expected
-                    ['hydra:member' => ['createdAt', 'updatedAt', ]],
-                    ['create_document_type']
+                    ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
+                    ['create_document_type'] // add these members to request check
                 )
             ],
         ];
