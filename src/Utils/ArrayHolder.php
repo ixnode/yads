@@ -2,6 +2,7 @@
 
 namespace App\Utils;
 
+use App\Exception\NamespaceAlreadyExistsException;
 use Exception;
 
 /**
@@ -44,12 +45,12 @@ class ArrayHolder
      * @param string $namespace
      * @param array[]|string[]|int[] $data
      * @return void
-     * @throws Exception
+     * @throws NamespaceAlreadyExistsException
      */
     public function add(string $namespace, array $data): void
     {
         if ($this->has($namespace)) {
-            throw new Exception(sprintf('The namespace "%s" already exists.', $namespace));
+            throw new NamespaceAlreadyExistsException($namespace, __METHOD__);
         }
 
         $this->holder[$namespace] = $data;

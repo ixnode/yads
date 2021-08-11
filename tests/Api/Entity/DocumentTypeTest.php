@@ -8,14 +8,13 @@ use App\Entity\DocumentType;
 use App\Tests\Api\ApiTestCaseWrapper;
 use App\Tests\Api\BaseApiTestCase;
 use Exception;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * Class RoleTest
+ * Class DocumentTypeTest
  *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
@@ -48,36 +47,27 @@ class DocumentTypeTest extends BaseApiTestCase
      *
      * @dataProvider dataProvider
      *
-     * @param ApiTestCaseWrapper $apiTestCaseWrapper
+     * @param ApiTestCaseWrapper $testCase
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws Exception
      */
-    public function testWrapper(ApiTestCaseWrapper $apiTestCaseWrapper): void
+    public function testWrapper(ApiTestCaseWrapper $testCase): void
     {
         /* Arrange */
-        $apiTestCaseWrapper->setApiClient(self::createClient());
-        $apiTestCaseWrapper->setArrayHolder(self::$arrayHolder);
+        $testCase->setApiClient(self::createClient());
+        $testCase->setArrayHolder(self::$arrayHolder);
 
         /* Act */
-        $response = $apiTestCaseWrapper->request();
+        $testCase->requestApi();
 
         /* Assert */
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(
-            ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE,
-            $apiTestCaseWrapper->getMimeType(
-                ApiTestCaseWrapper::MIME_TYPE_LD_JSON,
-                ApiTestCaseWrapper::CHARSET_UTF8
-            )
-        );
-        $this->assertEquals($apiTestCaseWrapper->getResponseType(), $response->getStatusCode());
-        $this->assertEquals($apiTestCaseWrapper->getResult(), $apiTestCaseWrapper->getApiResponseArray());
-
-        /* Addition */
-        self::$arrayHolder->add($apiTestCaseWrapper->getName(), $apiTestCaseWrapper->getApiResponseArray());
+        $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+        $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
+        $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
     }
 
     /**
@@ -102,11 +92,10 @@ class DocumentTypeTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'list_document_types_empty',
-                    $documentTypeContext->getPathName(),
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    Response::HTTP_OK,
-                    $documentTypeContext,
-                    null,
+                    $documentTypeContext, // the context creator
+                    null, // body
+                    [], // ignore these fields from response
                 )
             ],
 
@@ -119,9 +108,7 @@ class DocumentTypeTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'create_document_type',
-                    $documentTypeContext->getPathName(),
                     ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
-                    Response::HTTP_CREATED,
                     $documentTypeContext, // the context creator
                     $documentTypeDataProvider->getEntityArray(), // body
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
@@ -137,9 +124,7 @@ class DocumentTypeTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'list_document_types_all',
-                    (new DocumentTypeContext())->getPathName(),
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    Response::HTTP_OK,
                     $documentTypeContext, // the context creator
                     null,
                     ['hydra:member' => ['createdAt', 'updatedAt', ]],

@@ -2,12 +2,20 @@
 
 namespace App\Tests\Api;
 
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
+use App\Exception\ArrayHolderMissingException;
+use App\Exception\ContainerLoadException;
+use App\Exception\JsonDecodeException;
+use App\Exception\JsonEncodeException;
+use App\Exception\MissingApiClientException;
+use App\Exception\MissingKeyException;
+use App\Exception\NamespaceAlreadyExistsException;
+use App\Exception\RaceConditionApiRequestException;
+use App\Exception\UnknownRequestTypeException;
 use App\Utils\ArrayHolder;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -49,25 +57,24 @@ final class ApiTestCaseWrapper
 
     protected string $name;
 
-    protected string $path;
-
     protected string $requestType;
-
-    protected int $responseType;
 
     protected BaseContext $baseContext;
 
     /** @var ?mixed[]  */
     protected ?array $body;
 
-    /** @var ?mixed[] $result */
-    protected ?array $result;
-
     /** @var ?mixed[]  */
     protected ?array $unset;
 
     /** @var mixed[]  */
     protected array $namespaces;
+
+    protected string $accept = self::MIME_TYPE_LD_JSON;
+
+    protected string $contentType = self::MIME_TYPE_LD_JSON;
+
+    protected ?string $charset = self::CHARSET_UTF8;
 
     protected ?Client $apiClient = null;
 
@@ -79,20 +86,16 @@ final class ApiTestCaseWrapper
      * ApiTestCaseWrapper constructor
      *
      * @param string $name
-     * @param string $path
      * @param string $requestType
-     * @param int $responseType
      * @param BaseContext $baseContext
      * @param ?mixed[] $body
      * @param ?mixed[] $unset
      * @param mixed[] $namespaces
      */
-    public function __construct(string $name, string $path, string $requestType, int $responseType, BaseContext $baseContext, ?array $body, ?array $unset = [], array $namespaces = [])
+    public function __construct(string $name, string $requestType, BaseContext $baseContext, ?array $body, ?array $unset = [], array $namespaces = [])
     {
         $this->name = $name;
-        $this->path = $path;
         $this->requestType = $requestType;
-        $this->responseType = $responseType;
         $this->baseContext = $baseContext;
         $this->body = $body;
         $this->unset = $unset;
@@ -123,29 +126,6 @@ final class ApiTestCaseWrapper
     }
 
     /**
-     * Returns the path of this test case wrapper.
-     *
-     * @return string
-     */
-    public function getPath(): string
-    {
-        return $this->path;
-    }
-
-    /**
-     * Sets the path of this test case wrapper.
-     *
-     * @param string $path
-     * @return self
-     */
-    public function setPath(string $path): self
-    {
-        $this->path = $path;
-
-        return $this;
-    }
-
-    /**
      * Returns the request type of this test case wrapper.
      *
      * @return string
@@ -164,29 +144,6 @@ final class ApiTestCaseWrapper
     public function setRequestType(string $requestType): self
     {
         $this->requestType = $requestType;
-
-        return $this;
-    }
-
-    /**
-     * Returns the response type of this test case wrapper.
-     *
-     * @return int
-     */
-    public function getResponseType(): int
-    {
-        return $this->responseType;
-    }
-
-    /**
-     * Sets the response type of this test case wrapper.
-     *
-     * @param int $responseType
-     * @return self
-     */
-    public function setResponseType(int $responseType): self
-    {
-        $this->responseType = $responseType;
 
         return $this;
     }
@@ -230,7 +187,7 @@ final class ApiTestCaseWrapper
      * @param int $flags
      * @param int $depth
      * @return ?string
-     * @throws Exception
+     * @throws JsonEncodeException
      */
     public function getBodyJson(int $flags = 0, int $depth = 512): ?string
     {
@@ -241,7 +198,7 @@ final class ApiTestCaseWrapper
         $json = json_encode($this->body, $flags, $depth);
 
         if ($json === false) {
-            throw new Exception('An error occurred while converting array into an array.');
+            throw new JsonEncodeException(__METHOD__);
         }
 
         return $json;
@@ -276,7 +233,7 @@ final class ApiTestCaseWrapper
      * @param int $flags
      * @param int $depth
      * @return ?string
-     * @throws Exception
+     * @throws JsonEncodeException
      */
     public function getUnsetJson(int $flags = 0, int $depth = 512): ?string
     {
@@ -287,7 +244,7 @@ final class ApiTestCaseWrapper
         $json = json_encode($this->unset, $flags, $depth);
 
         if ($json === false) {
-            throw new Exception('An error occurred while converting array into an array.');
+            throw new JsonEncodeException(__METHOD__);
         }
 
         return $json;
@@ -324,6 +281,75 @@ final class ApiTestCaseWrapper
     public function setNamespaces(array $namespaces): void
     {
         $this->namespaces = $namespaces;
+    }
+
+    /**
+     * Returns the mime type "accept" of this class.
+     *
+     * @return string
+     */
+    public function getAccept(): string
+    {
+        return $this->accept;
+    }
+
+    /**
+     * Sets the mime type "accept" of this class.
+     *
+     * @param string $accept
+     * @return self
+     */
+    public function setAccept(string $accept): self
+    {
+        $this->accept = $accept;
+
+        return $this;
+    }
+
+    /**
+     * Returns the content type of this class.
+     *
+     * @return string
+     */
+    public function getContentType(): string
+    {
+        return $this->contentType;
+    }
+
+    /**
+     * Sets the content type of this class.
+     *
+     * @param string $contentType
+     * @return self
+     */
+    public function setContentType(string $contentType): self
+    {
+        $this->contentType = $contentType;
+
+        return $this;
+    }
+
+    /**
+     * Returns the charset of this class.
+     *
+     * @return ?string
+     */
+    public function getCharset(): ?string
+    {
+        return $this->charset;
+    }
+
+    /**
+     * Sets the charset of this class.
+     *
+     * @param string $charset
+     * @return self
+     */
+    public function setCharset(string $charset): self
+    {
+        $this->charset = $charset;
+
+        return $this;
     }
 
     /**
@@ -375,10 +401,15 @@ final class ApiTestCaseWrapper
     /**
      * Returns the API response.
      *
-     * @return ?ResponseInterface
+     * @return ResponseInterface
+     * @throws RaceConditionApiRequestException
      */
-    public function getApiResponse(): ?ResponseInterface
+    public function getApiResponse(): ResponseInterface
     {
+        if ($this->apiResponse === null) {
+            throw new RaceConditionApiRequestException(__METHOD__);
+        }
+
         return $this->apiResponse;
     }
 
@@ -390,18 +421,19 @@ final class ApiTestCaseWrapper
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
-     * @throws Exception
+     * @throws RaceConditionApiRequestException
+     * @throws JsonDecodeException
      */
     public function getApiResponseArray(): array
     {
         if ($this->apiResponse === null) {
-            throw new Exception('A request is required before calling the method "getApiResponseArray".');
+            throw new RaceConditionApiRequestException(__METHOD__);
         }
 
         $array = json_decode($this->apiResponse->getContent(), true);
 
         if ($array === false) {
-            throw new Exception('Unable to decode JSON string.');
+            throw new JsonDecodeException(__METHOD__);
         }
 
         /* Remove unset elements */
@@ -444,23 +476,57 @@ final class ApiTestCaseWrapper
 
 
     /**
+     * Returns the API status code.
+     *
+     * @return int
+     * @throws TransportExceptionInterface
+     * @throws RaceConditionApiRequestException
+     */
+    public function getApiStatusCode(): int
+    {
+        if ($this->apiResponse === null) {
+            throw new RaceConditionApiRequestException(__METHOD__);
+        }
+
+        return $this->apiResponse->getStatusCode();
+    }
+
+    /**
+     * Returns the expected API status code.
+     *
+     * @return int
+     * @throws UnknownRequestTypeException
+     */
+    public function getExpectedApiStatusCode(): int
+    {
+        $requestType = $this->getRequestType();
+
+        return match ($requestType) {
+            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ, self::REQUEST_TYPE_UPDATE, self::REQUEST_TYPE_DELETE => Response::HTTP_OK,
+            self::REQUEST_TYPE_CREATE => Response::HTTP_CREATED,
+            default => throw new UnknownRequestTypeException($requestType),
+        };
+    }
+
+    /**
      * Returns the endpoint of given parameters and path.
      *
      * @param string[]|int[] $parameter
      * @return string
-     * @throws Exception
+     * @throws MissingApiClientException
+     * @throws ContainerLoadException
      */
     public function getEndpoint(array $parameter = array()): string
     {
         if ($this->apiClient === null) {
-            throw new Exception('The api client must be set before calling the method "getEndpoint".');
+            throw new MissingApiClientException(__METHOD__);
         }
 
-        $path = $this->getPath();
+        $path = $this->baseContext->getPathName();
         $container = $this->apiClient->getContainer();
 
         if ($container === null) {
-            throw new Exception('Container could not be loaded.');
+            throw new ContainerLoadException(__METHOD__);
         }
 
         $baseUrl = $container->getParameter('api.base_url');
@@ -472,7 +538,7 @@ final class ApiTestCaseWrapper
      * Returns request method by given request type.
      *
      * @return string
-     * @throws Exception
+     * @throws UnknownRequestTypeException
      */
     public function getRequestMethod(): string
     {
@@ -483,22 +549,20 @@ final class ApiTestCaseWrapper
             self::REQUEST_TYPE_CREATE => Request::METHOD_POST,
             self::REQUEST_TYPE_UPDATE => Request::METHOD_PUT,
             self::REQUEST_TYPE_DELETE => Request::METHOD_DELETE,
-            default => throw new Exception(sprintf('Unknown request type "%s".', $requestType)),
+            default => throw new UnknownRequestTypeException($requestType),
         };
     }
 
     /**
      * Returns the header for request.
      *
-     * @param string $accept
-     * @param string $contentType
      * @return string[]
      */
-    public function getHeaders(string $accept = self::MIME_TYPE_JSON, string $contentType = self::MIME_TYPE_JSON): array
+    public function getHeaders(): array
     {
         return [
-            'accept' => $accept,
-            'Content-Type' => $contentType,
+            'accept' => $this->accept,
+            'Content-Type' => $this->contentType,
         ];
     }
 
@@ -506,7 +570,7 @@ final class ApiTestCaseWrapper
      * Returns options for request.
      *
      * @return string[][]
-     * @throws Exception
+     * @throws JsonEncodeException
      */
     public function getOptions(): array
     {
@@ -514,7 +578,7 @@ final class ApiTestCaseWrapper
         $body = $this->getBodyJson();
 
         $options = [
-            'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
+            'headers' => $this->getHeaders(),
         ];
 
         if ($requestType === BaseApiTestCase::REQUEST_TYPE_CREATE) {
@@ -527,33 +591,42 @@ final class ApiTestCaseWrapper
     /**
      * Returns the MIME Type of given components.
      *
-     * @param string $type
-     * @param string|null $charset
      * @return string
      */
-    public function getMimeType(string $type, string $charset = null): string
+    public function getMimeType(): string
     {
-        if ($charset !== null) {
-            $type = sprintf('%s; charset=%s', $type, $charset);
+        if ($this->charset === null) {
+            return $this->contentType;
         }
 
-        return $type;
+        return sprintf('%s; charset=%s', $this->contentType, $this->charset);
     }
 
     /**
      * Makes the API request and return the response.
      *
      * @return ResponseInterface
+     * @throws ClientExceptionInterface
+     * @throws ContainerLoadException
+     * @throws JsonDecodeException
+     * @throws JsonEncodeException
+     * @throws MissingApiClientException
+     * @throws NamespaceAlreadyExistsException
+     * @throws RaceConditionApiRequestException
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws UnknownRequestTypeException
      */
-    public function request(): ResponseInterface
+    public function requestApi(): ResponseInterface
     {
         if ($this->apiClient === null) {
-            throw new Exception('The api client must be set before calling the method "request".');
+            throw new MissingApiClientException(__METHOD__);
         }
 
         $this->apiResponse = $this->apiClient->request($this->getRequestMethod(), $this->getEndpoint(), $this->getOptions());
+
+        $this->arrayHolder?->add($this->getName(), $this->getApiResponseArray());
 
         return $this->apiResponse;
     }
@@ -562,22 +635,31 @@ final class ApiTestCaseWrapper
      * Returns the result of this test case wrapper as array.
      *
      * @return ?mixed[]
-     * @throws Exception
      * @throws TransportExceptionInterface
+     * @throws RaceConditionApiRequestException
+     * @throws ArrayHolderMissingException
+     * @throws TransportExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RaceConditionApiRequestException
+     * @throws JsonDecodeException
+     * @throws UnknownRequestTypeException
+     * @throws MissingKeyException
      */
-    public function getResult(): ?array
+    public function getExpectedApiResponseArray(): ?array
     {
         if ($this->apiResponse === null) {
-            throw new Exception('A request is required before calling the method "getResult".');
+            throw new RaceConditionApiRequestException(__METHOD__);
         }
 
         if ($this->arrayHolder === null) {
-            throw new Exception('The array holder must be set before calling the method "getResult".');
+            throw new ArrayHolderMissingException(__METHOD__);
         }
 
         $responseArray = $this->getApiResponseArray();
 
-        switch ($this->getRequestType()) {
+        switch ($this->requestType) {
 
             /* Returns full context for type list */
             case self::REQUEST_TYPE_LIST:
@@ -596,7 +678,7 @@ final class ApiTestCaseWrapper
             /* Returns full context for type create */
             case self::REQUEST_TYPE_CREATE:
                 if (!array_key_exists(self::ID_NAME, $responseArray)) {
-                    throw new Exception(sprintf('"%s" key is missing within API request.', self::ID_NAME));
+                    throw new MissingKeyException(self::ID_NAME, __METHOD__);
                 }
 
                 $id = $responseArray[self::ID_NAME];
@@ -608,30 +690,7 @@ final class ApiTestCaseWrapper
                 );
 
             default:
-                throw new Exception('Unknown request type.');
+                throw new UnknownRequestTypeException($this->requestType);
         }
-    }
-
-    /**
-     * Returns the result of this test case wrapper as json.
-     *
-     * @param int $flags
-     * @param int $depth
-     * @return ?string
-     * @throws Exception
-     */
-    public function getResultJson(int $flags = 0, int $depth = 512): ?string
-    {
-        if ($this->result === null) {
-            return null;
-        }
-
-        $json = json_encode($this->result, $flags, $depth);
-
-        if ($json === false) {
-            throw new Exception('An error occurred while converting array into an array.');
-        }
-
-        return $json;
     }
 }
