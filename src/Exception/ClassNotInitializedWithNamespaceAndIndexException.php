@@ -29,19 +29,18 @@ namespace App\Exception;
 use Exception;
 use Throwable;
 
-final class ArrayHolderMissingException extends Exception
+final class ClassNotInitializedWithNamespaceAndIndexException extends Exception
 {
-    const ERROR_MESSAGE = 'The array holder must be set before calling the method "%s".';
+    const ERROR_MESSAGE = 'Class was not initialized with namespace and index.';
 
     /**
-     * ArrayHolderMissingException constructor.
+     * ClassNotInitializedWithNamespaceAndIndexException constructor.
      *
-     * @param string $methodName
      * @param int $code
      * @param ?Throwable $previous
      */
-    public function __construct(string $methodName, int $code = 0, Throwable $previous = null)
+    public function __construct(int $code = 0, Throwable $previous = null)
     {
-        parent::__construct(sprintf(self::ERROR_MESSAGE, $methodName), $code, $previous);
+        parent::__construct(self::ERROR_MESSAGE, $code, $previous);
     }
 }

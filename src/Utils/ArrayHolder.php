@@ -26,6 +26,7 @@
 
 namespace App\Utils;
 
+use App\Exception\ClassNotInitializedWithNamespaceAndIndexException;
 use App\Exception\NamespaceAlreadyExistsException;
 use Exception;
 
@@ -142,12 +143,12 @@ class ArrayHolder
      *
      * @param ArrayHolder $arrayHolder
      * @return mixed
-     * @throws Exception
+     * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function conjure(ArrayHolder $arrayHolder): mixed
     {
         if ($this->namespace === null || $this->index === null) {
-            throw new Exception('Class was not initialized with namespace and index.');
+            throw new ClassNotInitializedWithNamespaceAndIndexException();
         }
 
         $this->set($arrayHolder);

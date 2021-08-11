@@ -28,7 +28,8 @@ namespace App\Tests\Api;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
-use App\Exception\ArrayHolderMissingException;
+use App\Exception\ClassNotInitializedWithNamespaceAndIndexException;
+use App\Exception\MissingArrayHolderException;
 use App\Exception\ContainerLoadException;
 use App\Exception\JsonDecodeException;
 use App\Exception\JsonEncodeException;
@@ -97,6 +98,9 @@ final class ApiTestCaseWrapper
     /** @var mixed[]  */
     protected array $namespaces;
 
+    /** @var mixed[]  */
+    protected array $parameters;
+
     protected string $accept = self::MIME_TYPE_LD_JSON;
 
     protected string $contentType = self::MIME_TYPE_LD_JSON;
@@ -119,8 +123,9 @@ final class ApiTestCaseWrapper
      * @param ?mixed[] $expected
      * @param ?mixed[] $unset
      * @param mixed[] $namespaces
+     * @param mixed[] $parameters
      */
-    public function __construct(string $name, string $requestType, BaseContext $baseContext, ?array $body, ?array $expected, ?array $unset = [], array $namespaces = [])
+    public function __construct(string $name, string $requestType, BaseContext $baseContext, ?array $body, ?array $expected, ?array $unset = [], array $namespaces = [], array $parameters = [])
     {
         $this->name = $name;
         $this->requestType = $requestType;
@@ -129,6 +134,7 @@ final class ApiTestCaseWrapper
         $this->expected = $expected;
         $this->unset = $unset;
         $this->namespaces = $namespaces;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -563,18 +569,20 @@ final class ApiTestCaseWrapper
     /**
      * Returns the endpoint of given parameters and path.
      *
-     * @param string[]|int[] $parameter
      * @return string
      * @throws MissingApiClientException
      * @throws ContainerLoadException
+     * @throws MissingArrayHolderException
+     * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
-    public function getEndpoint(array $parameter = array()): string
+    public function getEndpoint(): string
     {
         if ($this->apiClient === null) {
             throw new MissingApiClientException(__METHOD__);
         }
 
         $path = $this->baseContext->getPathName();
+
         $container = $this->apiClient->getContainer();
 
         if ($container === null) {
@@ -583,7 +591,19 @@ final class ApiTestCaseWrapper
 
         $baseUrl = $container->getParameter('api.base_url');
 
-        return implode('/', [$baseUrl, $path, ...$parameter]);
+        $parameters = $this->parameters;
+
+        foreach ($parameters as &$parameter) {
+            if ($parameter instanceof ArrayHolder) {
+                if ($this->arrayHolder === null) {
+                    throw new MissingArrayHolderException(__METHOD__);
+                }
+
+                $parameter = $parameter->conjure($this->arrayHolder);
+            }
+        }
+
+        return implode('/', [$baseUrl, $path, ...$parameters]);
     }
 
     /**
@@ -689,7 +709,7 @@ final class ApiTestCaseWrapper
      * @return ?mixed[]
      * @throws TransportExceptionInterface
      * @throws RaceConditionApiRequestException
-     * @throws ArrayHolderMissingException
+     * @throws MissingArrayHolderException
      * @throws TransportExceptionInterface
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
@@ -706,7 +726,7 @@ final class ApiTestCaseWrapper
         }
 
         if ($this->arrayHolder === null) {
-            throw new ArrayHolderMissingException(__METHOD__);
+            throw new MissingArrayHolderException(__METHOD__);
         }
 
         $responseArray = $this->getApiResponseArray();
@@ -729,6 +749,7 @@ final class ApiTestCaseWrapper
 
             /* Returns full context for type create */
             case self::REQUEST_TYPE_CREATE:
+            case self::REQUEST_TYPE_READ:
                 if (!array_key_exists(self::ID_NAME, $responseArray)) {
                     throw new MissingKeyException(self::ID_NAME, __METHOD__);
                 }
