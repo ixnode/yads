@@ -89,6 +89,9 @@ final class ApiTestCaseWrapper
     protected ?array $body;
 
     /** @var ?mixed[]  */
+    protected ?array $expected;
+
+    /** @var ?mixed[]  */
     protected ?array $unset;
 
     /** @var mixed[]  */
@@ -113,15 +116,17 @@ final class ApiTestCaseWrapper
      * @param string $requestType
      * @param BaseContext $baseContext
      * @param ?mixed[] $body
+     * @param ?mixed[] $expected
      * @param ?mixed[] $unset
      * @param mixed[] $namespaces
      */
-    public function __construct(string $name, string $requestType, BaseContext $baseContext, ?array $body, ?array $unset = [], array $namespaces = [])
+    public function __construct(string $name, string $requestType, BaseContext $baseContext, ?array $body, ?array $expected, ?array $unset = [], array $namespaces = [])
     {
         $this->name = $name;
         $this->requestType = $requestType;
         $this->baseContext = $baseContext;
         $this->body = $body;
+        $this->expected = $expected;
         $this->unset = $unset;
         $this->namespaces = $namespaces;
     }
@@ -237,6 +242,29 @@ final class ApiTestCaseWrapper
     public function setBody(?array $body): self
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    /**
+     * Returns the expected array of this test case wrapper as array.
+     *
+     * @return ?mixed[]
+     */
+    public function getExpected(): ?array
+    {
+        return $this->expected;
+    }
+
+    /**
+     * Sets the expected array of this test case wrapper as array.
+     *
+     * @param ?mixed[] $expected
+     * @return self
+     */
+    public function setExpected(?array $expected): self
+    {
+        $this->expected = $expected;
 
         return $this;
     }
@@ -706,11 +734,18 @@ final class ApiTestCaseWrapper
                 }
 
                 $id = $responseArray[self::ID_NAME];
-                $body = $this->body !== null ? $this->body : [];
+                $expected = $this->expected !== null ? $this->expected : [];
+
+                /* Translate ArrayHolder */
+                foreach($expected as &$item) {
+                    if ($item instanceof ArrayHolder) {
+                        $item = $item->conjure($this->arrayHolder);
+                    }
+                }
 
                 return $this->baseContext->getContextDetail(
                     $id,
-                    $body + ['id' => $id]
+                    $expected
                 );
 
             default:

@@ -40,6 +40,7 @@ use App\Exception\RaceConditionApiRequestException;
 use App\Exception\UnknownRequestTypeException;
 use App\Tests\Api\ApiTestCaseWrapper;
 use App\Tests\Api\BaseApiTestCase;
+use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -134,6 +135,7 @@ class DocumentTypeTest extends BaseApiTestCase
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     $documentTypeContext, // the context creator
                     null, // body
+                    null, // expected
                     [], // ignore these fields from response
                 )
             ],
@@ -150,6 +152,7 @@ class DocumentTypeTest extends BaseApiTestCase
                     ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $documentTypeContext, // the context creator
                     $documentTypeDataProvider->getEntityArray(), // body
+                    $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                 )
             ],
@@ -165,7 +168,8 @@ class DocumentTypeTest extends BaseApiTestCase
                     'list_document_types_all',
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     $documentTypeContext, // the context creator
-                    null,
+                    null, // body
+                    null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]],
                     ['create_document_type']
                 )
