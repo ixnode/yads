@@ -26,9 +26,10 @@
 
 namespace App\Tests\Api\Entity;
 
+use App\Context\DocumentContext;
 use App\Context\DocumentTypeContext;
+use App\DataProvider\DocumentDataProvider;
 use App\DataProvider\DocumentTypeDataProvider;
-use App\Entity\DocumentType;
 use App\Exception\MissingArrayHolderException;
 use App\Exception\ContainerLoadException;
 use App\Exception\JsonDecodeException;
@@ -52,9 +53,10 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
-class DocumentTypeTest extends BaseApiTestCase
+class DocumentTest extends BaseApiTestCase
 {
     /**
+     *
      * Test wrapper to test the test chain.
      *
      * @dataProvider dataProvider
@@ -99,27 +101,10 @@ class DocumentTypeTest extends BaseApiTestCase
     {
         $documentTypeDataProvider = new DocumentTypeDataProvider();
         $documentTypeContext = new DocumentTypeContext();
+        $documentDataProvider = new DocumentDataProvider();
+        $documentContext = new DocumentContext();
 
         return [
-
-            /**
-             * Get document types (empty).
-             *
-             * GET /api/v1/document_types
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'list_document_types_empty',
-                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $documentTypeContext, // the context creator
-                    null, // body
-                    null, // expected
-                    [], // ignore these fields from response
-                    [], // add these members to request check
-                    [] // parameters
-                )
-            ],
 
             /**
              * Create document type.
@@ -141,28 +126,66 @@ class DocumentTypeTest extends BaseApiTestCase
             ],
 
             /**
-             * Get document types (one record).
+             * Get documents (empty).
              *
-             * GET /api/v1/document_types
+             * GET /api/v1/documents
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'list_document_types_all',
+                    'list_documents_empty',
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $documentTypeContext, // the context creator
+                    $documentContext, // the context creator
                     null, // body
                     null, // expected
-                    ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['create_document_type'], // add these members to request check
+                    [], // ignore these fields from response
+                    [], // add these members to request check
                     [] // parameters
                 )
             ],
 
             /**
-             * Get document type with id x.
+             * Create document.
              *
-             * GET /api/v1/document_types/[id]
+             * POST /api/v1/documents
+             * application/ld+json; charset=utf-8
+             */
+            [
+                new ApiTestCaseWrapper(
+                    'create_document',
+                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
+                    $documentContext, // the context creator
+                    $documentDataProvider->getEntityArray(), // body
+                    $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document', 'id')], // expected
+                    ['createdAt', 'updatedAt', ], // ignore these fields from response
+                    [], // add these members to request check
+                    [] // parameters
+                )
+            ],
+
+            /**
+             * Get documents (one record).
+             *
+             * GET /api/v1/documents
+             * application/ld+json; charset=utf-8
+             */
+            [
+                new ApiTestCaseWrapper(
+                    'list_documents_all',
+                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
+                    $documentContext, // the context creator
+                    null, // body
+                    null, // expected
+                    ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
+                    ['create_document'], // add these members to request check
+                    [] // parameters
+                )
+            ],
+
+            /**
+             * Get document with id x.
+             *
+             * GET /api/v1/documents/[id]
              * application/ld+json; charset=utf-8
              */
             [
@@ -171,69 +194,67 @@ class DocumentTypeTest extends BaseApiTestCase
                     ApiTestCaseWrapper::REQUEST_TYPE_READ,
                     $documentTypeContext, // the context creator
                     null, // body
-                    $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type', 'id')], // expected
+                    $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
-                    [new ArrayHolder('create_document_type', 'id')]
+                    [new ArrayHolder('create_document', 'id')]
                 )
             ],
 
             /**
-             * Create document type 2.
+             * Create document.
              *
-             * POST /api/v1/document_types
+             * POST /api/v1/documents
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'create_document_type_2',
+                    'create_document_2',
                     ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
-                    $documentTypeContext, // the context creator
-                    $documentTypeDataProvider->getEntityArray(), // body
-                    $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_2', 'id')], // expected
+                    $documentContext, // the context creator
+                    $documentDataProvider->getEntityArray(), // body
+                    $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
                     [] // parameters
                 )
             ],
 
-
-
             /**
-             * Get document types (two records).
+             * Get documents (two records).
              *
-             * GET /api/v1/document_types
+             * GET /api/v1/documents
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'list_document_types_all_2',
+                    'list_documents_all_2',
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $documentTypeContext, // the context creator
+                    $documentContext, // the context creator
                     null, // body
                     null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['create_document_type', 'create_document_type_2'], // add these members to request check
+                    ['create_document', 'create_document_2'], // add these members to request check
                     [] // parameters
                 )
             ],
 
             /**
-             * Get document type with id x.
+             * Get document with id x.
              *
-             * GET /api/v1/document_types/[id]
+             * GET /api/v1/documents/[id]
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'get_document_type_2',
+                    'get_document_2',
                     ApiTestCaseWrapper::REQUEST_TYPE_READ,
-                    $documentTypeContext, // the context creator
+                    $documentContext, // the context creator
                     null, // body
-                    $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_2', 'id')], // expected
+                    $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
-                    [new ArrayHolder('create_document_type_2', 'id')]
+                    [new ArrayHolder('create_document_2', 'id')]
                 )
             ],
         ];

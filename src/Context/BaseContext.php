@@ -132,7 +132,7 @@ abstract class BaseContext
         $context = [
             '@context' => $this->getContext(),
             '@id' => sprintf('%s/%d', $this->getPath(), $id),
-            '@type' => 'DocumentType',
+            '@type' => $this->getType(),
         ];
 
         if ($entity !== null) {

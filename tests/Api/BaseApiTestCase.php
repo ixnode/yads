@@ -78,6 +78,8 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     static ArrayHolder $arrayHolder;
 
+    protected static bool $keepDataBetweenTests = false;
+
     protected ?string $apiPrefix = null;
 
     protected static ?Application $application = null;
@@ -96,7 +98,7 @@ abstract class BaseApiTestCase extends ApiTestCase
         self::$arrayHolder = new ArrayHolder();
 
         /* If setup is already done. Stop here. */
-        if (self::$setUpDone) {
+        if (self::$setUpDone && self::$keepDataBetweenTests) {
             return;
         }
 
@@ -255,7 +257,7 @@ abstract class BaseApiTestCase extends ApiTestCase
     protected static function createApplication(): Application
     {
         /* Application already exists. */
-        if (self::$application instanceof Application) {
+        if ((self::$application instanceof Application) && self::$keepDataBetweenTests) {
             return self::$application;
         }
 
