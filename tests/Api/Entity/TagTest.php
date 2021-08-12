@@ -28,8 +28,10 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\DocumentContext;
 use App\Context\DocumentTypeContext;
+use App\Context\TagContext;
 use App\DataProvider\DocumentDataProvider;
 use App\DataProvider\DocumentTypeDataProvider;
+use App\DataProvider\TagDataProvider;
 use App\Exception\MissingArrayHolderException;
 use App\Exception\ContainerLoadException;
 use App\Exception\JsonDecodeException;
@@ -48,12 +50,12 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * Class DocumentTest
+ * Class TagTest
  *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
-class DocumentTest extends BaseApiTestCase
+class TagTest extends BaseApiTestCase
 {
     /**
      *
@@ -99,43 +101,22 @@ class DocumentTest extends BaseApiTestCase
      */
     public function dataProvider(): array
     {
-        $documentTypeDataProvider = new DocumentTypeDataProvider();
-        $documentTypeContext = new DocumentTypeContext();
-        $documentDataProvider = new DocumentDataProvider();
-        $documentContext = new DocumentContext();
+        $tagDataProvider = new TagDataProvider();
+        $tagContext = new TagContext();
 
         return [
 
             /**
-             * Create document type.
+             * Get tags (empty).
              *
-             * POST /api/v1/document_types
+             * GET /api/v1/tags
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'create_document_type',
-                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
-                    $documentTypeContext, // the context creator
-                    $documentTypeDataProvider->getEntityArray(), // body
-                    $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [] // parameters
-                )
-            ],
-
-            /**
-             * Get documents (empty).
-             *
-             * GET /api/v1/documents
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'list_documents_empty',
+                    'list_tags_empty',
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $documentContext, // the context creator
+                    $tagContext, // the context creator
                     null, // body
                     null, // expected
                     [], // ignore these fields from response
@@ -145,18 +126,18 @@ class DocumentTest extends BaseApiTestCase
             ],
 
             /**
-             * Create document.
+             * Create tag.
              *
-             * POST /api/v1/documents
+             * POST /api/v1/tags
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'create_document',
+                    'create_tag',
                     ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
-                    $documentContext, // the context creator
-                    $documentDataProvider->getEntityArray(), // body
-                    $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document', 'id')], // expected
+                    $tagContext, // the context creator
+                    $tagDataProvider->getEntityArray(), // body
+                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
                     [] // parameters
@@ -164,56 +145,56 @@ class DocumentTest extends BaseApiTestCase
             ],
 
             /**
-             * Get documents (one record).
+             * Get tags (one record).
              *
-             * GET /api/v1/documents
+             * GET /api/v1/tags
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'list_documents_all',
+                    'list_tags_all',
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $documentContext, // the context creator
+                    $tagContext, // the context creator
                     null, // body
                     null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['create_document'], // add these members to request check
+                    ['create_tag'], // add these members to request check
                     [] // parameters
                 )
             ],
 
             /**
-             * Get document with id x.
+             * Get tag with id x.
              *
-             * GET /api/v1/documents/[id]
+             * GET /api/v1/tags/[id]
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'get_document_type',
+                    'get_tag',
                     ApiTestCaseWrapper::REQUEST_TYPE_READ,
-                    $documentTypeContext, // the context creator
+                    $tagContext, // the context creator
                     null, // body
-                    $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document', 'id')], // expected
+                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
-                    [new ArrayHolder('create_document', 'id')]
+                    [new ArrayHolder('create_tag', 'id')]
                 )
             ],
 
             /**
-             * Create document.
+             * Create tag.
              *
-             * POST /api/v1/documents
+             * POST /api/v1/tags
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'create_document_2',
+                    'create_tag_2',
                     ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
-                    $documentContext, // the context creator
-                    $documentDataProvider->getEntityArray(), // body
-                    $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')], // expected
+                    $tagContext, // the context creator
+                    $tagDataProvider->getEntityArray(), // body
+                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
                     [] // parameters
@@ -221,40 +202,40 @@ class DocumentTest extends BaseApiTestCase
             ],
 
             /**
-             * Get documents (two records).
+             * Get tags (two records).
              *
-             * GET /api/v1/documents
+             * GET /api/v1/tags
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'list_documents_all_2',
+                    'list_tags_all_2',
                     ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $documentContext, // the context creator
+                    $tagContext, // the context creator
                     null, // body
                     null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['create_document', 'create_document_2'], // add these members to request check
+                    ['create_tag', 'create_tag_2'], // add these members to request check
                     [] // parameters
                 )
             ],
 
             /**
-             * Get document with id x.
+             * Get tag with id x.
              *
-             * GET /api/v1/documents/[id]
+             * GET /api/v1/tags/[id]
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'get_document_2',
+                    'get_tag_2',
                     ApiTestCaseWrapper::REQUEST_TYPE_READ,
-                    $documentContext, // the context creator
+                    $tagContext, // the context creator
                     null, // body
-                    $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')], // expected
+                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
-                    [new ArrayHolder('create_document_2', 'id')]
+                    [new ArrayHolder('create_tag_2', 'id')]
                 )
             ],
         ];
