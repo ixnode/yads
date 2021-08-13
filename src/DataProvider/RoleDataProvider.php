@@ -42,9 +42,10 @@ class RoleDataProvider extends BaseDataProvider
     /**
      * Returns an entity as array.
      *
+     * @param int $recordNumber
      * @return array[]|int[]|string[]
      */
-    public function getArray(): array
+    public function getArray(int $recordNumber = 0): array
     {
         return [
             'id' => 1,

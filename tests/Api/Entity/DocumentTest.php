@@ -87,7 +87,9 @@ class DocumentTest extends BaseApiTestCase
 
         /* Assert */
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+        if ($testCase->getMimeType() !== null) {
+            $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+        }
         $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
         $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
     }

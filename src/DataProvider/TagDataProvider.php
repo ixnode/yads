@@ -42,14 +42,23 @@ class TagDataProvider extends BaseDataProvider
     /**
      * Returns an entity as array.
      *
+     * @param int $recordNumber
      * @return array[]|int[]|string[]
      */
-    public function getArray(): array
+    public function getArray(int $recordNumber = 0): array
     {
-        return [
-            'name' => 'Tag 1',
-            'description' => 'Description 1',
+        $data = [
+            [
+                'name' => 'Tag 1',
+                'description' => 'Description 1',
+            ],
+            [
+                'name' => 'Tag 2',
+                'description' => 'Description 2',
+            ],
         ];
+
+        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
 
     /**

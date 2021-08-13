@@ -70,7 +70,7 @@ abstract class BaseDataProvider
      *
      * @return mixed[]
      */
-    abstract public function getArray(): array;
+    abstract public function getArray(int $recordNumber = 0): array;
 
     /**
      * Returns new empty entity.
@@ -86,9 +86,9 @@ abstract class BaseDataProvider
      * @param mixed[] $filter
      * @return mixed[]
      */
-    public function getEntityArray(array $add = [], array $filter = []): array
+    public function getEntityArray(array $add = [], array $filter = [], int $recordNumber = 0): array
     {
-        $array = $this->getArray();
+        $array = $this->getArray($recordNumber);
 
         foreach ($filter as $key) {
             if (array_key_exists($key, $array)) {

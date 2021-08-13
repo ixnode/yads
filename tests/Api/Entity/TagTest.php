@@ -32,6 +32,7 @@ use App\Context\TagContext;
 use App\DataProvider\DocumentDataProvider;
 use App\DataProvider\DocumentTypeDataProvider;
 use App\DataProvider\TagDataProvider;
+use App\Exception\ClassNotInitializedWithNamespaceAndIndexException;
 use App\Exception\MissingArrayHolderException;
 use App\Exception\ContainerLoadException;
 use App\Exception\JsonDecodeException;
@@ -77,6 +78,7 @@ class TagTest extends BaseApiTestCase
      * @throws UnknownRequestTypeException
      * @throws MissingArrayHolderException
      * @throws MissingKeyException
+     * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function testWrapper(ApiTestCaseWrapper $testCase): void
     {
@@ -89,7 +91,9 @@ class TagTest extends BaseApiTestCase
 
         /* Assert */
         $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+        if ($testCase->getMimeType() !== null) {
+            $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+        }
         $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
         $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
     }
@@ -126,18 +130,18 @@ class TagTest extends BaseApiTestCase
             ],
 
             /**
-             * Create tag.
+             * Create first tag.
              *
              * POST /api/v1/tags
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'create_tag',
+                    'create_tag_1',
                     ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $tagContext, // the context creator
                     $tagDataProvider->getEntityArray(), // body
-                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag', 'id')], // expected
+                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
                     [] // parameters
@@ -158,32 +162,70 @@ class TagTest extends BaseApiTestCase
                     null, // body
                     null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['create_tag'], // add these members to request check
+                    ['create_tag_1'], // add these members to request check
                     [] // parameters
                 )
             ],
 
             /**
-             * Get tag with id x.
+             * Get first tag with id x.
              *
              * GET /api/v1/tags/[id]
              * application/ld+json; charset=utf-8
              */
             [
                 new ApiTestCaseWrapper(
-                    'get_tag',
+                    'get_tag_1',
                     ApiTestCaseWrapper::REQUEST_TYPE_READ,
                     $tagContext, // the context creator
                     null, // body
-                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag', 'id')], // expected
+                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
-                    [new ArrayHolder('create_tag', 'id')]
+                    [new ArrayHolder('create_tag_1', 'id')]
                 )
             ],
 
             /**
-             * Create tag.
+             * Update first tag with id x.
+             *
+             * PUT /api/v1/tags/[id]
+             * application/ld+json; charset=utf-8
+             */
+            [
+                new ApiTestCaseWrapper(
+                    'update_tag_1',
+                    ApiTestCaseWrapper::REQUEST_TYPE_UPDATE,
+                    $tagContext, // the context creator
+                    $tagDataProvider->getEntityArray(recordNumber: 1), // body
+                    $tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
+                    ['createdAt', 'updatedAt', ], // ignore these fields from response
+                    [], // add these members to request check
+                    [new ArrayHolder('create_tag_1', 'id')] // parameters
+                )
+            ],
+
+            /**
+             * Get first tag with id x.
+             *
+             * GET /api/v1/tags/[id]
+             * application/ld+json; charset=utf-8
+             */
+            [
+                new ApiTestCaseWrapper(
+                    'get_tag_1_updated',
+                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
+                    $tagContext, // the context creator
+                    null, // body
+                    $tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
+                    ['createdAt', 'updatedAt', ], // ignore these fields from response
+                    [], // add these members to request check
+                    [new ArrayHolder('create_tag_1', 'id')]
+                )
+            ],
+
+            /**
+             * Create second tag.
              *
              * POST /api/v1/tags
              * application/ld+json; charset=utf-8
@@ -215,13 +257,13 @@ class TagTest extends BaseApiTestCase
                     null, // body
                     null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['create_tag', 'create_tag_2'], // add these members to request check
+                    ['update_tag_1', 'create_tag_2'], // add these members to request check
                     [] // parameters
                 )
             ],
 
             /**
-             * Get tag with id x.
+             * Get second tag with id x.
              *
              * GET /api/v1/tags/[id]
              * application/ld+json; charset=utf-8
@@ -236,6 +278,25 @@ class TagTest extends BaseApiTestCase
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
                     [], // add these members to request check
                     [new ArrayHolder('create_tag_2', 'id')]
+                )
+            ],
+
+            /**
+             * Delete first tag with id x.
+             *
+             * GET /api/v1/tags/[id]
+             * application/ld+json; charset=utf-8
+             */
+            [
+                new ApiTestCaseWrapper(
+                    'delete_tag_1',
+                    ApiTestCaseWrapper::REQUEST_TYPE_DELETE,
+                    $tagContext, // the context creator
+                    null, // body
+                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
+                    ['createdAt', 'updatedAt', ], // ignore these fields from response
+                    [], // add these members to request check
+                    [new ArrayHolder('create_tag_1', 'id')]
                 )
             ],
         ];

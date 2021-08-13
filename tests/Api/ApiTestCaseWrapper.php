@@ -515,7 +515,7 @@ final class ApiTestCaseWrapper
             }
         }
 
-        return $array;
+        return is_null($array) ? [] : $array;
     }
 
     /**
@@ -560,8 +560,9 @@ final class ApiTestCaseWrapper
         $requestType = $this->getRequestType();
 
         return match ($requestType) {
-            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ, self::REQUEST_TYPE_UPDATE, self::REQUEST_TYPE_DELETE => Response::HTTP_OK,
+            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ, self::REQUEST_TYPE_UPDATE => Response::HTTP_OK,
             self::REQUEST_TYPE_CREATE => Response::HTTP_CREATED,
+            self::REQUEST_TYPE_DELETE => Response::HTTP_NO_CONTENT,
             default => throw new UnknownRequestTypeException($requestType),
         };
     }
@@ -653,7 +654,7 @@ final class ApiTestCaseWrapper
             'headers' => $this->getHeaders(),
         ];
 
-        if ($requestType === BaseApiTestCase::REQUEST_TYPE_CREATE) {
+        if (in_array($requestType, [BaseApiTestCase::REQUEST_TYPE_CREATE, BaseApiTestCase::REQUEST_TYPE_UPDATE])) {
             $options = array_merge_recursive($options, ['body' => $body]);
         }
 
@@ -663,10 +664,14 @@ final class ApiTestCaseWrapper
     /**
      * Returns the MIME Type of given components.
      *
-     * @return string
+     * @return ?string
      */
-    public function getMimeType(): string
+    public function getMimeType(): ?string
     {
+        if ($this->getRequestType() === self::REQUEST_TYPE_DELETE) {
+            return null;
+        }
+
         if ($this->charset === null) {
             return $this->contentType;
         }
@@ -689,6 +694,8 @@ final class ApiTestCaseWrapper
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws UnknownRequestTypeException
+     * @throws MissingArrayHolderException
+     * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function requestApi(): ResponseInterface
     {
@@ -718,6 +725,7 @@ final class ApiTestCaseWrapper
      * @throws JsonDecodeException
      * @throws UnknownRequestTypeException
      * @throws MissingKeyException
+     * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function getExpectedApiResponseArray(): ?array
     {
@@ -749,6 +757,7 @@ final class ApiTestCaseWrapper
 
             /* Returns full context for type create */
             case self::REQUEST_TYPE_CREATE:
+            case self::REQUEST_TYPE_UPDATE:
             case self::REQUEST_TYPE_READ:
                 if (!array_key_exists(self::ID_NAME, $responseArray)) {
                     throw new MissingKeyException(self::ID_NAME, __METHOD__);
@@ -768,6 +777,10 @@ final class ApiTestCaseWrapper
                     $id,
                     $expected
                 );
+
+            /* Returns full context for type delete */
+            case self::REQUEST_TYPE_DELETE:
+                return [];
 
             default:
                 throw new UnknownRequestTypeException($this->requestType);
