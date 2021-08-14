@@ -27,8 +27,6 @@
 namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
-use App\Context\TagContext;
-use App\DataProvider\TagDataProvider;
 use App\Exception\YadsException;
 use App\Tests\Api\ApiTestCaseWrapper;
 use App\Tests\Api\BaseApiTestCase;
@@ -208,8 +206,8 @@ class TagTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_tag_2')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
-            ->setBody($this->tagDataProvider->getEntityArray())
-            ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')])
+            ->setBody($this->tagDataProvider->getEntityArray(recordNumber: 1))
+            ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
@@ -258,7 +256,7 @@ class TagTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_tag_2')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
-            ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')])
+            ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_2', 'id'));
 

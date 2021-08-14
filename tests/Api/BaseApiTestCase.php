@@ -29,7 +29,9 @@ namespace App\Tests\Api;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
+use App\Context\RoleContext;
 use App\Context\TagContext;
+use App\DataProvider\RoleDataProvider;
 use App\DataProvider\TagDataProvider;
 use App\Exception\MissingContextException;
 use App\Exception\YadsException;
@@ -89,6 +91,12 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     protected static bool $setUpDone = false;
 
+
+
+    protected RoleDataProvider $roleDataProvider;
+
+    protected RoleContext $roleContext;
+
     protected TagDataProvider $tagDataProvider;
 
     protected TagContext $tagContext;
@@ -125,6 +133,9 @@ abstract class BaseApiTestCase extends ApiTestCase
      */
     protected function setUp(): void
     {
+        $this->roleDataProvider = new RoleDataProvider();
+        $this->roleContext = new RoleContext();
+
         $this->tagDataProvider = new TagDataProvider();
         $this->tagContext = new TagContext();
     }

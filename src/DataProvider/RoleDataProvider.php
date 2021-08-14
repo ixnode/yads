@@ -47,11 +47,18 @@ class RoleDataProvider extends BaseDataProvider
      */
     public function getArray(int $recordNumber = 0): array
     {
-        return [
-            'id' => 1,
-            'name' => 'Role example name',
-            'description' => 'Role example name',
+        $data = [
+            [
+                'name' => 'Role example name 1',
+                'description' => 'Role example name 1',
+            ],
+            [
+                'name' => 'Role example name 2',
+                'description' => 'Role example name 2',
+            ],
         ];
+
+        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
 
     /**
