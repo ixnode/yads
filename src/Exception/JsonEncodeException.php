@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class JsonEncodeException extends Exception
+final class JsonEncodeException extends YadsException
 {
     const ERROR_MESSAGE = 'Unable to encode JSON from given data within method "%s".';
 

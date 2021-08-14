@@ -28,12 +28,12 @@ namespace App\Exception;
 
 use Throwable;
 
-final class ContainerLoadException extends YadsException
+final class MissingContextException extends YadsException
 {
-    const ERROR_MESSAGE = 'Container could not be loaded within method "%s".';
+    const ERROR_MESSAGE = 'No context was found within method "%s".';
 
     /**
-     * ContainerLoadException constructor.
+     * MissingContextException constructor.
      *
      * @param string $methodName
      * @param int $code

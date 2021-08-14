@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class UnknownRequestTypeException extends Exception
+final class UnknownRequestTypeException extends YadsException
 {
     const ERROR_MESSAGE = 'Unknown request type "%s".';
 

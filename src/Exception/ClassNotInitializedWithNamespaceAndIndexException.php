@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class ClassNotInitializedWithNamespaceAndIndexException extends Exception
+final class ClassNotInitializedWithNamespaceAndIndexException extends YadsException
 {
     const ERROR_MESSAGE = 'Class was not initialized with namespace and index.';
 

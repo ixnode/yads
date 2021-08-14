@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class MissingKeyException extends Exception
+final class MissingKeyException extends YadsException
 {
     const ERROR_MESSAGE = '"%s" key is missing within method "%s".';
 

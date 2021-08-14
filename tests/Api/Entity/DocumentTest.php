@@ -26,6 +26,7 @@
 
 namespace App\Tests\Api\Entity;
 
+use App\Context\BaseContext;
 use App\Context\DocumentContext;
 use App\Context\DocumentTypeContext;
 use App\DataProvider\DocumentDataProvider;
@@ -117,8 +118,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'create_document_type',
-                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $documentTypeContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $documentTypeDataProvider->getEntityArray(), // body
                     $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
@@ -136,8 +137,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'list_documents_empty',
-                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     $documentContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     null, // body
                     null, // expected
                     [], // ignore these fields from response
@@ -155,8 +156,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'create_document',
-                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $documentContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $documentDataProvider->getEntityArray(), // body
                     $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
@@ -174,8 +175,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'list_documents_all',
-                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     $documentContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     null, // body
                     null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
@@ -193,8 +194,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'get_document_type',
-                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
                     $documentTypeContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
                     null, // body
                     $documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
@@ -212,8 +213,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'create_document_2',
-                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $documentContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
                     $documentDataProvider->getEntityArray(), // body
                     $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
@@ -231,8 +232,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'list_documents_all_2',
-                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     $documentContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
                     null, // body
                     null, // expected
                     ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
@@ -250,8 +251,8 @@ class DocumentTest extends BaseApiTestCase
             [
                 new ApiTestCaseWrapper(
                     'get_document_2',
-                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
                     $documentContext, // the context creator
+                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
                     null, // body
                     $documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')], // expected
                     ['createdAt', 'updatedAt', ], // ignore these fields from response
@@ -260,5 +261,15 @@ class DocumentTest extends BaseApiTestCase
                 )
             ],
         ];
+    }
+
+    /**
+     * Returns the context of this class.
+     *
+     * @return ?BaseContext
+     */
+    public function getContext(): ?BaseContext
+    {
+        return $this->tagContext;
     }
 }

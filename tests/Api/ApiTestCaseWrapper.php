@@ -35,9 +35,9 @@ use App\Exception\JsonDecodeException;
 use App\Exception\JsonEncodeException;
 use App\Exception\MissingApiClientException;
 use App\Exception\MissingKeyException;
-use App\Exception\NamespaceAlreadyExistsException;
 use App\Exception\RaceConditionApiRequestException;
 use App\Exception\UnknownRequestTypeException;
+use App\Exception\YadsException;
 use App\Utils\ArrayHolder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -99,7 +99,7 @@ final class ApiTestCaseWrapper
     protected array $namespaces;
 
     /** @var mixed[]  */
-    protected array $parameters;
+    protected array $parameters = [];
 
     protected string $accept = self::MIME_TYPE_LD_JSON;
 
@@ -125,11 +125,11 @@ final class ApiTestCaseWrapper
      * @param mixed[] $namespaces
      * @param mixed[] $parameters
      */
-    public function __construct(string $name, string $requestType, BaseContext $baseContext, ?array $body, ?array $expected, ?array $unset = [], array $namespaces = [], array $parameters = [])
+    public function __construct(string $name, BaseContext $baseContext, string $requestType = self::REQUEST_TYPE_LIST, ?array $body = null, ?array $expected = [], ?array $unset = [], array $namespaces = [], array $parameters = [])
     {
         $this->name = $name;
-        $this->requestType = $requestType;
         $this->baseContext = $baseContext;
+        $this->requestType = $requestType;
         $this->body = $body;
         $this->expected = $expected;
         $this->unset = $unset;
@@ -335,10 +335,49 @@ final class ApiTestCaseWrapper
      * Sets the namespaces of this class.
      *
      * @param mixed[] $namespaces
+     * @return self
      */
-    public function setNamespaces(array $namespaces): void
+    public function setNamespaces(array $namespaces): self
     {
         $this->namespaces = $namespaces;
+
+        return $this;
+    }
+
+    /**
+     * Returns the parameters of this class.
+     *
+     * @return mixed[]
+     */
+    public function getParameters(): array
+    {
+        return $this->parameters;
+    }
+
+    /**
+     * Sets the parameters of this class.
+     *
+     * @param mixed[] $parameters
+     * @return self
+     */
+    public function setParameters(array $parameters): self
+    {
+        $this->parameters = $parameters;
+
+        return $this;
+    }
+
+    /**
+     * Sets the parameters of this class.
+     *
+     * @param ArrayHolder|mixed $parameter
+     * @return self
+     */
+    public function addParameter(mixed $parameter): self
+    {
+        $this->parameters[] = $parameter;
+
+        return $this;
     }
 
     /**
@@ -475,12 +514,11 @@ final class ApiTestCaseWrapper
      * Returns the API response and filtered.
      *
      * @return mixed[]
+     * @throws YadsException
      * @throws TransportExceptionInterface
-     * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
      * @throws ServerExceptionInterface
-     * @throws RaceConditionApiRequestException
-     * @throws JsonDecodeException
      */
     public function getApiResponseArray(): array
     {
@@ -683,19 +721,11 @@ final class ApiTestCaseWrapper
      * Makes the API request and return the response.
      *
      * @return ResponseInterface
-     * @throws ClientExceptionInterface
-     * @throws ContainerLoadException
-     * @throws JsonDecodeException
-     * @throws JsonEncodeException
-     * @throws MissingApiClientException
-     * @throws NamespaceAlreadyExistsException
-     * @throws RaceConditionApiRequestException
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
+     * @throws YadsException
      * @throws TransportExceptionInterface
-     * @throws UnknownRequestTypeException
-     * @throws MissingArrayHolderException
-     * @throws ClassNotInitializedWithNamespaceAndIndexException
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws ServerExceptionInterface
      */
     public function requestApi(): ResponseInterface
     {
@@ -714,18 +744,11 @@ final class ApiTestCaseWrapper
      * Returns the result of this test case wrapper as array.
      *
      * @return ?mixed[]
+     * @throws YadsException
      * @throws TransportExceptionInterface
-     * @throws RaceConditionApiRequestException
-     * @throws MissingArrayHolderException
-     * @throws TransportExceptionInterface
-     * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
      * @throws ServerExceptionInterface
-     * @throws RaceConditionApiRequestException
-     * @throws JsonDecodeException
-     * @throws UnknownRequestTypeException
-     * @throws MissingKeyException
-     * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function getExpectedApiResponseArray(): ?array
     {

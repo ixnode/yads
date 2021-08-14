@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class NamespaceAlreadyExistsException extends Exception
+final class NamespaceAlreadyExistsException extends YadsException
 {
     const ERROR_MESSAGE = 'The namespace "%s" already exists within method "%s".';
 

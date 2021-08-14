@@ -26,6 +26,7 @@
 
 namespace App\Tests\Api\Entity;
 
+use App\Context\BaseContext;
 use App\DataProvider\RoleDataProvider;
 use App\Entity\Role;
 use App\Tests\Api\BaseApiTestCase;
@@ -296,5 +297,15 @@ class RoleTest extends BaseApiTestCase
         /* Assert */
         $this->assertResponseIsSuccessful();
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    }
+
+    /**
+     * Returns the context of this class.
+     *
+     * @return ?BaseContext
+     */
+    public function getContext(): ?BaseContext
+    {
+        return $this->tagContext;
     }
 }

@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class MissingApiClientException extends Exception
+final class MissingApiClientException extends YadsException
 {
     const ERROR_MESSAGE = 'The api client must be set before calling the method "%s". Use App\Tests\Api\ApiTestCaseWrapper::setApiClient method to set.';
 

@@ -26,21 +26,8 @@
 
 namespace App\Exception;
 
-use Throwable;
+use Exception;
 
-final class ContainerLoadException extends YadsException
+abstract class YadsException extends Exception
 {
-    const ERROR_MESSAGE = 'Container could not be loaded within method "%s".';
-
-    /**
-     * ContainerLoadException constructor.
-     *
-     * @param string $methodName
-     * @param int $code
-     * @param ?Throwable $previous
-     */
-    public function __construct(string $methodName, int $code = 0, Throwable $previous = null)
-    {
-        parent::__construct(sprintf(self::ERROR_MESSAGE, $methodName), $code, $previous);
-    }
 }

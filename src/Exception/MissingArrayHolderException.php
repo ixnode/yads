@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class MissingArrayHolderException extends Exception
+final class MissingArrayHolderException extends YadsException
 {
     const ERROR_MESSAGE = 'The array holder must be set before calling the method "%s".';
 

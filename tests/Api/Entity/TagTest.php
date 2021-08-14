@@ -26,22 +26,10 @@
 
 namespace App\Tests\Api\Entity;
 
-use App\Context\DocumentContext;
-use App\Context\DocumentTypeContext;
+use App\Context\BaseContext;
 use App\Context\TagContext;
-use App\DataProvider\DocumentDataProvider;
-use App\DataProvider\DocumentTypeDataProvider;
 use App\DataProvider\TagDataProvider;
-use App\Exception\ClassNotInitializedWithNamespaceAndIndexException;
-use App\Exception\MissingArrayHolderException;
-use App\Exception\ContainerLoadException;
-use App\Exception\JsonDecodeException;
-use App\Exception\JsonEncodeException;
-use App\Exception\MissingApiClientException;
-use App\Exception\MissingKeyException;
-use App\Exception\NamespaceAlreadyExistsException;
-use App\Exception\RaceConditionApiRequestException;
-use App\Exception\UnknownRequestTypeException;
+use App\Exception\YadsException;
 use App\Tests\Api\ApiTestCaseWrapper;
 use App\Tests\Api\BaseApiTestCase;
 use App\Utils\ArrayHolder;
@@ -59,246 +47,281 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class TagTest extends BaseApiTestCase
 {
     /**
+     * Get tags (empty).
      *
-     * Test wrapper to test the test chain.
+     * GET /api/v1/tags
+     * application/ld+json; charset=utf-8
      *
-     * @dataProvider dataProvider
-     *
-     * @param ApiTestCaseWrapper $testCase
      * @throws ClientExceptionInterface
-     * @throws ContainerLoadException
-     * @throws JsonDecodeException
-     * @throws JsonEncodeException
-     * @throws MissingApiClientException
-     * @throws NamespaceAlreadyExistsException
-     * @throws RaceConditionApiRequestException
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
-     * @throws UnknownRequestTypeException
-     * @throws MissingArrayHolderException
-     * @throws MissingKeyException
-     * @throws ClassNotInitializedWithNamespaceAndIndexException
+     * @throws YadsException
      */
-    public function testWrapper(ApiTestCaseWrapper $testCase): void
+    public function testGetEntitiesExpectEmptyList(): void
     {
-        /* Arrange */
-        $testCase->setApiClient(self::createClient());
-        $testCase->setArrayHolder(self::$arrayHolder);
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_tags_empty');
 
-        /* Act */
-        $testCase->requestApi();
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
 
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        if ($testCase->getMimeType() !== null) {
-            $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
-        }
-        $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
-        $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
+    /**Create first tag.
+     *
+     * POST /api/v1/tags
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_tag_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->tagDataProvider->getEntityArray())
+            ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
     }
 
     /**
-     * Data provider.
+     * Get tags (expect one hit).
      *
-     * @return array[]
+     * GET /api/v1/tags
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
      */
-    public function dataProvider(): array
+    public function testGetEntitiesExpectOneHit(): void
     {
-        $tagDataProvider = new TagDataProvider();
-        $tagContext = new TagContext();
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_tags_1')
+            ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
+            ->setNamespaces(['create_tag_1'])
+        ;
 
-        return [
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
 
-            /**
-             * Get tags (empty).
-             *
-             * GET /api/v1/tags
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'list_tags_empty',
-                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $tagContext, // the context creator
-                    null, // body
-                    null, // expected
-                    [], // ignore these fields from response
-                    [], // add these members to request check
-                    [] // parameters
-                )
-            ],
+    /**
+     * Get first tag with id x.
+     *
+     * GET /api/v1/tags/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_tag_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-            /**
-             * Create first tag.
-             *
-             * POST /api/v1/tags
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'create_tag_1',
-                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
-                    $tagContext, // the context creator
-                    $tagDataProvider->getEntityArray(), // body
-                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [] // parameters
-                )
-            ],
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
 
-            /**
-             * Get tags (one record).
-             *
-             * GET /api/v1/tags
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'list_tags_all',
-                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $tagContext, // the context creator
-                    null, // body
-                    null, // expected
-                    ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['create_tag_1'], // add these members to request check
-                    [] // parameters
-                )
-            ],
+    /**
+     * Update first tag with id x.
+     *
+     * PUT /api/v1/tags/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testUpdateFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('update_tag_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_UPDATE)
+            ->setBody($this->tagDataProvider->getEntityArray(recordNumber: 1))
+            ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-            /**
-             * Get first tag with id x.
-             *
-             * GET /api/v1/tags/[id]
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'get_tag_1',
-                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
-                    $tagContext, // the context creator
-                    null, // body
-                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [new ArrayHolder('create_tag_1', 'id')]
-                )
-            ],
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
 
-            /**
-             * Update first tag with id x.
-             *
-             * PUT /api/v1/tags/[id]
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'update_tag_1',
-                    ApiTestCaseWrapper::REQUEST_TYPE_UPDATE,
-                    $tagContext, // the context creator
-                    $tagDataProvider->getEntityArray(recordNumber: 1), // body
-                    $tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [new ArrayHolder('create_tag_1', 'id')] // parameters
-                )
-            ],
+    /**
+     * Get updated first tag with id x.
+     *
+     * GET /api/v1/tags/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetUpdatedFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_tag_1_updated')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-            /**
-             * Get first tag with id x.
-             *
-             * GET /api/v1/tags/[id]
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'get_tag_1_updated',
-                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
-                    $tagContext, // the context creator
-                    null, // body
-                    $tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [new ArrayHolder('create_tag_1', 'id')]
-                )
-            ],
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
 
-            /**
-             * Create second tag.
-             *
-             * POST /api/v1/tags
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'create_tag_2',
-                    ApiTestCaseWrapper::REQUEST_TYPE_CREATE,
-                    $tagContext, // the context creator
-                    $tagDataProvider->getEntityArray(), // body
-                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [] // parameters
-                )
-            ],
+    /**Create second tag.
+     *
+     * POST /api/v1/tags
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateSecondEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_tag_2')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->tagDataProvider->getEntityArray())
+            ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
 
-            /**
-             * Get tags (two records).
-             *
-             * GET /api/v1/tags
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'list_tags_all_2',
-                    ApiTestCaseWrapper::REQUEST_TYPE_LIST,
-                    $tagContext, // the context creator
-                    null, // body
-                    null, // expected
-                    ['hydra:member' => ['createdAt', 'updatedAt', ]], // ignore these fields from response
-                    ['update_tag_1', 'create_tag_2'], // add these members to request check
-                    [] // parameters
-                )
-            ],
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
 
-            /**
-             * Get second tag with id x.
-             *
-             * GET /api/v1/tags/[id]
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'get_tag_2',
-                    ApiTestCaseWrapper::REQUEST_TYPE_READ,
-                    $tagContext, // the context creator
-                    null, // body
-                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [new ArrayHolder('create_tag_2', 'id')]
-                )
-            ],
+    /**
+     * Get tags (expect two hits).
+     *
+     * GET /api/v1/tags
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetEntitiesExpectTwoHits(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_tags_2')
+            ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
+            ->setNamespaces(['update_tag_1', 'create_tag_2', ])
+        ;
 
-            /**
-             * Delete first tag with id x.
-             *
-             * GET /api/v1/tags/[id]
-             * application/ld+json; charset=utf-8
-             */
-            [
-                new ApiTestCaseWrapper(
-                    'delete_tag_1',
-                    ApiTestCaseWrapper::REQUEST_TYPE_DELETE,
-                    $tagContext, // the context creator
-                    null, // body
-                    $tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')], // expected
-                    ['createdAt', 'updatedAt', ], // ignore these fields from response
-                    [], // add these members to request check
-                    [new ArrayHolder('create_tag_1', 'id')]
-                )
-            ],
-        ];
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Get second tag with id x.
+     *
+     * GET /api/v1/tags/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetSecondEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_tag_2')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_2', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_tag_2', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Delete first tag with id x.
+     *
+     * DELETE /api/v1/tags/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testDeleteFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('delete_tag_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_DELETE)
+            ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_tag_1', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Get tags (expect one hit).
+     *
+     * GET /api/v1/tags
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetEntitiesExpectOneHit2(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_tags_1_2')
+            ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
+            ->setNamespaces(['create_tag_2'])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Returns the context of this class.
+     *
+     * @return ?BaseContext
+     */
+    public function getContext(): ?BaseContext
+    {
+        return $this->tagContext;
     }
 }

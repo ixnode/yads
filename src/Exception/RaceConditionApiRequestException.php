@@ -26,10 +26,9 @@
 
 namespace App\Exception;
 
-use Exception;
 use Throwable;
 
-final class RaceConditionApiRequestException extends Exception
+final class RaceConditionApiRequestException extends YadsException
 {
     const ERROR_MESSAGE = 'An API request is required before calling the method "%s". Use App\Tests\Api\ApiTestCaseWrapper::requestApi method to request.';
 

@@ -28,13 +28,16 @@ namespace App\Tests\Api;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
+use App\Context\BaseContext;
+use App\Context\TagContext;
+use App\DataProvider\TagDataProvider;
+use App\Exception\MissingContextException;
+use App\Exception\YadsException;
 use App\Utils\ArrayHolder;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -86,6 +89,10 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     protected static bool $setUpDone = false;
 
+    protected TagDataProvider $tagDataProvider;
+
+    protected TagContext $tagContext;
+
     /**
      * This method is called before each test.
      *
@@ -111,6 +118,71 @@ abstract class BaseApiTestCase extends ApiTestCase
 
         /* Setup is already done */
         self::$setUpDone = true;
+    }
+
+    /**
+     * This method is called before each test.
+     */
+    protected function setUp(): void
+    {
+        $this->tagDataProvider = new TagDataProvider();
+        $this->tagContext = new TagContext();
+    }
+
+    /**
+     * Returns the base context of this class;
+     *
+     * @return ?BaseContext
+     */
+    abstract function getContext(): ?BaseContext;
+
+    /**
+     * Makes the actual test
+     *
+     * @param ApiTestCaseWrapper $testCase
+     * @throws YadsException
+     * @throws TransportExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function makeTest(ApiTestCaseWrapper $testCase): void
+    {
+        /* Arrange */
+        $testCase->setApiClient(self::createClient());
+        $testCase->setArrayHolder(self::$arrayHolder);
+
+        /* Act */
+        $testCase->requestApi();
+
+        /* Assert */
+        $this->assertResponseIsSuccessful();
+        if ($testCase->getMimeType() !== null) {
+            $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+        }
+        $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
+        $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
+    }
+
+    /**
+     * Returns the API test case for this test.
+     *
+     * @param string $name
+     * @param BaseContext|null $baseContext
+     * @return ApiTestCaseWrapper
+     * @throws MissingContextException
+     */
+    public function getApiTestCaseWrapper(string $name, BaseContext $baseContext = null): ApiTestCaseWrapper
+    {
+        if ($baseContext === null) {
+            $baseContext = $this->getContext();
+        }
+
+        if ($baseContext === null) {
+            throw new MissingContextException(__METHOD__);
+        }
+
+        return new ApiTestCaseWrapper($name, $baseContext);
     }
 
     /**
