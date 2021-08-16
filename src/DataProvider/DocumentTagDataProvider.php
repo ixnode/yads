@@ -43,11 +43,20 @@ class DocumentTagDataProvider extends BaseDataProvider
      * Returns an entity as array.
      *
      * @param int $recordNumber
-     * @return array[]|int[]|string[]
+     * @return array[]|int[]|string[]|null[]
      */
     public function getArray(int $recordNumber = 0): array
     {
-        $data = [[], [], ];
+        $data = [
+            [
+                'document' => '/api/v1/documents/1',
+                'tag' => '/api/v1/tags/1',
+            ],
+            [
+                'document' => '/api/v1/documents/2',
+                'tag' => '/api/v1/tags/1',
+            ],
+        ];
 
         return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
