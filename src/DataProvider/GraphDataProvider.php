@@ -44,11 +44,33 @@ class GraphDataProvider extends BaseDataProvider
      * Returns an entity as array.
      *
      * @param int $recordNumber
-     * @return array[]|int[]|string[]
+     * @return array[]|int[]|string[]|bool[]|null[]
      */
     public function getArray(int $recordNumber = 0): array
     {
-        $data = [[], [], ];
+        $data = [
+            [
+                'documentSource' => '/api/v1/documents/1',
+                'documentTarget' => '/api/v1/documents/2',
+                'graphType' => '/api/v1/graph_types/1',
+                'graphTypeReversed' => false,
+                'weight' => 10,
+            ],
+            [
+                'documentSource' => '/api/v1/documents/1',
+                'documentTarget' => '/api/v1/documents/3',
+                'graphType' => '/api/v1/graph_types/1',
+                'graphTypeReversed' => false,
+                'weight' => 10,
+            ],
+            [
+                'documentSource' => '/api/v1/documents/1',
+                'documentTarget' => '/api/v1/documents/4',
+                'graphType' => '/api/v1/graph_types/1',
+                'graphTypeReversed' => false,
+                'weight' => 10,
+            ],
+        ];
 
         return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }

@@ -64,6 +64,22 @@ class DocumentDataProvider extends BaseDataProvider
                     'has_date_of_completion' => false,
                 ],
             ],
+            [
+                'documentType' => '/api/v1/document_types/1', // task
+                'data' => [
+                    'title' => 'test 3',
+                    'description' => 'test 3',
+                    'has_date_of_completion' => false,
+                ],
+            ],
+            [
+                'documentType' => '/api/v1/document_types/1', // task
+                'data' => [
+                    'title' => 'test 4',
+                    'description' => 'test 4',
+                    'has_date_of_completion' => false,
+                ],
+            ],
         ];
 
         return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
