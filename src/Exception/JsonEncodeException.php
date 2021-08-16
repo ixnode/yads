@@ -24,50 +24,23 @@
  * SOFTWARE.
  */
 
-namespace App\DataProvider;
+namespace App\Exception;
 
-use App\DataFixtures\DocumentTypeFixtures;
-use App\Entity\BaseEntity;
-use App\Entity\Role;
+use Throwable;
 
-/**
- * Class RoleDataProvider
- *
- * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-01)
- * @package App\DataProvider
- */
-class RoleDataProvider extends BaseDataProvider
+final class JsonEncodeException extends YadsException
 {
-    /**
-     * Returns an entity as array.
-     *
-     * @param int $recordNumber
-     * @return array[]|int[]|string[]
-     */
-    public function getArray(int $recordNumber = 0): array
-    {
-        $data = [
-            [
-                'name' => 'Role example name 1',
-                'description' => 'Role example name 1',
-            ],
-            [
-                'name' => 'Role example name 2',
-                'description' => 'Role example name 2',
-            ],
-        ];
-
-        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
-    }
+    const ERROR_MESSAGE = 'Unable to encode JSON from given data within method "%s".';
 
     /**
-     * Returns new Role entity.
+     * JsonEncodeException constructor.
      *
-     * @return BaseEntity
+     * @param string $methodName
+     * @param int $code
+     * @param ?Throwable $previous
      */
-    public function getObject(): BaseEntity
+    public function __construct(string $methodName, int $code = 0, Throwable $previous = null)
     {
-        return new Role();
+        parent::__construct(sprintf(self::ERROR_MESSAGE, $methodName), $code, $previous);
     }
 }

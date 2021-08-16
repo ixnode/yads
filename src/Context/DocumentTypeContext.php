@@ -24,72 +24,46 @@
  * SOFTWARE.
  */
 
-namespace App\Entity;
+namespace App\Context;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
+use App\Entity\DocumentType;
 
 /**
- * Class Role
+ * Class DocumentTypeContext
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-04)
- * @package App\Entity
+ * @version 1.0 (2021-08-10)
+ * @package App\Context
  */
-#[ApiResource]
-#[ORM\Table(name: 'role')]
-#[ORM\Entity, ORM\HasLifecycleCallbacks]
-class Role extends BaseEntity
+final class DocumentTypeContext extends BaseContext
 {
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    private string $name;
-
-    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true, options: ['default' => null])]
-    private ?string $description = null;
-
     /**
-     * Returns the name of this entity.
+     * Returns the DocumentType entity class.
      *
      * @return string
      */
-    public function getName(): string
+    public function getClass(): string
     {
-        return $this->name;
+        return DocumentType::class;
     }
 
     /**
-     * Sets the name of this entity.
+     * Returns the type of this class.
      *
-     * @param string $name
-     * @return $this
+     * @return string
      */
-    public function setName(string $name): self
+    public function getType(): string
     {
-        $this->name = $name;
-
-        return $this;
+        return 'DocumentType';
     }
 
     /**
-     * Returns the description of this entity.
+     * Returns the single path name.
      *
-     * @return ?string
+     * @return string
      */
-    public function getDescription(): ?string
+    public function getPathName(): string
     {
-        return $this->description;
-    }
-
-    /**
-     * Sets the description of this entity.
-     *
-     * @param ?string $description
-     * @return $this
-     */
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
+        return 'document_types';
     }
 }

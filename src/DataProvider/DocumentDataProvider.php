@@ -28,16 +28,16 @@ namespace App\DataProvider;
 
 use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
-use App\Entity\Role;
+use App\Entity\Document;
 
 /**
- * Class RoleDataProvider
+ * Class DocumentDataProvider
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-01)
+ * @version 1.0 (2021-08-12)
  * @package App\DataProvider
  */
-class RoleDataProvider extends BaseDataProvider
+class DocumentDataProvider extends BaseDataProvider
 {
     /**
      * Returns an entity as array.
@@ -49,12 +49,36 @@ class RoleDataProvider extends BaseDataProvider
     {
         $data = [
             [
-                'name' => 'Role example name 1',
-                'description' => 'Role example name 1',
+                'documentType' => '/api/v1/document_types/1',
+                'data' => [
+                    'title' => 'test 1',
+                    'description' => 'test 1',
+                    'has_date_of_completion' => false,
+                ],
             ],
             [
-                'name' => 'Role example name 2',
-                'description' => 'Role example name 2',
+                'documentType' => '/api/v1/document_types/1',
+                'data' => [
+                    'title' => 'test 2',
+                    'description' => 'test 2',
+                    'has_date_of_completion' => false,
+                ],
+            ],
+            [
+                'documentType' => '/api/v1/document_types/1',
+                'data' => [
+                    'title' => 'test 3',
+                    'description' => 'test 3',
+                    'has_date_of_completion' => false,
+                ],
+            ],
+            [
+                'documentType' => '/api/v1/document_types/1',
+                'data' => [
+                    'title' => 'test 4',
+                    'description' => 'test 4',
+                    'has_date_of_completion' => false,
+                ],
             ],
         ];
 
@@ -62,12 +86,12 @@ class RoleDataProvider extends BaseDataProvider
     }
 
     /**
-     * Returns new Role entity.
+     * Returns new Document entity.
      *
      * @return BaseEntity
      */
     public function getObject(): BaseEntity
     {
-        return new Role();
+        return new Document();
     }
 }

@@ -28,17 +28,23 @@ namespace App\DataProvider;
 
 use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
-use App\Entity\Role;
+use App\Entity\GraphType;
 
 /**
- * Class RoleDataProvider
+ * Class GraphTypeDataProvider
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-01)
+ * @version 1.0 (2021-08-16)
  * @package App\DataProvider
  */
-class RoleDataProvider extends BaseDataProvider
+class GraphTypeDataProvider extends BaseDataProvider
 {
+    const DIRECTION_TYPE_BIDIRECTIONAL = 'bidirectional';
+
+    const DIRECTION_TYPE_UNIDIRECTIONAL = 'unidirectional';
+
+    const DIRECTION_TYPE_NOT_DIRECTED = 'not_directed';
+
     /**
      * Returns an entity as array.
      *
@@ -49,12 +55,17 @@ class RoleDataProvider extends BaseDataProvider
     {
         $data = [
             [
-                'name' => 'Role example name 1',
-                'description' => 'Role example name 1',
-            ],
-            [
-                'name' => 'Role example name 2',
-                'description' => 'Role example name 2',
+                'title' => 'Bidirectional 1',
+                'titleReverse' =>  'Bidirectional Reverse 1',
+                'graphType' => self::DIRECTION_TYPE_BIDIRECTIONAL,
+            ], [
+                'title' => 'Unidirectional 2',
+                'titleReverse' =>  'Unidirectional Reverse 2',
+                'graphType' => self::DIRECTION_TYPE_UNIDIRECTIONAL,
+            ], [
+                'title' => 'Not directed 3',
+                'titleReverse' =>  'Not directed Reverse 3',
+                'graphType' => self::DIRECTION_TYPE_NOT_DIRECTED,
             ],
         ];
 
@@ -62,12 +73,12 @@ class RoleDataProvider extends BaseDataProvider
     }
 
     /**
-     * Returns new Role entity.
+     * Returns new GraphType entity.
      *
      * @return BaseEntity
      */
     public function getObject(): BaseEntity
     {
-        return new Role();
+        return new GraphType();
     }
 }

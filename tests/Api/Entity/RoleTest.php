@@ -1,18 +1,40 @@
-<?php
+<?php declare(strict_types=1);
+
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 Björn Hempel <bjoern@hempel.li>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 namespace App\Tests\Api\Entity;
 
-use App\DataProvider\RoleDataProvider;
-use App\Entity\Role;
+use App\Context\BaseContext;
+use App\Exception\YadsException;
+use App\Tests\Api\ApiTestCaseWrapper;
 use App\Tests\Api\BaseApiTestCase;
-use Exception;
-use Symfony\Component\HttpFoundation\Response;
+use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Class RoleTest
@@ -22,265 +44,282 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 class RoleTest extends BaseApiTestCase
 {
-    protected RoleDataProvider $roleDataProvider;
-
     /**
-     * This method is called before each test.
+     * Get roles (empty).
      *
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->roleDataProvider = new RoleDataProvider();
-    }
-
-    /**
-     * Returns the DocumentType entity class.
-     *
-     * @return string
-     */
-    protected function getClass(): string
-    {
-        return Role::class;
-    }
-
-    /**
-     * @param ResponseInterface $response
-     * @return array[]
-     * @throws ClientExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     */
-    protected function getFilteredArrayFromResponse(ResponseInterface $response): array
-    {
-        $unsetArray = [
-            '@context',
-            '@id',
-            '@type',
-            'createdAt',
-            'updatedAt',
-        ];
-
-        $responseArray = $response->toArray();
-
-        foreach ($unsetArray as $unsetKey) {
-            if (array_key_exists($unsetKey, $responseArray)) {
-                unset($responseArray[$unsetKey]);
-            }
-        }
-
-        return $responseArray;
-    }
-
-    /**
-     * POST /api/v1/roles
-     * application/ld+json; charset=utf-8 request
-     *
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws Exception
-     */
-    public function testAddEntityLdJson(): void
-    {
-        /* Arrange */
-        $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles');
-
-        /* Act */
-        $response = $client->request('POST', $url, [
-                'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
-                'body' => $this->roleDataProvider->getEntityJson(),
-            ]
-        );
-
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
-        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
-        $this->assertArrayHasKey('location', $response->getHeaders());
-        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
-    }
-
-    /**
      * GET /api/v1/roles
-     * application/ld+json; charset=utf-8 request
-     *
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws Exception
-     */
-    public function testGetCollectionLdJson(): void
-    {
-        /* Arrange */
-        $rolesCount = 1;
-        $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles');
-
-        /* Act */
-        $response = $client->request('GET', $url, [
-            'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
-        ]);
-
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
-        $this->assertJsonContains([
-            '@context' => '/api/v1/contexts/Role',
-            '@id' => '/api/v1/roles',
-            '@type' => 'hydra:Collection',
-            'hydra:totalItems' => $rolesCount,
-        ]);
-        $this->assertCount($rolesCount, $response->toArray()['hydra:member']);
-        $this->assertMatchesResourceCollectionJsonSchema(Role::class);
-    }
-
-
-    /**
-     * GET /api/v1/roles/{id}
-     * application/ld+json; charset=utf-8 request
-     *
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws Exception
-     */
-    public function testGetEntityLdJson(): void
-    {
-        /* Arrange */
-        $entityArray = $this->roleDataProvider->getEntityArray();
-        $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
-
-        /* Act */
-        $response = $client->request('GET', $url, [
-            'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
-        ]);
-
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
-        $this->assertJsonContains([
-            '@context' => '/api/v1/contexts/Role',
-            '@id' => sprintf('/api/v1/roles/%s', $entityArray['id']),
-            '@type' => 'Role',
-            'id' => $entityArray['id'],
-            'name' => $entityArray['name'],
-        ]);
-        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
-        $this->assertMatchesResourceItemJsonSchema(Role::class);
-    }
-
-    /**
-     * PUT /api/v1/roles/{id}
-     * application/ld+json; charset=utf-8 request
+     * application/ld+json; charset=utf-8
      *
      * @throws ClientExceptionInterface
-     * @throws DecodingExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws YadsException
      */
-    public function testReplaceEntityLdJson(): void
+    public function testGetEntitiesExpectEmptyList(): void
     {
-        /* Arrange */
-        $entityArray = $this->roleDataProvider->getEntityArray();
-        $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_roles_empty');
 
-        /* Act */
-        $response = $client->request('PUT', $url, [
-            'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_LD_JSON),
-            'body' => $this->roleDataProvider->getEntityJson(),
-        ]);
-
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
-        $this->assertJsonContains([
-            '@context' => '/api/v1/contexts/Role',
-            '@id' => sprintf('/api/v1/roles/%s', $entityArray['id']),
-            '@type' => 'Role',
-            'id' => $entityArray['id'],
-            'name' => $entityArray['name'],
-        ]);
-        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
-        $this->assertMatchesResourceItemJsonSchema(Role::class);
+        /* Make the test */
+        $this->makeTest($testCase);
     }
 
-    /**
-     * PATCH /api/v1/roles/{id}
-     * application/ld+json; charset=utf-8 request
+    /**Create first role.
      *
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
+     * POST /api/v1/roles
+     * application/ld+json; charset=utf-8
+     *
      * @throws ClientExceptionInterface
-     * @throws TransportExceptionInterface
+     * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
-     * @throws Exception
+     * @throws TransportExceptionInterface
+     * @throws YadsException
      */
-    public function testUpdateEntityLdJson(): void
+    public function testCreateFirstEntity(): void
     {
-        /* Arrange */
-        $entityArray = $this->roleDataProvider->getEntityArray();
-        $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_role_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->roleDataProvider->getEntityArray())
+            ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
 
-        /* Act */
-        $response = $client->request('PATCH', $url, [
-            'headers' => $this->getHeaders(self::MIME_TYPE_LD_JSON, self::MIME_TYPE_MERGE_JSON),
-            'body' => $this->roleDataProvider->getEntityJson(),
-        ]);
-
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        $this->assertResponseHeaderSame(self::HEADER_NAME_CONTENT_TYPE, self::getMimeType(self::MIME_TYPE_LD_JSON, self::CHARSET_UTF8));
-        $this->assertJsonContains([
-            '@context' => '/api/v1/contexts/Role',
-            '@id' => sprintf('/api/v1/roles/%s', $entityArray['id']),
-            '@type' => 'Role',
-            'id' => $entityArray['id'],
-            'name' => $entityArray['name'],
-        ]);
-        $this->assertEquals($this->roleDataProvider->getEntityArray(), $this->getFilteredArrayFromResponse($response));
-        $this->assertMatchesResourceItemJsonSchema(Role::class);
+        /* Make the test */
+        $this->makeTest($testCase);
     }
 
     /**
-     * DELETE /api/v1/roles/{id}
-     * application/ld+json; charset=utf-8 request
+     * Get roles (expect one hit).
      *
+     * GET /api/v1/roles
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws YadsException
      */
-    public function testDeleteEntityLdJson(): void
+    public function testGetEntitiesExpectOneHit(): void
     {
-        /* Arrange */
-        $entityArray = $this->roleDataProvider->getEntityArray();
-        $client = self::createClient();
-        $url = $this->getEndpoint($client, 'roles', [$entityArray['id']]);
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_roles_1')
+            ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
+            ->setNamespaces(['create_role_1'])
+        ;
 
-        /* Act */
-        $response = $client->request('DELETE', $url, [
-            'headers' => [
-                'accept' => '*/*',
-            ],
-        ]);
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
 
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+    /**
+     * Get first role with id x.
+     *
+     * GET /api/v1/roles/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_role_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_role_1', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Update first role with id x.
+     *
+     * PUT /api/v1/roles/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testUpdateFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('update_role_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_UPDATE)
+            ->setBody($this->roleDataProvider->getEntityArray(recordNumber: 1))
+            ->setExpected($this->roleDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_role_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_role_1', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Get updated first role with id x.
+     *
+     * GET /api/v1/roles/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetUpdatedFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_role_1_updated')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected($this->roleDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_role_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_role_1', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**Create second role.
+     *
+     * POST /api/v1/roles
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateSecondEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_role_2')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->roleDataProvider->getEntityArray())
+            ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_2', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Get roles (expect two hits).
+     *
+     * GET /api/v1/roles
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetEntitiesExpectTwoHits(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_roles_2')
+            ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
+            ->setNamespaces(['update_role_1', 'create_role_2', ])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Get second role with id x.
+     *
+     * GET /api/v1/roles/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetSecondEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_role_2')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_2', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_role_2', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Delete first role with id x.
+     *
+     * DELETE /api/v1/roles/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testDeleteFirstEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('delete_role_1')
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_DELETE)
+            ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_1', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+            ->addParameter(new ArrayHolder('create_role_1', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Get roles (expect one hit).
+     *
+     * GET /api/v1/roles
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetEntitiesExpectOneHit2(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_roles_1_2')
+            ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
+            ->setNamespaces(['create_role_2'])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Returns the context of this class.
+     *
+     * @return ?BaseContext
+     */
+    public function getContext(): ?BaseContext
+    {
+        return $this->roleContext;
     }
 }

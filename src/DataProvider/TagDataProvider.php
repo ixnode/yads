@@ -24,72 +24,50 @@
  * SOFTWARE.
  */
 
-namespace App\Entity;
+namespace App\DataProvider;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
+use App\DataFixtures\DocumentTypeFixtures;
+use App\Entity\BaseEntity;
+use App\Entity\Tag;
 
 /**
- * Class Role
+ * Class DocumentDataProvider
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-04)
- * @package App\Entity
+ * @version 1.0 (2021-08-12)
+ * @package App\DataProvider
  */
-#[ApiResource]
-#[ORM\Table(name: 'role')]
-#[ORM\Entity, ORM\HasLifecycleCallbacks]
-class Role extends BaseEntity
+class TagDataProvider extends BaseDataProvider
 {
-    #[ORM\Column(name: 'name', type: 'string', length: 255, nullable: false)]
-    private string $name;
-
-    #[ORM\Column(name: 'description', type: 'string', length: 255, nullable: true, options: ['default' => null])]
-    private ?string $description = null;
-
     /**
-     * Returns the name of this entity.
+     * Returns an entity as array.
      *
-     * @return string
+     * @param int $recordNumber
+     * @return array[]|int[]|string[]
      */
-    public function getName(): string
+    public function getArray(int $recordNumber = 0): array
     {
-        return $this->name;
+        $data = [
+            [
+                'name' => 'Tag 1',
+                'description' => 'Description 1',
+            ],
+            [
+                'name' => 'Tag 2',
+                'description' => 'Description 2',
+            ],
+        ];
+
+        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
 
     /**
-     * Sets the name of this entity.
+     * Returns new DocumentType entity.
      *
-     * @param string $name
-     * @return $this
+     * @return BaseEntity
      */
-    public function setName(string $name): self
+    public function getObject(): BaseEntity
     {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Returns the description of this entity.
-     *
-     * @return ?string
-     */
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    /**
-     * Sets the description of this entity.
-     *
-     * @param ?string $description
-     * @return $this
-     */
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
+        return new Tag();
     }
 }

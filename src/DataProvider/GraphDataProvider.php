@@ -28,33 +28,47 @@ namespace App\DataProvider;
 
 use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
-use App\Entity\Role;
+use App\Entity\Graph;
+use App\Entity\Tag;
 
 /**
- * Class RoleDataProvider
+ * Class GraphDataProvider
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-01)
+ * @version 1.0 (2021-08-16)
  * @package App\DataProvider
  */
-class RoleDataProvider extends BaseDataProvider
+class GraphDataProvider extends BaseDataProvider
 {
     /**
      * Returns an entity as array.
      *
      * @param int $recordNumber
-     * @return array[]|int[]|string[]
+     * @return array[]|int[]|string[]|bool[]|null[]
      */
     public function getArray(int $recordNumber = 0): array
     {
         $data = [
             [
-                'name' => 'Role example name 1',
-                'description' => 'Role example name 1',
+                'documentSource' => '/api/v1/documents/1',
+                'documentTarget' => '/api/v1/documents/2',
+                'graphType' => '/api/v1/graph_types/1',
+                'graphTypeReversed' => false,
+                'weight' => 10,
             ],
             [
-                'name' => 'Role example name 2',
-                'description' => 'Role example name 2',
+                'documentSource' => '/api/v1/documents/1',
+                'documentTarget' => '/api/v1/documents/3',
+                'graphType' => '/api/v1/graph_types/1',
+                'graphTypeReversed' => false,
+                'weight' => 10,
+            ],
+            [
+                'documentSource' => '/api/v1/documents/1',
+                'documentTarget' => '/api/v1/documents/4',
+                'graphType' => '/api/v1/graph_types/1',
+                'graphTypeReversed' => false,
+                'weight' => 10,
             ],
         ];
 
@@ -62,12 +76,12 @@ class RoleDataProvider extends BaseDataProvider
     }
 
     /**
-     * Returns new Role entity.
+     * Returns new Graph entity.
      *
      * @return BaseEntity
      */
     public function getObject(): BaseEntity
     {
-        return new Role();
+        return new Graph();
     }
 }

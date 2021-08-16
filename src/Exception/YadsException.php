@@ -24,50 +24,10 @@
  * SOFTWARE.
  */
 
-namespace App\DataProvider;
+namespace App\Exception;
 
-use App\DataFixtures\DocumentTypeFixtures;
-use App\Entity\BaseEntity;
-use App\Entity\Role;
+use Exception;
 
-/**
- * Class RoleDataProvider
- *
- * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-01)
- * @package App\DataProvider
- */
-class RoleDataProvider extends BaseDataProvider
+abstract class YadsException extends Exception
 {
-    /**
-     * Returns an entity as array.
-     *
-     * @param int $recordNumber
-     * @return array[]|int[]|string[]
-     */
-    public function getArray(int $recordNumber = 0): array
-    {
-        $data = [
-            [
-                'name' => 'Role example name 1',
-                'description' => 'Role example name 1',
-            ],
-            [
-                'name' => 'Role example name 2',
-                'description' => 'Role example name 2',
-            ],
-        ];
-
-        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
-    }
-
-    /**
-     * Returns new Role entity.
-     *
-     * @return BaseEntity
-     */
-    public function getObject(): BaseEntity
-    {
-        return new Role();
-    }
 }

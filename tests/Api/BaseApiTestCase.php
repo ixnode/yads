@@ -1,20 +1,60 @@
-<?php
+<?php declare(strict_types=1);
+
+/*
+ * MIT License
+ *
+ * Copyright (c) 2021 Björn Hempel <bjoern@hempel.li>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 
 namespace App\Tests\Api;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
+use App\Context\BaseContext;
+use App\Context\DocumentContext;
+use App\Context\DocumentTagContext;
+use App\Context\DocumentTypeContext;
+use App\Context\GraphContext;
+use App\Context\GraphRuleContext;
+use App\Context\GraphTypeContext;
+use App\Context\RoleContext;
+use App\Context\TagContext;
+use App\DataProvider\DocumentDataProvider;
+use App\DataProvider\DocumentTagDataProvider;
+use App\DataProvider\DocumentTypeDataProvider;
+use App\DataProvider\GraphDataProvider;
+use App\DataProvider\GraphRuleDataProvider;
+use App\DataProvider\GraphTypeDataProvider;
+use App\DataProvider\RoleDataProvider;
+use App\DataProvider\TagDataProvider;
+use App\Exception\MissingContextException;
+use App\Exception\YadsException;
 use App\Utils\ArrayHolder;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Class BaseApiTestCase
@@ -52,17 +92,49 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     const REQUEST_TYPE_DELETE = 'delete';
 
-    const API_PATH = '/api/v1';
-
-    const CONTEXTS_NAME = 'contexts';
-
     static ArrayHolder $arrayHolder;
+
+    protected static bool $keepDataBetweenTests = false;
 
     protected ?string $apiPrefix = null;
 
     protected static ?Application $application = null;
 
     protected static bool $setUpDone = false;
+
+
+
+    protected DocumentDataProvider $documentDataProvider;
+
+    protected DocumentContext $documentContext;
+
+    protected DocumentTagDataProvider $documentTagDataProvider;
+
+    protected DocumentTagContext $documentTagContext;
+
+    protected DocumentTypeDataProvider $documentTypeDataProvider;
+
+    protected DocumentTypeContext $documentTypeContext;
+
+    protected GraphDataProvider $graphDataProvider;
+
+    protected GraphContext $graphContext;
+
+    protected GraphRuleDataProvider $graphRuleDataProvider;
+
+    protected GraphRuleContext $graphRuleContext;
+
+    protected GraphTypeDataProvider $graphTypeDataProvider;
+
+    protected GraphTypeContext $graphTypeContext;
+
+    protected RoleDataProvider $roleDataProvider;
+
+    protected RoleContext $roleContext;
+
+    protected TagDataProvider $tagDataProvider;
+
+    protected TagContext $tagContext;
 
     /**
      * This method is called before each test.
@@ -76,7 +148,7 @@ abstract class BaseApiTestCase extends ApiTestCase
         self::$arrayHolder = new ArrayHolder();
 
         /* If setup is already done. Stop here. */
-        if (self::$setUpDone) {
+        if (self::$setUpDone && self::$keepDataBetweenTests) {
             return;
         }
 
@@ -92,22 +164,89 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Returns the entity class.
-     *
-     * @return string
+     * This method is called before each test.
      */
-    abstract protected function getClass(): string;
+    protected function setUp(): void
+    {
+        $this->documentDataProvider = new DocumentDataProvider();
+        $this->documentContext = new DocumentContext();
+
+        $this->documentTagDataProvider = new DocumentTagDataProvider();
+        $this->documentTagContext = new DocumentTagContext();
+
+        $this->documentTypeDataProvider = new DocumentTypeDataProvider();
+        $this->documentTypeContext = new DocumentTypeContext();
+
+        $this->graphDataProvider = new GraphDataProvider();
+        $this->graphContext = new GraphContext();
+
+        $this->graphRuleDataProvider = new GraphRuleDataProvider();
+        $this->graphRuleContext = new GraphRuleContext();
+
+        $this->graphTypeDataProvider = new GraphTypeDataProvider();
+        $this->graphTypeContext = new GraphTypeContext();
+
+        $this->roleDataProvider = new RoleDataProvider();
+        $this->roleContext = new RoleContext();
+
+        $this->tagDataProvider = new TagDataProvider();
+        $this->tagContext = new TagContext();
+    }
 
     /**
-     * Returns the short representation of entity class.
+     * Returns the base context of this class;
      *
-     * @return string
+     * @return ?BaseContext
      */
-    protected function getClassShort(): string
-    {
-        $exploded = explode('\\', $this->getClass());
+    abstract function getContext(): ?BaseContext;
 
-        return end($exploded);
+    /**
+     * Makes the actual test
+     *
+     * @param ApiTestCaseWrapper $testCase
+     * @throws YadsException
+     * @throws TransportExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     * @throws ServerExceptionInterface
+     */
+    public function makeTest(ApiTestCaseWrapper $testCase): void
+    {
+        /* Arrange */
+        $testCase->setApiClient(self::createClient());
+        $testCase->setArrayHolder(self::$arrayHolder);
+
+        /* Act */
+        $testCase->requestApi();
+
+        /* Assert */
+        $this->assertResponseIsSuccessful();
+        if ($testCase->getMimeType() !== null) {
+            $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+        }
+        $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
+        $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
+    }
+
+    /**
+     * Returns the API test case for this test.
+     *
+     * @param string $name
+     * @param BaseContext|null $baseContext
+     * @return ApiTestCaseWrapper
+     * @throws MissingContextException
+     */
+    public function getApiTestCaseWrapper(string $name, BaseContext $baseContext = null): ApiTestCaseWrapper
+    {
+        if ($baseContext === null) {
+            $baseContext = $this->getContext();
+        }
+
+        if ($baseContext === null) {
+            throw new MissingContextException(__METHOD__);
+        }
+
+        return new ApiTestCaseWrapper($name, $baseContext);
     }
 
     /**
@@ -130,69 +269,6 @@ abstract class BaseApiTestCase extends ApiTestCase
         $baseUrl = $container->getParameter('api.base_url');
 
         return implode('/', [$baseUrl, $path, ...$parameter]);
-    }
-
-    /**
-     * Returns the Context of this class.
-     *
-     * @return string
-     */
-    protected function getContext(): string
-    {
-        return sprintf('%s/%s/%s', self::API_PATH, self::CONTEXTS_NAME, $this->getClassShort());
-    }
-
-    /**
-     * Returns the content according to given type.
-     *
-     * @param string $requestType
-     * @param mixed[] $data
-     * @param string $endpoint
-     * @return mixed[]
-     * @throws Exception
-     */
-    protected function getContent(string $requestType, array $data, string $endpoint): array
-    {
-        $entityName = $this->getClassShort();
-
-        return match ($requestType) {
-            self::REQUEST_TYPE_LIST => [
-                '@context' => $this->getContext(),
-                '@id' => $endpoint,
-                '@type' => 'hydra:Collection',
-                'hydra:member' => [],
-                'hydra:totalItems' => 0,
-            ],
-            self::REQUEST_TYPE_CREATE => array_merge_recursive([
-                '@context' => $this->getContext(),
-                '@id' => sprintf('%s/%d', $endpoint, intval($data['id'])),
-                '@type' => 'DocumentType',
-            ], $data),
-            default => throw new Exception(sprintf('Not supported request type "%s".', $requestType)),
-        };
-    }
-
-    /**
-     * Returns the key value pairs of given data array.
-     *
-     * @param mixed[] $data
-     * @param string[] $keys
-     * @return mixed[]
-     * @throws Exception
-     */
-    protected function getKeyValuePair(array $data, array $keys): array
-    {
-        $keyValuePair = [];
-
-        foreach ($keys as $key) {
-            if (!array_key_exists($key, $data)) {
-                throw new Exception(sprintf('The given key "%s" does not exist.', $key));
-            }
-
-            $keyValuePair[$key] = $data[$key];
-        }
-
-        return $keyValuePair;
     }
 
     /**
@@ -281,64 +357,6 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Get expected array to validate.
-     *
-     * @param ResponseInterface $response
-     * @param ArrayHolder[]|array[] $expectedBase
-     * @param ?array[] $reference
-     * @return ArrayHolder[]|array[]
-     *
-     * @throws ClientExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     * @throws Exception
-     */
-    public function getExpected(ResponseInterface $response, array $expectedBase, array $reference = null)
-    {
-        $responseArray = $response->toArray();
-
-        /* Get id from current response. */
-        $id = array_key_exists(self::ID_NAME, $responseArray) ? $responseArray[self::ID_NAME] : '???';
-
-        /* Body reference index */
-        $bodyIndexes = [];
-
-        /* Rebuild $expectedBase */
-        array_walk($expectedBase, function(&$a, $key) use ($id, &$bodyIndexes) {
-
-            /* Change $id with current on from response */
-            if ($a === '$id') {
-                $a = $id;
-            }
-
-            /* Find $body reference */
-            if ($a === '$body') {
-                $bodyIndexes[] = $key;
-            }
-        });
-
-        /* Replace reference ($body) */
-        $bodyIndex = count($bodyIndexes);
-        if ($reference !== null) {
-            while ($bodyIndex) {
-                unset($expectedBase[--$bodyIndex]);
-                $expectedBase = array_merge($reference, $expectedBase);
-            }
-        }
-
-        /* Replace ArrayHolder */
-        foreach ($expectedBase as &$value) {
-            if ($value instanceof ArrayHolder) {
-                $value = $value->conjure(self::$arrayHolder);
-            }
-        }
-
-        return $expectedBase;
-    }
-
-    /**
      * Returns the header for request.
      *
      * @param string $accept
@@ -351,24 +369,6 @@ abstract class BaseApiTestCase extends ApiTestCase
             'accept' => $accept,
             'Content-Type' => $contentType,
         ];
-    }
-
-    /**
-     * Returns request method by given request type.
-     *
-     * @param string $requestType
-     * @return string
-     * @throws Exception
-     */
-    public function getRequestMethod(string $requestType): string
-    {
-        return match ($requestType) {
-            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ => Request::METHOD_GET,
-            self::REQUEST_TYPE_CREATE => Request::METHOD_POST,
-            self::REQUEST_TYPE_UPDATE => Request::METHOD_PUT,
-            self::REQUEST_TYPE_DELETE => Request::METHOD_DELETE,
-            default => throw new Exception(sprintf('Unknown request type "%s".', $requestType)),
-        };
     }
 
     /**
@@ -393,7 +393,7 @@ abstract class BaseApiTestCase extends ApiTestCase
     protected static function createApplication(): Application
     {
         /* Application already exists. */
-        if (self::$application instanceof Application) {
+        if ((self::$application instanceof Application) && self::$keepDataBetweenTests) {
             return self::$application;
         }
 
@@ -429,69 +429,5 @@ abstract class BaseApiTestCase extends ApiTestCase
         }
 
         return $type;
-    }
-
-    /**
-     * Returns the URI of given endpoint and id.
-     *
-     * @param string[] $endpoint
-     * @param ArrayHolder $arrayHolder
-     * @return string
-     * @throws Exception
-     */
-    protected function getUri(array $endpoint, ArrayHolder $arrayHolder): string
-    {
-        foreach ($endpoint as &$endpointPart) {
-            $array = explode('::', $endpointPart);
-
-            if (count($array) === 1) {
-                continue;
-            }
-
-            list($key, $indexSpecifier) = $array;
-
-            if (!$arrayHolder->has($key)) {
-                throw new Exception(sprintf('A response with key "%s" is not available', $key));
-            }
-
-            /* Replace $id with real id. */
-            $endpointPart = match ($indexSpecifier) {
-                '$id' => $arrayHolder->get($key, self::ID_NAME),
-                default => throw new Exception(sprintf('Unknown index specifier "%s".', $indexSpecifier)),
-            };
-        }
-
-        return ($this->apiPrefix ?? '').implode('/', $endpoint);
-    }
-
-    /**
-     * Returns options for request.
-     *
-     * @param string $requestType
-     * @param string[]|ArrayHolder[] $body
-     * @return string[][]
-     * @throws Exception
-     */
-    protected function getOptions(string $requestType, array $body): array
-    {
-        $options = [
-            'headers' => [
-                'Accept' => 'application/json',
-                'Content-Type' => 'application/json',
-            ],
-        ];
-
-        /* Replace ArrayHolder */
-        foreach ($body as &$value) {
-            if ($value instanceof ArrayHolder) {
-                $value = $value->conjure(self::$arrayHolder);
-            }
-        }
-
-        if ($requestType === BaseApiTestCase::REQUEST_TYPE_CREATE) {
-            $options = array_merge_recursive($options, ['body' => json_encode($body)]);
-        }
-
-        return $options;
     }
 }

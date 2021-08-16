@@ -68,9 +68,9 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "phpunit-api": "phpunit tests/Api",
-        "phpunit-unit": "phpunit tests/Unit",
-        "sca": "phpstan analyse --level 8 --memory-limit 128M src tests",
+        "phpunit-api": "phpunit tests/Api --testdox",
+        "phpunit-unit": "phpunit tests/Unit --testdox",
+        "sca": "phpstan analyse --level 8 --memory-limit 256M src tests",
         "test": [
             "@phpunit-unit",
             "@phpunit-api",

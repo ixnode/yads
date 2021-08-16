@@ -28,16 +28,16 @@ namespace App\DataProvider;
 
 use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
-use App\Entity\Role;
+use App\Entity\GraphRule;
 
 /**
- * Class RoleDataProvider
+ * Class GraphRuleDataProvider
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-01)
+ * @version 1.0 (2021-08-16)
  * @package App\DataProvider
  */
-class RoleDataProvider extends BaseDataProvider
+class GraphRuleDataProvider extends BaseDataProvider
 {
     /**
      * Returns an entity as array.
@@ -49,12 +49,19 @@ class RoleDataProvider extends BaseDataProvider
     {
         $data = [
             [
-                'name' => 'Role example name 1',
-                'description' => 'Role example name 1',
+                'documentTypeSource' => '/api/v1/document_types/1',
+                'documentTypeTarget' => '/api/v1/document_types/2',
+                'graphType' => '/api/v1/graph_types/1',
             ],
             [
-                'name' => 'Role example name 2',
-                'description' => 'Role example name 2',
+                'documentTypeSource' => '/api/v1/document_types/1',
+                'documentTypeTarget' => '/api/v1/document_types/3',
+                'graphType' => '/api/v1/graph_types/1',
+            ],
+            [
+                'documentTypeSource' => '/api/v1/document_types/1',
+                'documentTypeTarget' => '/api/v1/document_types/4',
+                'graphType' => '/api/v1/graph_types/1',
             ],
         ];
 
@@ -62,12 +69,12 @@ class RoleDataProvider extends BaseDataProvider
     }
 
     /**
-     * Returns new Role entity.
+     * Returns new GraphRule entity.
      *
      * @return BaseEntity
      */
     public function getObject(): BaseEntity
     {
-        return new Role();
+        return new GraphRule();
     }
 }
