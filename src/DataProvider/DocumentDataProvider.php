@@ -49,7 +49,7 @@ class DocumentDataProvider extends BaseDataProvider
     {
         $data = [
             [
-                'documentType' => '/api/v1/document_types/1', // task
+                'documentType' => '/api/v1/document_types/1',
                 'data' => [
                     'title' => 'test 1',
                     'description' => 'test 1',
@@ -57,7 +57,7 @@ class DocumentDataProvider extends BaseDataProvider
                 ],
             ],
             [
-                'documentType' => '/api/v1/document_types/1', // task
+                'documentType' => '/api/v1/document_types/1',
                 'data' => [
                     'title' => 'test 2',
                     'description' => 'test 2',
@@ -65,7 +65,7 @@ class DocumentDataProvider extends BaseDataProvider
                 ],
             ],
             [
-                'documentType' => '/api/v1/document_types/1', // task
+                'documentType' => '/api/v1/document_types/1',
                 'data' => [
                     'title' => 'test 3',
                     'description' => 'test 3',
@@ -73,7 +73,7 @@ class DocumentDataProvider extends BaseDataProvider
                 ],
             ],
             [
-                'documentType' => '/api/v1/document_types/1', // task
+                'documentType' => '/api/v1/document_types/1',
                 'data' => [
                     'title' => 'test 4',
                     'description' => 'test 4',

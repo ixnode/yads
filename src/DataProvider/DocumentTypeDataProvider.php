@@ -47,47 +47,174 @@ class DocumentTypeDataProvider extends BaseDataProvider
      */
     public function getArray(int $recordNumber = 0): array
     {
-        return [
-            'type' => 'task',
-            'allowedAttributes' => [
-                '$id' => 'document.data.task.schema.json',
-                '$schema' => 'https://json-schema.org/draft/2020-12/schema',
-                'title' => 'Task document data',
-                'description' => 'Data from document of type task',
-                'type' => 'object',
-                'additionalProperties' => false,
-                'properties' => [
-                    'title' => [
-                        'type' => 'string',
-                        'minLength' => 2,
-                        'maxLength' => 255,
-                        'description' => 'The title of the task.',
+        $data = [
+            [
+                'type' => 'task',
+                'allowedAttributes' => [
+                    '$id' => 'document.data.task.schema.json',
+                    '$schema' => 'https://json-schema.org/draft/2020-12/schema',
+                    'title' => 'Task document data',
+                    'description' => 'Data from document of type task',
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                            'minLength' => 2,
+                            'maxLength' => 255,
+                            'description' => 'The title of the task.',
+                        ],
+                        'description' => [
+                            'type' => 'string',
+                            'minLength' => 10,
+                            'maxLength' => 65535,
+                            'description' => 'The description of the task.',
+                        ],
+                        'has_date_of_completion' => [
+                            'type' => 'boolean',
+                        ],
+                        'date_of_completion' => [
+                            'type' => 'string',
+                            'format' => 'date',
+                            'description' => 'The date on which this task must be completed.',
+                        ],
                     ],
-                    'description' => [
-                        'type' => 'string',
-                        'minLength' => 10,
-                        'maxLength' => 65535,
-                        'description' => 'The description of the task.',
-                    ],
-                    'has_date_of_completion' => [
-                        'type' => 'boolean',
-                    ],
-                    'date_of_completion' => [
-                        'type' => 'string',
-                        'format' => 'date',
-                        'description' => 'The date on which this task must be completed.',
+                    'required' => [
+                        0 => 'title',
+                        1 => 'description',
+                        2 => 'has_date_of_completion',
                     ],
                 ],
-                'required' => [
-                    0 => 'title',
-                    1 => 'description',
-                    2 => 'has_date_of_completion',
+                'defaults' => [
+                    'title'
                 ],
             ],
-            'defaults' => [
-                'title'
+            [
+                'type' => 'task',
+                'allowedAttributes' => [
+                    '$id' => 'document.data.task.schema.json',
+                    '$schema' => 'https://json-schema.org/draft/2020-12/schema',
+                    'title' => 'Task document data',
+                    'description' => 'Data from document of type task',
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                            'minLength' => 2,
+                            'maxLength' => 255,
+                            'description' => 'The title of the task.',
+                        ],
+                        'description' => [
+                            'type' => 'string',
+                            'minLength' => 10,
+                            'maxLength' => 65535,
+                            'description' => 'The description of the task.',
+                        ],
+                        'has_date_of_completion' => [
+                            'type' => 'boolean',
+                        ],
+                        'date_of_completion' => [
+                            'type' => 'string',
+                            'format' => 'date',
+                            'description' => 'The date on which this task must be completed.',
+                        ],
+                    ],
+                    'required' => [
+                        0 => 'title',
+                        1 => 'description',
+                        2 => 'has_date_of_completion',
+                    ],
+                ],
+                'defaults' => [
+                    'title'
+                ],
+            ],
+            [
+                'type' => 'task',
+                'allowedAttributes' => [
+                    '$id' => 'document.data.task.schema.json',
+                    '$schema' => 'https://json-schema.org/draft/2020-12/schema',
+                    'title' => 'Task document data',
+                    'description' => 'Data from document of type task',
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                            'minLength' => 2,
+                            'maxLength' => 255,
+                            'description' => 'The title of the task.',
+                        ],
+                        'description' => [
+                            'type' => 'string',
+                            'minLength' => 10,
+                            'maxLength' => 65535,
+                            'description' => 'The description of the task.',
+                        ],
+                        'has_date_of_completion' => [
+                            'type' => 'boolean',
+                        ],
+                        'date_of_completion' => [
+                            'type' => 'string',
+                            'format' => 'date',
+                            'description' => 'The date on which this task must be completed.',
+                        ],
+                    ],
+                    'required' => [
+                        0 => 'title',
+                        1 => 'description',
+                        2 => 'has_date_of_completion',
+                    ],
+                ],
+                'defaults' => [
+                    'title'
+                ],
+            ],
+            [
+                'type' => 'task',
+                'allowedAttributes' => [
+                    '$id' => 'document.data.task.schema.json',
+                    '$schema' => 'https://json-schema.org/draft/2020-12/schema',
+                    'title' => 'Task document data',
+                    'description' => 'Data from document of type task',
+                    'type' => 'object',
+                    'additionalProperties' => false,
+                    'properties' => [
+                        'title' => [
+                            'type' => 'string',
+                            'minLength' => 2,
+                            'maxLength' => 255,
+                            'description' => 'The title of the task.',
+                        ],
+                        'description' => [
+                            'type' => 'string',
+                            'minLength' => 10,
+                            'maxLength' => 65535,
+                            'description' => 'The description of the task.',
+                        ],
+                        'has_date_of_completion' => [
+                            'type' => 'boolean',
+                        ],
+                        'date_of_completion' => [
+                            'type' => 'string',
+                            'format' => 'date',
+                            'description' => 'The date on which this task must be completed.',
+                        ],
+                    ],
+                    'required' => [
+                        0 => 'title',
+                        1 => 'description',
+                        2 => 'has_date_of_completion',
+                    ],
+                ],
+                'defaults' => [
+                    'title'
+                ],
             ],
         ];
+
+        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
 
     /**

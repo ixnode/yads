@@ -47,7 +47,23 @@ class GraphRuleDataProvider extends BaseDataProvider
      */
     public function getArray(int $recordNumber = 0): array
     {
-        $data = [[], [], ];
+        $data = [
+            [
+                'documentTypeSource' => '/api/v1/document_types/1',
+                'documentTypeTarget' => '/api/v1/document_types/2',
+                'graphType' => '/api/v1/graph_types/1',
+            ],
+            [
+                'documentTypeSource' => '/api/v1/document_types/1',
+                'documentTypeTarget' => '/api/v1/document_types/3',
+                'graphType' => '/api/v1/graph_types/1',
+            ],
+            [
+                'documentTypeSource' => '/api/v1/document_types/1',
+                'documentTypeTarget' => '/api/v1/document_types/4',
+                'graphType' => '/api/v1/graph_types/1',
+            ],
+        ];
 
         return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
