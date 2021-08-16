@@ -28,17 +28,23 @@ namespace App\DataProvider;
 
 use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
-use App\Entity\Document;
+use App\Entity\GraphType;
 
 /**
- * Class DocumentDataProvider
+ * Class GraphTypeDataProvider
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-12)
+ * @version 1.0 (2021-08-16)
  * @package App\DataProvider
  */
-class DocumentDataProvider extends BaseDataProvider
+class GraphTypeDataProvider extends BaseDataProvider
 {
+    const DIRECTION_TYPE_BIDIRECTIONAL = 'bidirectional';
+
+    const DIRECTION_TYPE_UNIDIRECTIONAL = 'unidirectional';
+
+    const DIRECTION_TYPE_NOT_DIRECTED = 'not_directed';
+
     /**
      * Returns an entity as array.
      *
@@ -49,20 +55,17 @@ class DocumentDataProvider extends BaseDataProvider
     {
         $data = [
             [
-                'documentType' => '/api/v1/document_types/1', // task
-                'data' => [
-                    'title' => 'test 1',
-                    'description' => 'test 1',
-                    'has_date_of_completion' => false,
-                ],
-            ],
-            [
-                'documentType' => '/api/v1/document_types/1', // task
-                'data' => [
-                    'title' => 'test 2',
-                    'description' => 'test 2',
-                    'has_date_of_completion' => false,
-                ],
+                'title' => 'Bidirectional 1',
+                'titleReverse' =>  'Bidirectional Reverse 1',
+                'graphType' => self::DIRECTION_TYPE_BIDIRECTIONAL,
+            ], [
+                'title' => 'Unidirectional 2',
+                'titleReverse' =>  'Unidirectional Reverse 2',
+                'graphType' => self::DIRECTION_TYPE_UNIDIRECTIONAL,
+            ], [
+                'title' => 'Not directed 3',
+                'titleReverse' =>  'Not directed Reverse 3',
+                'graphType' => self::DIRECTION_TYPE_NOT_DIRECTED,
             ],
         ];
 
@@ -70,12 +73,12 @@ class DocumentDataProvider extends BaseDataProvider
     }
 
     /**
-     * Returns new Document entity.
+     * Returns new GraphType entity.
      *
      * @return BaseEntity
      */
     public function getObject(): BaseEntity
     {
-        return new Document();
+        return new GraphType();
     }
 }

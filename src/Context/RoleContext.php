@@ -38,7 +38,7 @@ use App\Entity\Role;
 final class RoleContext extends BaseContext
 {
     /**
-     * Returns the DocumentType entity class.
+     * Returns the Role entity class.
      *
      * @return string
      */

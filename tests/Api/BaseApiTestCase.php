@@ -30,11 +30,19 @@ use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
 use App\Context\DocumentContext;
+use App\Context\DocumentTagContext;
 use App\Context\DocumentTypeContext;
+use App\Context\GraphContext;
+use App\Context\GraphRuleContext;
+use App\Context\GraphTypeContext;
 use App\Context\RoleContext;
 use App\Context\TagContext;
 use App\DataProvider\DocumentDataProvider;
+use App\DataProvider\DocumentTagDataProvider;
 use App\DataProvider\DocumentTypeDataProvider;
+use App\DataProvider\GraphDataProvider;
+use App\DataProvider\GraphRuleDataProvider;
+use App\DataProvider\GraphTypeDataProvider;
 use App\DataProvider\RoleDataProvider;
 use App\DataProvider\TagDataProvider;
 use App\Exception\MissingContextException;
@@ -100,9 +108,25 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     protected DocumentContext $documentContext;
 
+    protected DocumentTagDataProvider $documentTagDataProvider;
+
+    protected DocumentTagContext $documentTagContext;
+
     protected DocumentTypeDataProvider $documentTypeDataProvider;
 
     protected DocumentTypeContext $documentTypeContext;
+
+    protected GraphDataProvider $graphDataProvider;
+
+    protected GraphContext $graphContext;
+
+    protected GraphRuleDataProvider $graphRuleDataProvider;
+
+    protected GraphRuleContext $graphRuleContext;
+
+    protected GraphTypeDataProvider $graphTypeDataProvider;
+
+    protected GraphTypeContext $graphTypeContext;
 
     protected RoleDataProvider $roleDataProvider;
 
@@ -147,8 +171,20 @@ abstract class BaseApiTestCase extends ApiTestCase
         $this->documentDataProvider = new DocumentDataProvider();
         $this->documentContext = new DocumentContext();
 
+        $this->documentTagDataProvider = new DocumentTagDataProvider();
+        $this->documentTagContext = new DocumentTagContext();
+
         $this->documentTypeDataProvider = new DocumentTypeDataProvider();
         $this->documentTypeContext = new DocumentTypeContext();
+
+        $this->graphDataProvider = new GraphDataProvider();
+        $this->graphContext = new GraphContext();
+
+        $this->graphRuleDataProvider = new GraphRuleDataProvider();
+        $this->graphRuleContext = new GraphRuleContext();
+
+        $this->graphTypeDataProvider = new GraphTypeDataProvider();
+        $this->graphTypeContext = new GraphTypeContext();
 
         $this->roleDataProvider = new RoleDataProvider();
         $this->roleContext = new RoleContext();

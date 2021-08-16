@@ -29,7 +29,7 @@ namespace App\Context;
 use App\Entity\Document;
 
 /**
- * Class DocumentTypeContext
+ * Class DocumentContext
  *
  * @author Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2021-08-10)
@@ -38,7 +38,7 @@ use App\Entity\Document;
 final class DocumentContext extends BaseContext
 {
     /**
-     * Returns the DocumentType entity class.
+     * Returns the Document entity class.
      *
      * @return string
      */

@@ -24,58 +24,46 @@
  * SOFTWARE.
  */
 
-namespace App\DataProvider;
+namespace App\Context;
 
-use App\DataFixtures\DocumentTypeFixtures;
-use App\Entity\BaseEntity;
-use App\Entity\Document;
+use App\Entity\DocumentTag;
 
 /**
- * Class DocumentDataProvider
+ * Class DocumentTagContext
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-12)
- * @package App\DataProvider
+ * @version 1.0 (2021-08-16)
+ * @package App\Context
  */
-class DocumentDataProvider extends BaseDataProvider
+final class DocumentTagContext extends BaseContext
 {
     /**
-     * Returns an entity as array.
+     * Returns the DocumentTag entity class.
      *
-     * @param int $recordNumber
-     * @return array[]|int[]|string[]
+     * @return string
      */
-    public function getArray(int $recordNumber = 0): array
+    public function getClass(): string
     {
-        $data = [
-            [
-                'documentType' => '/api/v1/document_types/1', // task
-                'data' => [
-                    'title' => 'test 1',
-                    'description' => 'test 1',
-                    'has_date_of_completion' => false,
-                ],
-            ],
-            [
-                'documentType' => '/api/v1/document_types/1', // task
-                'data' => [
-                    'title' => 'test 2',
-                    'description' => 'test 2',
-                    'has_date_of_completion' => false,
-                ],
-            ],
-        ];
-
-        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
+        return DocumentTag::class;
     }
 
     /**
-     * Returns new Document entity.
+     * Returns the type of this class.
      *
-     * @return BaseEntity
+     * @return string
      */
-    public function getObject(): BaseEntity
+    public function getType(): string
     {
-        return new Document();
+        return 'DocumentTag';
+    }
+
+    /**
+     * Returns the single path name.
+     *
+     * @return string
+     */
+    public function getPathName(): string
+    {
+        return 'document_tags';
     }
 }

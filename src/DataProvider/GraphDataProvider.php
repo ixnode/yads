@@ -28,16 +28,17 @@ namespace App\DataProvider;
 
 use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
-use App\Entity\Document;
+use App\Entity\Graph;
+use App\Entity\Tag;
 
 /**
- * Class DocumentDataProvider
+ * Class GraphDataProvider
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-12)
+ * @version 1.0 (2021-08-16)
  * @package App\DataProvider
  */
-class DocumentDataProvider extends BaseDataProvider
+class GraphDataProvider extends BaseDataProvider
 {
     /**
      * Returns an entity as array.
@@ -47,35 +48,18 @@ class DocumentDataProvider extends BaseDataProvider
      */
     public function getArray(int $recordNumber = 0): array
     {
-        $data = [
-            [
-                'documentType' => '/api/v1/document_types/1', // task
-                'data' => [
-                    'title' => 'test 1',
-                    'description' => 'test 1',
-                    'has_date_of_completion' => false,
-                ],
-            ],
-            [
-                'documentType' => '/api/v1/document_types/1', // task
-                'data' => [
-                    'title' => 'test 2',
-                    'description' => 'test 2',
-                    'has_date_of_completion' => false,
-                ],
-            ],
-        ];
+        $data = [[], [], ];
 
         return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
 
     /**
-     * Returns new Document entity.
+     * Returns new Graph entity.
      *
      * @return BaseEntity
      */
     public function getObject(): BaseEntity
     {
-        return new Document();
+        return new Graph();
     }
 }

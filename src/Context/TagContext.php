@@ -29,7 +29,7 @@ namespace App\Context;
 use App\Entity\Tag;
 
 /**
- * Class DocumentTypeContext
+ * Class TagContext
  *
  * @author Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2021-08-13)
@@ -38,7 +38,7 @@ use App\Entity\Tag;
 final class TagContext extends BaseContext
 {
     /**
-     * Returns the DocumentType entity class.
+     * Returns the Tag entity class.
      *
      * @return string
      */
