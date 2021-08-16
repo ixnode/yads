@@ -47,14 +47,26 @@ class DocumentDataProvider extends BaseDataProvider
      */
     public function getArray(int $recordNumber = 0): array
     {
-        return [
-            'documentType' => '/api/v1/document_types/1', // task
-            'data' => [
-                'title' => 'test',
-                'description' => 'test',
-                'has_date_of_completion' => false,
+        $data = [
+            [
+                'documentType' => '/api/v1/document_types/1', // task
+                'data' => [
+                    'title' => 'test 1',
+                    'description' => 'test 1',
+                    'has_date_of_completion' => false,
+                ],
+            ],
+            [
+                'documentType' => '/api/v1/document_types/1', // task
+                'data' => [
+                    'title' => 'test 2',
+                    'description' => 'test 2',
+                    'has_date_of_completion' => false,
+                ],
             ],
         ];
+
+        return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];
     }
 
     /**

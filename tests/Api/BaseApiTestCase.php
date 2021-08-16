@@ -29,8 +29,12 @@ namespace App\Tests\Api;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
+use App\Context\DocumentContext;
+use App\Context\DocumentTypeContext;
 use App\Context\RoleContext;
 use App\Context\TagContext;
+use App\DataProvider\DocumentDataProvider;
+use App\DataProvider\DocumentTypeDataProvider;
 use App\DataProvider\RoleDataProvider;
 use App\DataProvider\TagDataProvider;
 use App\Exception\MissingContextException;
@@ -43,7 +47,6 @@ use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * Class BaseApiTestCase
@@ -93,6 +96,14 @@ abstract class BaseApiTestCase extends ApiTestCase
 
 
 
+    protected DocumentDataProvider $documentDataProvider;
+
+    protected DocumentContext $documentContext;
+
+    protected DocumentTypeDataProvider $documentTypeDataProvider;
+
+    protected DocumentTypeContext $documentTypeContext;
+
     protected RoleDataProvider $roleDataProvider;
 
     protected RoleContext $roleContext;
@@ -133,6 +144,12 @@ abstract class BaseApiTestCase extends ApiTestCase
      */
     protected function setUp(): void
     {
+        $this->documentDataProvider = new DocumentDataProvider();
+        $this->documentContext = new DocumentContext();
+
+        $this->documentTypeDataProvider = new DocumentTypeDataProvider();
+        $this->documentTypeContext = new DocumentTypeContext();
+
         $this->roleDataProvider = new RoleDataProvider();
         $this->roleContext = new RoleContext();
 

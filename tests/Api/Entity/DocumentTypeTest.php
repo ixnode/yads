@@ -29,7 +29,6 @@ namespace App\Tests\Api\Entity;
 use App\Context\BaseContext;
 use App\Context\DocumentTypeContext;
 use App\DataProvider\DocumentTypeDataProvider;
-use App\Entity\DocumentType;
 use App\Exception\MissingArrayHolderException;
 use App\Exception\ContainerLoadException;
 use App\Exception\JsonDecodeException;
