@@ -48,13 +48,15 @@ class DocumentTypeDataProvider extends BaseDataProvider
     public function getArray(int $recordNumber = 0): array
     {
         $data = [
+
+            /* group document type */
             [
-                'type' => 'task',
+                'type' => 'group',
                 'allowedAttributes' => [
-                    '$id' => 'document.data.task.schema.json',
+                    '$id' => 'document.data.group.schema.json',
                     '$schema' => 'https://json-schema.org/draft/2020-12/schema',
-                    'title' => 'Task document data',
-                    'description' => 'Data from document of type task',
+                    'title' => 'Group document data',
+                    'description' => 'Data from document of type group',
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
@@ -62,40 +64,33 @@ class DocumentTypeDataProvider extends BaseDataProvider
                             'type' => 'string',
                             'minLength' => 2,
                             'maxLength' => 255,
-                            'description' => 'The title of the task.',
+                            'description' => 'The title of the group.',
                         ],
                         'description' => [
                             'type' => 'string',
                             'minLength' => 10,
                             'maxLength' => 65535,
-                            'description' => 'The description of the task.',
-                        ],
-                        'has_date_of_completion' => [
-                            'type' => 'boolean',
-                        ],
-                        'date_of_completion' => [
-                            'type' => 'string',
-                            'format' => 'date',
-                            'description' => 'The date on which this task must be completed.',
-                        ],
+                            'description' => 'The description of the group.',
+                        ]
                     ],
                     'required' => [
                         0 => 'title',
                         1 => 'description',
-                        2 => 'has_date_of_completion',
                     ],
                 ],
                 'defaults' => [
                     'title'
                 ],
             ],
+
+            /* notebook document type */
             [
-                'type' => 'task',
+                'type' => 'notebook',
                 'allowedAttributes' => [
-                    '$id' => 'document.data.task.schema.json',
+                    '$id' => 'document.data.notebook.schema.json',
                     '$schema' => 'https://json-schema.org/draft/2020-12/schema',
-                    'title' => 'Task document data',
-                    'description' => 'Data from document of type task',
+                    'title' => 'Notebook document data',
+                    'description' => 'Data from document of type notebook',
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
@@ -103,40 +98,38 @@ class DocumentTypeDataProvider extends BaseDataProvider
                             'type' => 'string',
                             'minLength' => 2,
                             'maxLength' => 255,
-                            'description' => 'The title of the task.',
+                            'description' => 'The title of the notebook.',
                         ],
                         'description' => [
                             'type' => 'string',
                             'minLength' => 10,
-                            'maxLength' => 65535,
-                            'description' => 'The description of the task.',
+                            'maxLength' => 65535, // 64k
+                            'description' => 'The description of the notebook.',
                         ],
-                        'has_date_of_completion' => [
-                            'type' => 'boolean',
-                        ],
-                        'date_of_completion' => [
-                            'type' => 'string',
-                            'format' => 'date',
-                            'description' => 'The date on which this task must be completed.',
+                        'parent' => [
+                            'type' => ['integer', 'null', ],
+                            'minimum' => 1,
+                            'description' => 'The parent notebook id if exists.',
                         ],
                     ],
                     'required' => [
                         0 => 'title',
-                        1 => 'description',
-                        2 => 'has_date_of_completion',
+                        1 => 'parent',
                     ],
                 ],
                 'defaults' => [
                     'title'
                 ],
             ],
+
+            /* note document type */
             [
-                'type' => 'task',
+                'type' => 'note',
                 'allowedAttributes' => [
-                    '$id' => 'document.data.task.schema.json',
+                    '$id' => 'document.data.note.schema.json',
                     '$schema' => 'https://json-schema.org/draft/2020-12/schema',
-                    'title' => 'Task document data',
-                    'description' => 'Data from document of type task',
+                    'title' => 'Note document data',
+                    'description' => 'Data from document of type note',
                     'type' => 'object',
                     'additionalProperties' => false,
                     'properties' => [
@@ -144,33 +137,32 @@ class DocumentTypeDataProvider extends BaseDataProvider
                             'type' => 'string',
                             'minLength' => 2,
                             'maxLength' => 255,
-                            'description' => 'The title of the task.',
+                            'description' => 'The title of the note.',
                         ],
                         'description' => [
                             'type' => 'string',
                             'minLength' => 10,
-                            'maxLength' => 65535,
-                            'description' => 'The description of the task.',
+                            'maxLength' => 65535, // 64k
+                            'description' => 'The description of the note.',
                         ],
-                        'has_date_of_completion' => [
-                            'type' => 'boolean',
-                        ],
-                        'date_of_completion' => [
+                        'content' => [
                             'type' => 'string',
-                            'format' => 'date',
-                            'description' => 'The date on which this task must be completed.',
+                            'minLength' => 10,
+                            'maxLength' => 16777215, // 16M
+                            'description' => 'The description of the note.',
                         ],
                     ],
                     'required' => [
                         0 => 'title',
-                        1 => 'description',
-                        2 => 'has_date_of_completion',
+                        1 => 'content',
                     ],
                 ],
                 'defaults' => [
                     'title'
                 ],
             ],
+
+            /* task document type */
             [
                 'type' => 'task',
                 'allowedAttributes' => [

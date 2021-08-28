@@ -48,32 +48,37 @@ class DocumentDataProvider extends BaseDataProvider
     public function getArray(int $recordNumber = 0): array
     {
         $data = [
+
+            /* group document */
             [
                 'documentType' => '/api/v1/document_types/1',
                 'data' => [
                     'title' => 'test 1',
                     'description' => 'test 1',
-                    'has_date_of_completion' => false,
                 ],
             ],
+
+            /* notebook document */
             [
-                'documentType' => '/api/v1/document_types/1',
+                'documentType' => '/api/v1/document_types/2',
                 'data' => [
                     'title' => 'test 2',
-                    'description' => 'test 2',
-                    'has_date_of_completion' => false,
+                    'parent' => null,
                 ],
             ],
+
+            /* note document */
             [
-                'documentType' => '/api/v1/document_types/1',
+                'documentType' => '/api/v1/document_types/3',
                 'data' => [
                     'title' => 'test 3',
-                    'description' => 'test 3',
-                    'has_date_of_completion' => false,
+                    'content' => 'test 3',
                 ],
             ],
+
+            /* task document */
             [
-                'documentType' => '/api/v1/document_types/1',
+                'documentType' => '/api/v1/document_types/4',
                 'data' => [
                     'title' => 'test 4',
                     'description' => 'test 4',

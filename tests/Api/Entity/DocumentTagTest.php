@@ -28,8 +28,8 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
 use App\Exception\YadsException;
-use App\Tests\Api\ApiTestCaseWrapper;
-use App\Tests\Api\BaseApiTestCase;
+use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -45,7 +45,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class DocumentTagTest extends BaseApiTestCase
 {
     /**
-     * Create document type (needed for a DocumentTag entity).
+     * Create document type group (needed for a DocumentTag entity).
      *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
@@ -56,13 +56,38 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeEntity(): void
+    public function testCreateNeededDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray())
-            ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type', 'id')])
+            ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create document type notebook (needed for a DocumentTag entity).
+     *
+     * POST /api/v1/document_types
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateNeededDocumentTypeNotebookEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 1))
+            ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */

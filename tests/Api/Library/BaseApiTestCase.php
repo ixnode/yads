@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace App\Tests\Api;
+namespace App\Tests\Api\Library;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
@@ -198,7 +198,10 @@ abstract class BaseApiTestCase extends ApiTestCase
      *
      * @return ?BaseContext
      */
-    abstract function getContext(): ?BaseContext;
+    public function getContext(): ?BaseContext
+    {
+        return null;
+    }
 
     /**
      * Makes the actual test
