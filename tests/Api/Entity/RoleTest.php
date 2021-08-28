@@ -65,7 +65,8 @@ class RoleTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create first role.
+    /**
+     * Create first role.
      *
      * POST /api/v1/roles
      * application/ld+json; charset=utf-8

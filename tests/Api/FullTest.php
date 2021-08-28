@@ -55,13 +55,13 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeGroup(): void
+    public function testCreateDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
-            ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 0))
-            ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 0) + ['id' => new ArrayHolder('create_document_type_group', 'id')])
+            ->setBody($this->documentTypeDataProvider->getEntityArray())
+            ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
@@ -81,7 +81,7 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeNotebook(): void
+    public function testCreateDocumentTypeNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
@@ -94,6 +94,7 @@ class FullTest extends BaseApiTestCase
         /* Make the test */
         $this->makeTest($testCase);
     }
+
     /**
      * Create document_type note.
      *
@@ -106,7 +107,7 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeNote(): void
+    public function testCreateDocumentTypeNoteEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_note', $this->documentTypeContext)
@@ -119,6 +120,7 @@ class FullTest extends BaseApiTestCase
         /* Make the test */
         $this->makeTest($testCase);
     }
+
     /**
      * Create document_type task.
      *
@@ -131,13 +133,117 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeTask(): void
+    public function testCreateDocumentTypeTaskEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_task', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_type_task', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph_type bidirectional.
+     *
+     * POST /api/v1/graph_types
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateGraphTypeBidirectionalEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_type_bidirectional', $this->graphTypeContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->graphTypeDataProvider->getEntityArray())
+            ->setExpected($this->graphTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_type_bidirectional', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph_type unidirectional.
+     *
+     * POST /api/v1/graph_types
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateGraphTypeUnidirectionalEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_type_unidirectional', $this->graphTypeContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->graphTypeDataProvider->getEntityArray(recordNumber: 1))
+            ->setExpected($this->graphTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_graph_type_unidirectional', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph_type not directed.
+     *
+     * POST /api/v1/graph_types
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateGraphTypeNotDirectedEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_type_not_directed', $this->graphTypeContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->graphTypeDataProvider->getEntityArray(recordNumber: 2))
+            ->setExpected($this->graphTypeDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_graph_type_not_directed', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create role.
+     *
+     * POST /api/v1/roles
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateRoleEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_role', $this->roleContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->roleDataProvider->getEntityArray())
+            ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 

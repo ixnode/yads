@@ -26,7 +26,6 @@
 
 namespace App\DataProvider;
 
-use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
 use App\Entity\Tag;
 
