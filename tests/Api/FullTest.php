@@ -61,6 +61,13 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  * - Create role graph notebook and note entity
  * - Create role graph notebook and task entity
  *
+ * Create document
+ * ---------------
+ * - Create document group entity
+ * - Create document notebook entity
+ * - Create document note entity
+ * - Create document task entity
+ * 
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
