@@ -433,4 +433,14 @@ abstract class BaseApiTestCase extends ApiTestCase
 
         return $type;
     }
+
+    /**
+     * Return ArrayHolder
+     *
+     * @return ArrayHolder
+     */
+    protected function getArrayHolder(): ArrayHolder
+    {
+        return self::$arrayHolder;
+    }
 }

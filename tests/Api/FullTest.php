@@ -30,6 +30,7 @@ use App\Exception\YadsException;
 use App\Tests\Api\Library\ApiTestCaseWrapper;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
+use Exception;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -37,6 +38,28 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * Class FullTest
+ *
+ * Create document types:
+ * ----------------------
+ * - Create document type group entity
+ * - Create document type notebook entity
+ * - Create document type note entity
+ * - Create document type task entity
+ *
+ * Create graph types
+ * ------------------
+ * - Create graph type bidirectional entity
+ * - Create graph type unidirectional entity
+ * - Create graph type not directed entity
+ *
+ * Create roles
+ * ------------
+ * - Create role entity
+ *
+ * Create role graphs
+ * ------------------
+ * - Create role graph notebook and note entity
+ * - Create role graph notebook and task entity
  *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
@@ -248,6 +271,74 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create first graphRule.
+     *
+     * POST /api/v1/graph_rules
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateRoleGraphNotebookAndNoteEntity(): void
+    {
+        /* Arrange: Build body */
+        $body = [
+            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_notebook', '@id'), // n
+            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_note', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+        ];
+
+        /* Arrange: Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_rule_notebook_note', $this->graphRuleContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_notebook_note', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Act & Assert: Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create first graphRule.
+     *
+     * POST /api/v1/graph_rules
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateRoleGraphNotebookAndTaskEntity(): void
+    {
+        /* Arrange: Build body */
+        $body = [
+            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_notebook', '@id'), // n
+            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_task', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+        ];
+
+        /* Arrange: Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_rule_notebook_task', $this->graphRuleContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_notebook_task', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Act & Assert: Make the test */
         $this->makeTest($testCase);
     }
 }
