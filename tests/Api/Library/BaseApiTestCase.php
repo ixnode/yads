@@ -46,8 +46,11 @@ use App\DataProvider\GraphTypeDataProvider;
 use App\DataProvider\RoleDataProvider;
 use App\DataProvider\TagDataProvider;
 use App\Exception\MissingContextException;
+use App\Exception\RaceConditionApiRequestException;
+use App\Exception\UnknownRequestTypeException;
 use App\Exception\YadsException;
 use App\Utils\ArrayHolder;
+use App\Utils\ExceptionHolder;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
@@ -207,15 +210,23 @@ abstract class BaseApiTestCase extends ApiTestCase
      * Makes the actual test
      *
      * @param ApiTestCaseWrapper $testCase
-     * @throws YadsException
-     * @throws TransportExceptionInterface
-     * @throws RedirectionExceptionInterface
+     * @param ExceptionHolder|null $exceptionHolder
      * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws RaceConditionApiRequestException
+     * @throws UnknownRequestTypeException
      */
-    public function makeTest(ApiTestCaseWrapper $testCase): void
+    public function makeTest(ApiTestCaseWrapper $testCase, ?ExceptionHolder $exceptionHolder = null): void
     {
         /* Arrange */
+        if ($exceptionHolder !== null) {
+            $this->expectException($exceptionHolder->getClass());
+            $this->expectExceptionCode($exceptionHolder->getCode());
+            $this->expectExceptionMessage($exceptionHolder->getMessage());
+        }
         $testCase->setApiClient(self::createClient());
         $testCase->setArrayHolder(self::$arrayHolder);
 

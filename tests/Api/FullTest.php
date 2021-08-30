@@ -30,7 +30,9 @@ use App\Exception\YadsException;
 use App\Tests\Api\Library\ApiTestCaseWrapper;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
+use App\Utils\ExceptionHolder;
 use Exception;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -63,11 +65,13 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  *
  * Create document
  * ---------------
+ * - Create invalid document group missing title entity
+ * - Create invalid document group unknown field entity
  * - Create document group entity
  * - Create document notebook entity
  * - Create document note entity
  * - Create document task entity
- * 
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
@@ -347,6 +351,76 @@ class FullTest extends BaseApiTestCase
 
         /* Act & Assert: Make the test */
         $this->makeTest($testCase);
+    }
+
+    /**
+     * Create invalid group document.
+     *
+     * POST /api/v1/documents
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateInvalidDocumentGroupMissingTitleEntity(): void
+    {
+        $body = [
+            'documentType' => $this->getArrayHolder()->get('create_document_type_group', '@id'),
+            'data' => [
+                'description' => 'test 1',
+            ],
+        ];
+        $exceptionHolder = new ExceptionHolder(ClientException::class, 422, 'The property title is required');
+
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_document_group_invalid_missing_title', $this->documentContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_document_group_invalid_missing_title', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase, $exceptionHolder);
+    }
+
+    /**
+     * Create invalid group document.
+     *
+     * POST /api/v1/documents
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateInvalidDocumentGroupUnknownFieldEntity(): void
+    {
+        $body = [
+            'documentType' => $this->getArrayHolder()->get('create_document_type_group', '@id'),
+            'data' => [
+                'title' => 'test 1',
+                'description' => 'test 1',
+                'unknown' => 'foo',
+            ],
+        ];
+        $exceptionHolder = new ExceptionHolder(ClientException::class, 422, 'The property unknown is not defined and the definition does not allow additional properties');
+
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_document_group_invalid', $this->documentContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_document_group_invalid', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase, $exceptionHolder);
     }
 
     /**
