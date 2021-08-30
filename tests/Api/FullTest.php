@@ -302,7 +302,7 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create first graphRule.
+     * Create notebook and note graphRule.
      *
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
@@ -338,7 +338,7 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create first graphRule.
+     * Create notebook and task graphRule.
      *
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
@@ -424,7 +424,7 @@ class FullTest extends BaseApiTestCase
      * @throws YadsException
      * @throws Exception
      */
-    public function testCreateInvalidDocumentGroupUnknownFieldEntity(): void
+    public function createInvalidDocumentGroupUnknownFieldEntity(): void
     {
         $body = [
             'documentType' => $this->getArrayHolder()->get('create_document_type_group', '@id'),
@@ -461,7 +461,7 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentGroupEntity(): void
+    public function createDocumentGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_group', $this->documentContext)
@@ -488,7 +488,7 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentNotebookEntity(): void
+    public function createDocumentNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_notebook', $this->documentContext)
@@ -515,7 +515,7 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentNoteEntity(): void
+    public function createDocumentNoteEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_note', $this->documentContext)
@@ -542,13 +542,85 @@ class FullTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTaskEntity(): void
+    public function createDocumentTaskEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_task', $this->documentContext)
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_task', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph notebook and note graph.
+     *
+     * POST /api/v1/graphs
+     * application/ld+json; charset=utf-8
+     *
+     * @test
+     * @testdox Graph: 1) Create notebook and note connection.
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateNotebookNoteEntity(): void
+    {
+        $body = [
+            'documentSource' => $this->getArrayHolder()->get('create_document_notebook', '@id'), // n
+            'documentTarget' => $this->getArrayHolder()->get('create_document_note', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'graphTypeReversed' => false,
+            'weight' => 10,
+        ];
+
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_notebook_and_note', $this->graphContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_notebook_and_note', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph notebook and task graph.
+     *
+     * POST /api/v1/graphs
+     * application/ld+json; charset=utf-8
+     *
+     * @test
+     * @testdox Graph: 1) Create notebook and task connection.
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateNotebookTaskEntity(): void
+    {
+        $body = [
+            'documentSource' => $this->getArrayHolder()->get('create_document_notebook', '@id'), // n
+            'documentTarget' => $this->getArrayHolder()->get('create_document_task', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'graphTypeReversed' => false,
+            'weight' => 10,
+        ];
+
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_notebook_and_task', $this->graphContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_notebook_and_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
