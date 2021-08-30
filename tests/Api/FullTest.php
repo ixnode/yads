@@ -83,13 +83,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 1) Create "group".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeGroupEntity(): void
+    public function createDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
@@ -109,13 +111,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 2) Create "notebook".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeNotebookEntity(): void
+    public function createDocumentTypeNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
@@ -135,13 +139,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 3) Create "note".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeNoteEntity(): void
+    public function createDocumentTypeNoteEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_note', $this->documentTypeContext)
@@ -161,13 +167,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 4) Create "task".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateDocumentTypeTaskEntity(): void
+    public function createDocumentTypeTaskEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_task', $this->documentTypeContext)
@@ -187,13 +195,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 1) Create "bidirectional".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateGraphTypeBidirectionalEntity(): void
+    public function createGraphTypeBidirectionalEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_bidirectional', $this->graphTypeContext)
@@ -213,13 +223,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 2) Create "unidirectional".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateGraphTypeUnidirectionalEntity(): void
+    public function createGraphTypeUnidirectionalEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_unidirectional', $this->graphTypeContext)
@@ -239,13 +251,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 3) Create "not directed".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateGraphTypeNotDirectedEntity(): void
+    public function createGraphTypeNotDirectedEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_not_directed', $this->graphTypeContext)
@@ -265,13 +279,15 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/roles
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 1) Create Role.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateRoleEntity(): void
+    public function createRoleEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_role', $this->roleContext)
@@ -291,6 +307,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 1) "notebook" connects "note".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -298,7 +316,7 @@ class FullTest extends BaseApiTestCase
      * @throws YadsException
      * @throws Exception
      */
-    public function testCreateRoleGraphNotebookAndNoteEntity(): void
+    public function createGraphRuleNotebookAndNoteEntity(): void
     {
         /* Arrange: Build body */
         $body = [
@@ -325,6 +343,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 2) "notebook" connects "task".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -332,7 +352,7 @@ class FullTest extends BaseApiTestCase
      * @throws YadsException
      * @throws Exception
      */
-    public function testCreateRoleGraphNotebookAndTaskEntity(): void
+    public function createGraphRuleNotebookAndTaskEntity(): void
     {
         /* Arrange: Build body */
         $body = [
@@ -359,6 +379,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Invalid Document: 1) Create group document with missing title.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -366,7 +388,7 @@ class FullTest extends BaseApiTestCase
      * @throws YadsException
      * @throws Exception
      */
-    public function testCreateInvalidDocumentGroupMissingTitleEntity(): void
+    public function createInvalidDocumentGroupMissingTitleEntity(): void
     {
         $body = [
             'documentType' => $this->getArrayHolder()->get('create_document_type_group', '@id'),
@@ -393,6 +415,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Invalid Document: 2) Create group document with unknown field.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -429,6 +453,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 1) Invalid: Create group document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -454,6 +480,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 2) Invalid: Create notebook document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -479,6 +507,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 3) Invalid: Create note document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -504,6 +534,8 @@ class FullTest extends BaseApiTestCase
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 4) Invalid: Create task document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
