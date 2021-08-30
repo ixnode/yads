@@ -44,9 +44,11 @@ final class ArrayHolderTest extends TestCase
     /**
      * Test creating instance.
      *
+     * @test
+     * @testdox 1) Test instance of ArrayHolder.
      * @return ArrayHolder
      */
-    public function testInstance(): ArrayHolder
+    public function instance(): ArrayHolder
     {
         /* Arrange */
 
@@ -65,12 +67,14 @@ final class ArrayHolderTest extends TestCase
     /**
      * Test if array holder is empty.
      *
-     * @depends testInstance
+     * @test
+     * @testdox 2) Test that instance of ArrayHolder is empty.
+     * @depends instance
      * @param ArrayHolder $arrayHolder
      * @return ArrayHolder
      * @throws Exception
      */
-    public function testEmpty(ArrayHolder $arrayHolder): ArrayHolder
+    public function empty(ArrayHolder $arrayHolder): ArrayHolder
     {
         /* Arrange */
 
@@ -86,12 +90,14 @@ final class ArrayHolderTest extends TestCase
     /**
      * Test if array holder is empty.
      *
-     * @depends testInstance
+     * @test
+     * @testdox 3) Test add method of instance of ArrayHolder.
+     * @depends instance
      * @param ArrayHolder $arrayHolder
      * @return ArrayHolder
      * @throws Exception
      */
-    public function testAdd(ArrayHolder $arrayHolder): ArrayHolder
+    public function add(ArrayHolder $arrayHolder): ArrayHolder
     {
         /* Arrange */
         $namespace = 'data';
@@ -113,12 +119,14 @@ final class ArrayHolderTest extends TestCase
     /**
      * Test copy functionality.
      *
-     * @depends testAdd
+     * @test
+     * @testdox 4) Test copy method of instance of ArrayHolder.
+     * @depends add
      * @param ArrayHolder $arrayHolder
      * @return ArrayHolder
      * @throws Exception
      */
-    public function testCopy(ArrayHolder $arrayHolder): ArrayHolder
+    public function copy(ArrayHolder $arrayHolder): ArrayHolder
     {
         /* Arrange */
 
@@ -135,12 +143,14 @@ final class ArrayHolderTest extends TestCase
     /**
      * Test conjure functionality.
      *
-     * @depends testCopy
+     * @test
+     * @testdox 5) Test conjure method of instance of ArrayHolder.
+     * @depends copy
      * @param ArrayHolder $arrayHolder
      * @return ArrayHolder
      * @throws Exception
      */
-    public function testConjure(ArrayHolder $arrayHolder): ArrayHolder
+    public function conjure(ArrayHolder $arrayHolder): ArrayHolder
     {
         /* Arrange */
 
