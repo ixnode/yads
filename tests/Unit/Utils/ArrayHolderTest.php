@@ -33,6 +33,12 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class ArrayHolderTest
  *
+ * 1) Test instance of ArrayHolder.
+ * 2) Test that instance of ArrayHolder is empty.
+ * 3) Test add method of instance of ArrayHolder.
+ * 4) Test copy method of instance of ArrayHolder.
+ * 5) Test conjure method of instance of ArrayHolder.
+ *
  * @author Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2021-07-31)
  * @package App\Tests\Unit\Utils
@@ -42,7 +48,7 @@ final class ArrayHolderTest extends TestCase
     protected int $id = 6543;
 
     /**
-     * Test creating instance.
+     * 1) Test creating instance.
      *
      * @test
      * @testdox 1) Test instance of ArrayHolder.
@@ -65,7 +71,7 @@ final class ArrayHolderTest extends TestCase
     }
 
     /**
-     * Test if array holder is empty.
+     * 2) Test if array holder is empty.
      *
      * @test
      * @testdox 2) Test that instance of ArrayHolder is empty.
@@ -88,7 +94,7 @@ final class ArrayHolderTest extends TestCase
     }
 
     /**
-     * Test if array holder is empty.
+     * 3) Test if array holder is empty.
      *
      * @test
      * @testdox 3) Test add method of instance of ArrayHolder.
@@ -117,7 +123,7 @@ final class ArrayHolderTest extends TestCase
     }
 
     /**
-     * Test copy functionality.
+     * 4) Test copy functionality.
      *
      * @test
      * @testdox 4) Test copy method of instance of ArrayHolder.
@@ -141,7 +147,7 @@ final class ArrayHolderTest extends TestCase
     }
 
     /**
-     * Test conjure functionality.
+     * 5) Test conjure functionality.
      *
      * @test
      * @testdox 5) Test conjure method of instance of ArrayHolder.

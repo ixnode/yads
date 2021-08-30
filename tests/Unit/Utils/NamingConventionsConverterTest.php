@@ -43,12 +43,16 @@ final class NamingConventionsConverterTest extends TestCase
      *
      * @dataProvider dataProvider
      *
+     * @test
+     * @testdox $number) Test NamingConventionsConverter->$method(): $title.
+     * @param int $number
+     * @param string $title
      * @param string $method
      * @param string|string[] $given
      * @param string|string[] $expected
      * @return void
      */
-    public function testWrapper(string $method, string|array $given, string|array $expected): void
+    public function wrapper(int $number, string $title, string $method, string|array $given, string|array $expected): void
     {
         /* Arrange */
 
@@ -57,6 +61,8 @@ final class NamingConventionsConverterTest extends TestCase
         $callback = [$namingConventionsConverter, $method];
 
         /* Assert */
+        $this->assertIsInt($number);
+        $this->assertIsString($title);
         $this->assertContains($method, get_class_methods($namingConventionsConverter));
         $this->assertIsCallable($callback);
 
@@ -73,150 +79,152 @@ final class NamingConventionsConverterTest extends TestCase
      */
     public function dataProvider(): array
     {
+        $number = 0;
+
         return [
 
             /**
              * Basic word
              */
-            ['getRaw', 'group', 'group', ],
-            ['getWords', 'group', ['group', ], ],
-            ['getTitle', 'group', 'Group', ],
-            ['getPascalCase', 'group', 'Group', ],
-            ['getCamelCase', 'group', 'group', ],
-            ['getUnderscored', 'group', 'group', ],
-            ['getConstant', 'group', 'GROUP', ],
+            [++$number, 'Basic word', 'getRaw', 'group', 'group', ],
+            [++$number, 'Basic word', 'getWords', 'group', ['group', ], ],
+            [++$number, 'Basic word', 'getTitle', 'group', 'Group', ],
+            [++$number, 'Basic word', 'getPascalCase', 'group', 'Group', ],
+            [++$number, 'Basic word', 'getCamelCase', 'group', 'group', ],
+            [++$number, 'Basic word', 'getUnderscored', 'group', 'group', ],
+            [++$number, 'Basic word', 'getConstant', 'group', 'GROUP', ],
 
             /**
              * Words
              */
-            ['getRaw', ['group', 'private', ], ['group', 'private', ], ],
-            ['getWords', ['group', 'private', ], ['group', 'private', ], ],
-            ['getTitle', ['group', 'private', ], 'Group Private', ],
-            ['getPascalCase', ['group', 'private', ], 'GroupPrivate', ],
-            ['getCamelCase', ['group', 'private', ], 'groupPrivate', ],
-            ['getUnderscored', ['group', 'private', ], 'group_private', ],
-            ['getConstant', ['group', 'private', ], 'GROUP_PRIVATE', ],
+            [++$number, 'Words', 'getRaw', ['group', 'private', ], ['group', 'private', ], ],
+            [++$number, 'Words', 'getWords', ['group', 'private', ], ['group', 'private', ], ],
+            [++$number, 'Words', 'getTitle', ['group', 'private', ], 'Group Private', ],
+            [++$number, 'Words', 'getPascalCase', ['group', 'private', ], 'GroupPrivate', ],
+            [++$number, 'Words', 'getCamelCase', ['group', 'private', ], 'groupPrivate', ],
+            [++$number, 'Words', 'getUnderscored', ['group', 'private', ], 'group_private', ],
+            [++$number, 'Words', 'getConstant', ['group', 'private', ], 'GROUP_PRIVATE', ],
 
             /**
              * Title
              */
-            ['getRaw', 'Group Private', 'Group Private', ],
-            ['getWords', 'Group Private', ['group', 'private', ], ],
-            ['getTitle', 'Group Private', 'Group Private', ],
-            ['getPascalCase', 'Group Private', 'GroupPrivate', ],
-            ['getCamelCase', 'Group Private', 'groupPrivate', ],
-            ['getUnderscored', 'Group Private', 'group_private', ],
-            ['getConstant', 'Group Private', 'GROUP_PRIVATE', ],
+            [++$number, 'Title', 'getRaw', 'Group Private', 'Group Private', ],
+            [++$number, 'Title', 'getWords', 'Group Private', ['group', 'private', ], ],
+            [++$number, 'Title', 'getTitle', 'Group Private', 'Group Private', ],
+            [++$number, 'Title', 'getPascalCase', 'Group Private', 'GroupPrivate', ],
+            [++$number, 'Title', 'getCamelCase', 'Group Private', 'groupPrivate', ],
+            [++$number, 'Title', 'getUnderscored', 'Group Private', 'group_private', ],
+            [++$number, 'Title', 'getConstant', 'Group Private', 'GROUP_PRIVATE', ],
 
             /**
              * PascalCase
              */
-            ['getRaw', 'GroupPrivate', 'GroupPrivate', ],
-            ['getWords', 'GroupPrivate', ['group', 'private', ], ],
-            ['getTitle', 'GroupPrivate', 'Group Private', ],
-            ['getPascalCase', 'GroupPrivate', 'GroupPrivate', ],
-            ['getCamelCase', 'GroupPrivate', 'groupPrivate', ],
-            ['getUnderscored', 'GroupPrivate', 'group_private', ],
-            ['getConstant', 'GroupPrivate', 'GROUP_PRIVATE', ],
+            [++$number, 'PascalCase', 'getRaw', 'GroupPrivate', 'GroupPrivate', ],
+            [++$number, 'PascalCase', 'getWords', 'GroupPrivate', ['group', 'private', ], ],
+            [++$number, 'PascalCase', 'getTitle', 'GroupPrivate', 'Group Private', ],
+            [++$number, 'PascalCase', 'getPascalCase', 'GroupPrivate', 'GroupPrivate', ],
+            [++$number, 'PascalCase', 'getCamelCase', 'GroupPrivate', 'groupPrivate', ],
+            [++$number, 'PascalCase', 'getUnderscored', 'GroupPrivate', 'group_private', ],
+            [++$number, 'PascalCase', 'getConstant', 'GroupPrivate', 'GROUP_PRIVATE', ],
 
             /**
              * camelCase
              */
-            ['getRaw', 'groupPrivate', 'groupPrivate', ],
-            ['getWords', 'groupPrivate', ['group', 'private', ], ],
-            ['getTitle', 'groupPrivate', 'Group Private', ],
-            ['getPascalCase', 'groupPrivate', 'GroupPrivate', ],
-            ['getCamelCase', 'groupPrivate', 'groupPrivate', ],
-            ['getUnderscored', 'groupPrivate', 'group_private', ],
-            ['getConstant', 'groupPrivate', 'GROUP_PRIVATE', ],
+            [++$number, 'camelCase', 'getRaw', 'groupPrivate', 'groupPrivate', ],
+            [++$number, 'camelCase', 'getWords', 'groupPrivate', ['group', 'private', ], ],
+            [++$number, 'camelCase', 'getTitle', 'groupPrivate', 'Group Private', ],
+            [++$number, 'camelCase', 'getPascalCase', 'groupPrivate', 'GroupPrivate', ],
+            [++$number, 'camelCase', 'getCamelCase', 'groupPrivate', 'groupPrivate', ],
+            [++$number, 'camelCase', 'getUnderscored', 'groupPrivate', 'group_private', ],
+            [++$number, 'camelCase', 'getConstant', 'groupPrivate', 'GROUP_PRIVATE', ],
 
             /**
              * Underscored
              */
-            ['getRaw', 'group_private', 'group_private', ],
-            ['getWords', 'group_private', ['group', 'private', ], ],
-            ['getTitle', 'group_private', 'Group Private', ],
-            ['getPascalCase', 'group_private', 'GroupPrivate', ],
-            ['getCamelCase', 'group_private', 'groupPrivate', ],
-            ['getUnderscored', 'group_private', 'group_private', ],
-            ['getConstant', 'group_private', 'GROUP_PRIVATE', ],
+            [++$number, 'Underscored', 'getRaw', 'group_private', 'group_private', ],
+            [++$number, 'Underscored', 'getWords', 'group_private', ['group', 'private', ], ],
+            [++$number, 'Underscored', 'getTitle', 'group_private', 'Group Private', ],
+            [++$number, 'Underscored', 'getPascalCase', 'group_private', 'GroupPrivate', ],
+            [++$number, 'Underscored', 'getCamelCase', 'group_private', 'groupPrivate', ],
+            [++$number, 'Underscored', 'getUnderscored', 'group_private', 'group_private', ],
+            [++$number, 'Underscored', 'getConstant', 'group_private', 'GROUP_PRIVATE', ],
 
             /**
              * Constant
              */
-            ['getRaw', 'GROUP_PRIVATE', 'GROUP_PRIVATE', ],
-            ['getWords', 'GROUP_PRIVATE', ['group', 'private', ], ],
-            ['getTitle', 'GROUP_PRIVATE', 'Group Private', ],
-            ['getPascalCase', 'GROUP_PRIVATE', 'GroupPrivate', ],
-            ['getCamelCase', 'GROUP_PRIVATE', 'groupPrivate', ],
-            ['getUnderscored', 'GROUP_PRIVATE', 'group_private', ],
-            ['getConstant', 'GROUP_PRIVATE', 'GROUP_PRIVATE', ],
+            [++$number, 'Constant', 'getRaw', 'GROUP_PRIVATE', 'GROUP_PRIVATE', ],
+            [++$number, 'Constant', 'getWords', 'GROUP_PRIVATE', ['group', 'private', ], ],
+            [++$number, 'Constant', 'getTitle', 'GROUP_PRIVATE', 'Group Private', ],
+            [++$number, 'Constant', 'getPascalCase', 'GROUP_PRIVATE', 'GroupPrivate', ],
+            [++$number, 'Constant', 'getCamelCase', 'GROUP_PRIVATE', 'groupPrivate', ],
+            [++$number, 'Constant', 'getUnderscored', 'GROUP_PRIVATE', 'group_private', ],
+            [++$number, 'Constant', 'getConstant', 'GROUP_PRIVATE', 'GROUP_PRIVATE', ],
 
             /**
              * Words (Multiple)
              */
-            ['getRaw', ['group', 'private', 'as', 'multiple', ], ['group', 'private', 'as', 'multiple', ], ],
-            ['getWords', ['group', 'private', 'as', 'multiple', ], ['group', 'private', 'as', 'multiple', ], ],
-            ['getTitle', ['group', 'private', 'as', 'multiple', ], 'Group Private As Multiple', ],
-            ['getPascalCase', ['group', 'private', 'as', 'multiple', ], 'GroupPrivateAsMultiple', ],
-            ['getCamelCase', ['group', 'private', 'as', 'multiple', ], 'groupPrivateAsMultiple', ],
-            ['getUnderscored', ['group', 'private', 'as', 'multiple', ], 'group_private_as_multiple', ],
-            ['getConstant', ['group', 'private', 'as', 'multiple', ], 'GROUP_PRIVATE_AS_MULTIPLE', ],
+            [++$number, 'Words (Multiple)', 'getRaw', ['group', 'private', 'as', 'multiple', ], ['group', 'private', 'as', 'multiple', ], ],
+            [++$number, 'Words (Multiple)', 'getWords', ['group', 'private', 'as', 'multiple', ], ['group', 'private', 'as', 'multiple', ], ],
+            [++$number, 'Words (Multiple)', 'getTitle', ['group', 'private', 'as', 'multiple', ], 'Group Private As Multiple', ],
+            [++$number, 'Words (Multiple)', 'getPascalCase', ['group', 'private', 'as', 'multiple', ], 'GroupPrivateAsMultiple', ],
+            [++$number, 'Words (Multiple)', 'getCamelCase', ['group', 'private', 'as', 'multiple', ], 'groupPrivateAsMultiple', ],
+            [++$number, 'Words (Multiple)', 'getUnderscored', ['group', 'private', 'as', 'multiple', ], 'group_private_as_multiple', ],
+            [++$number, 'Words (Multiple)', 'getConstant', ['group', 'private', 'as', 'multiple', ], 'GROUP_PRIVATE_AS_MULTIPLE', ],
 
             /**
              * Title (Multiple)
              */
-            ['getRaw', 'Group Private As Multiple', 'Group Private As Multiple', ],
-            ['getWords', 'Group Private As Multiple', ['group', 'private', 'as', 'multiple', ], ],
-            ['getTitle', 'Group Private As Multiple', 'Group Private As Multiple', ],
-            ['getPascalCase', 'Group Private As Multiple', 'GroupPrivateAsMultiple', ],
-            ['getCamelCase', 'Group Private As Multiple', 'groupPrivateAsMultiple', ],
-            ['getUnderscored', 'Group Private As Multiple', 'group_private_as_multiple', ],
-            ['getConstant', 'Group Private As Multiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
+            [++$number, 'Title (Multiple)', 'getRaw', 'Group Private As Multiple', 'Group Private As Multiple', ],
+            [++$number, 'Title (Multiple)', 'getWords', 'Group Private As Multiple', ['group', 'private', 'as', 'multiple', ], ],
+            [++$number, 'Title (Multiple)', 'getTitle', 'Group Private As Multiple', 'Group Private As Multiple', ],
+            [++$number, 'Title (Multiple)', 'getPascalCase', 'Group Private As Multiple', 'GroupPrivateAsMultiple', ],
+            [++$number, 'Title (Multiple)', 'getCamelCase', 'Group Private As Multiple', 'groupPrivateAsMultiple', ],
+            [++$number, 'Title (Multiple)', 'getUnderscored', 'Group Private As Multiple', 'group_private_as_multiple', ],
+            [++$number, 'Title (Multiple)', 'getConstant', 'Group Private As Multiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
 
             /**
              * PascalCase (Multiple)
              */
-            ['getRaw', 'GroupPrivateAsMultiple', 'GroupPrivateAsMultiple', ],
-            ['getWords', 'GroupPrivateAsMultiple', ['group', 'private', 'as', 'multiple', ], ],
-            ['getTitle', 'GroupPrivateAsMultiple', 'Group Private As Multiple', ],
-            ['getPascalCase', 'GroupPrivateAsMultiple', 'GroupPrivateAsMultiple', ],
-            ['getCamelCase', 'GroupPrivateAsMultiple', 'groupPrivateAsMultiple', ],
-            ['getUnderscored', 'GroupPrivateAsMultiple', 'group_private_as_multiple', ],
-            ['getConstant', 'GroupPrivateAsMultiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
+            [++$number, 'PascalCase (Multiple)', 'getRaw', 'GroupPrivateAsMultiple', 'GroupPrivateAsMultiple', ],
+            [++$number, 'PascalCase (Multiple)', 'getWords', 'GroupPrivateAsMultiple', ['group', 'private', 'as', 'multiple', ], ],
+            [++$number, 'PascalCase (Multiple)', 'getTitle', 'GroupPrivateAsMultiple', 'Group Private As Multiple', ],
+            [++$number, 'PascalCase (Multiple)', 'getPascalCase', 'GroupPrivateAsMultiple', 'GroupPrivateAsMultiple', ],
+            [++$number, 'PascalCase (Multiple)', 'getCamelCase', 'GroupPrivateAsMultiple', 'groupPrivateAsMultiple', ],
+            [++$number, 'PascalCase (Multiple)', 'getUnderscored', 'GroupPrivateAsMultiple', 'group_private_as_multiple', ],
+            [++$number, 'PascalCase (Multiple)', 'getConstant', 'GroupPrivateAsMultiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
 
             /**
              * camelCase (Multiple)
              */
-            ['getRaw', 'groupPrivateAsMultiple', 'groupPrivateAsMultiple', ],
-            ['getWords', 'groupPrivateAsMultiple', ['group', 'private', 'as', 'multiple', ], ],
-            ['getTitle', 'groupPrivateAsMultiple', 'Group Private As Multiple', ],
-            ['getPascalCase', 'groupPrivateAsMultiple', 'GroupPrivateAsMultiple', ],
-            ['getCamelCase', 'groupPrivateAsMultiple', 'groupPrivateAsMultiple', ],
-            ['getUnderscored', 'groupPrivateAsMultiple', 'group_private_as_multiple', ],
-            ['getConstant', 'groupPrivateAsMultiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
+            [++$number, 'camelCase (Multiple)', 'getRaw', 'groupPrivateAsMultiple', 'groupPrivateAsMultiple', ],
+            [++$number, 'camelCase (Multiple)', 'getWords', 'groupPrivateAsMultiple', ['group', 'private', 'as', 'multiple', ], ],
+            [++$number, 'camelCase (Multiple)', 'getTitle', 'groupPrivateAsMultiple', 'Group Private As Multiple', ],
+            [++$number, 'camelCase (Multiple)', 'getPascalCase', 'groupPrivateAsMultiple', 'GroupPrivateAsMultiple', ],
+            [++$number, 'camelCase (Multiple)', 'getCamelCase', 'groupPrivateAsMultiple', 'groupPrivateAsMultiple', ],
+            [++$number, 'camelCase (Multiple)', 'getUnderscored', 'groupPrivateAsMultiple', 'group_private_as_multiple', ],
+            [++$number, 'camelCase (Multiple)', 'getConstant', 'groupPrivateAsMultiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
 
             /**
              * Underscored (Multiple)
              */
-            ['getRaw', 'group_private_as_multiple', 'group_private_as_multiple', ],
-            ['getWords', 'group_private_as_multiple', ['group', 'private', 'as', 'multiple', ], ],
-            ['getTitle', 'group_private_as_multiple', 'Group Private As Multiple', ],
-            ['getPascalCase', 'group_private_as_multiple', 'GroupPrivateAsMultiple', ],
-            ['getCamelCase', 'group_private_as_multiple', 'groupPrivateAsMultiple', ],
-            ['getUnderscored', 'group_private_as_multiple', 'group_private_as_multiple', ],
-            ['getConstant', 'group_private_as_multiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
+            [++$number, 'Underscored (Multiple)', 'getRaw', 'group_private_as_multiple', 'group_private_as_multiple', ],
+            [++$number, 'Underscored (Multiple)', 'getWords', 'group_private_as_multiple', ['group', 'private', 'as', 'multiple', ], ],
+            [++$number, 'Underscored (Multiple)', 'getTitle', 'group_private_as_multiple', 'Group Private As Multiple', ],
+            [++$number, 'Underscored (Multiple)', 'getPascalCase', 'group_private_as_multiple', 'GroupPrivateAsMultiple', ],
+            [++$number, 'Underscored (Multiple)', 'getCamelCase', 'group_private_as_multiple', 'groupPrivateAsMultiple', ],
+            [++$number, 'Underscored (Multiple)', 'getUnderscored', 'group_private_as_multiple', 'group_private_as_multiple', ],
+            [++$number, 'Underscored (Multiple)', 'getConstant', 'group_private_as_multiple', 'GROUP_PRIVATE_AS_MULTIPLE', ],
 
             /**
              * Constant (Multiple)
              */
-            ['getRaw', 'GROUP_PRIVATE_AS_MULTIPLE', 'GROUP_PRIVATE_AS_MULTIPLE', ],
-            ['getWords', 'GROUP_PRIVATE_AS_MULTIPLE', ['group', 'private', 'as', 'multiple', ], ],
-            ['getTitle', 'GROUP_PRIVATE_AS_MULTIPLE', 'Group Private As Multiple', ],
-            ['getPascalCase', 'GROUP_PRIVATE_AS_MULTIPLE', 'GroupPrivateAsMultiple', ],
-            ['getCamelCase', 'GROUP_PRIVATE_AS_MULTIPLE', 'groupPrivateAsMultiple', ],
-            ['getUnderscored', 'GROUP_PRIVATE_AS_MULTIPLE', 'group_private_as_multiple', ],
-            ['getConstant', 'GROUP_PRIVATE_AS_MULTIPLE', 'GROUP_PRIVATE_AS_MULTIPLE', ],
+            [++$number, 'Constant (Multiple)', 'getRaw', 'GROUP_PRIVATE_AS_MULTIPLE', 'GROUP_PRIVATE_AS_MULTIPLE', ],
+            [++$number, 'Constant (Multiple)', 'getWords', 'GROUP_PRIVATE_AS_MULTIPLE', ['group', 'private', 'as', 'multiple', ], ],
+            [++$number, 'Constant (Multiple)', 'getTitle', 'GROUP_PRIVATE_AS_MULTIPLE', 'Group Private As Multiple', ],
+            [++$number, 'Constant (Multiple)', 'getPascalCase', 'GROUP_PRIVATE_AS_MULTIPLE', 'GroupPrivateAsMultiple', ],
+            [++$number, 'Constant (Multiple)', 'getCamelCase', 'GROUP_PRIVATE_AS_MULTIPLE', 'groupPrivateAsMultiple', ],
+            [++$number, 'Constant (Multiple)', 'getUnderscored', 'GROUP_PRIVATE_AS_MULTIPLE', 'group_private_as_multiple', ],
+            [++$number, 'Constant (Multiple)', 'getConstant', 'GROUP_PRIVATE_AS_MULTIPLE', 'GROUP_PRIVATE_AS_MULTIPLE', ],
 
         ];
     }
