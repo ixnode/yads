@@ -31,6 +31,7 @@ use App\Exception\YadsException;
 use App\Tests\Api\Library\ApiTestCaseWrapper;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
+use Exception;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
@@ -287,6 +288,108 @@ class GraphTest extends BaseApiTestCase
         $testCase = $this->getApiTestCaseWrapper('list_graphs_empty');
 
         /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph rule group and notebook.
+     *
+     * POST /api/v1/graph_rules
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateGraphRuleGroupAndNotebookEntity(): void
+    {
+        /* Arrange: Build body */
+        $body = [
+            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_group', '@id'), // n
+            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_notebook', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type', '@id'),
+        ];
+
+        /* Arrange: Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_rule_group_notebook', $this->graphRuleContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_group_notebook', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Act & Assert: Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph rule group and note.
+     *
+     * POST /api/v1/graph_rules
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateGraphRuleGroupAndNoteEntity(): void
+    {
+        /* Arrange: Build body */
+        $body = [
+            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_group', '@id'), // n
+            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_note', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type', '@id'),
+        ];
+
+        /* Arrange: Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_rule_group_note', $this->graphRuleContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_group_note', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Act & Assert: Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create graph rule group and task.
+     *
+     * POST /api/v1/graph_rules
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function testCreateGraphRuleGroupAndTaskEntity(): void
+    {
+        /* Arrange: Build body */
+        $body = [
+            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_group', '@id'), // n
+            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_task', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type', '@id'),
+        ];
+
+        /* Arrange: Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_rule_group_task', $this->graphRuleContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_group_task', 'id')])
+            ->setUnset(['createdAt', 'updatedAt', ])
+        ;
+
+        /* Act & Assert: Make the test */
         $this->makeTest($testCase);
     }
 

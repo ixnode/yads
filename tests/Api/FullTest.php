@@ -78,8 +78,6 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class FullTest extends BaseApiTestCase
 {
     /**
-     * Create document_type group.
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
@@ -106,8 +104,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create document_type notebook.
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
@@ -134,8 +130,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create document_type note.
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
@@ -162,8 +156,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create document_type task.
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
@@ -190,8 +182,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create graph_type bidirectional.
-     *
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
@@ -218,8 +208,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create graph_type unidirectional.
-     *
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
@@ -246,8 +234,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create graph_type not directed.
-     *
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
@@ -274,8 +260,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create role.
-     *
      * POST /api/v1/roles
      * application/ld+json; charset=utf-8
      *
@@ -302,8 +286,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create notebook and note graphRule.
-     *
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
@@ -338,8 +320,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create notebook and task graphRule.
-     *
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
@@ -374,8 +354,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create invalid group document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
@@ -410,8 +388,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create invalid group document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
@@ -448,13 +424,11 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create group document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 1) Invalid: Create group document.
+     * @testdox Document: 1) Create group document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -475,13 +449,11 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create notebook document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 2) Invalid: Create notebook document.
+     * @testdox Document: 2) Create notebook document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -502,13 +474,11 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create note document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 3) Invalid: Create note document.
+     * @testdox Document: 3) Create note document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -529,13 +499,11 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create task document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 4) Invalid: Create task document.
+     * @testdox Document: 4) Create task document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -556,8 +524,41 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create graph notebook and note graph.
+     * POST /api/v1/graphs
+     * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Invalid Graph: 1) Create note and task connection.
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws Exception
+     */
+    public function createInvalidGraphNoteTaskEntity(): void
+    {
+        $body = [
+            'documentSource' => $this->getArrayHolder()->get('create_document_note', '@id'), // n
+            'documentTarget' => $this->getArrayHolder()->get('create_document_task', '@id'), // 1
+            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'graphTypeReversed' => false,
+            'weight' => 10,
+        ];
+        $exceptionHolder = new ExceptionHolder(ClientException::class, 422, 'It is not allowed to link document type "note" (source) with document type "task" (target) and relation type "unidirectional".');
+
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_graph_note_and_task', $this->graphContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_graph_note_and_task', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase, $exceptionHolder);
+    }
+
+    /**
      * POST /api/v1/graphs
      * application/ld+json; charset=utf-8
      *
@@ -570,7 +571,7 @@ class FullTest extends BaseApiTestCase
      * @throws YadsException
      * @throws Exception
      */
-    public function testCreateNotebookNoteEntity(): void
+    public function createGraphNotebookNoteEntity(): void
     {
         $body = [
             'documentSource' => $this->getArrayHolder()->get('create_document_notebook', '@id'), // n
@@ -592,8 +593,6 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * Create graph notebook and task graph.
-     *
      * POST /api/v1/graphs
      * application/ld+json; charset=utf-8
      *
@@ -606,7 +605,7 @@ class FullTest extends BaseApiTestCase
      * @throws YadsException
      * @throws Exception
      */
-    public function testCreateNotebookTaskEntity(): void
+    public function createGraphNotebookTaskEntity(): void
     {
         $body = [
             'documentSource' => $this->getArrayHolder()->get('create_document_notebook', '@id'), // n
