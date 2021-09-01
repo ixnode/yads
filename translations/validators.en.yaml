@@ -1,0 +1,5 @@
+# constraints && constraint validators
+constraints:
+  graph:
+    combinationNotAllowed: 'It is not allowed to link document type "{{sourceDocumentType}}" (source) with document type "{{targetDocumentType}}" (target) and relation type "{{graphType}}".'
+    roleNotAllowed: 'The following link relation do not allow role connection'

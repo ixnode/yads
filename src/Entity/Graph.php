@@ -27,13 +27,14 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Validator as AcmeAssert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class Graph
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-04)
+ * @version 1.0 (2021-09-01)
  * @package App\Entity
  */
 #[ApiResource]
@@ -44,6 +45,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(columns: ['document_target_id'], name: 'IDX_D0234567BAD26311')]
 #[ORM\Index(columns: ['role_id'], name: 'IDX_D0234567BAD26311')]
 #[ORM\Entity, ORM\HasLifecycleCallbacks]
+#[AcmeAssert\Graph\ContainsValidCombination()]
 class Graph extends BaseEntity
 {
     #[ORM\Column(name: 'graph_type_reversed', type: 'boolean', nullable: false)]

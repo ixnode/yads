@@ -1,0 +1,5 @@
+# constraints && constraint validators
+constraints:
+  graph:
+    combinationNotAllowed: 'Es ist nicht erlaubt den Dokumenten-Typ "{{sourceDocumentType}}" (Quelle) mit dem Dokumenten-Typ "{{targetDocumentType}}" (Ziel) und dem Relationen-Typ "{{graphType}}" zu verknüpfen.'
+    roleNotAllowed: 'Die folgende Verknüpfungsrelation erlaubt keine Rollenverbindung'
