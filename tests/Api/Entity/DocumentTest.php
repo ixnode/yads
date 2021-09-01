@@ -28,8 +28,8 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
 use App\Exception\YadsException;
-use App\Tests\Api\ApiTestCaseWrapper;
-use App\Tests\Api\BaseApiTestCase;
+use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -45,7 +45,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class DocumentTest extends BaseApiTestCase
 {
     /**
-     * Create document type (needed for a Document entity).
+     * Create document type group (needed for a Document entity).
      *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
@@ -56,13 +56,13 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeEntity(): void
+    public function testCreateNeededDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray())
-            ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type', 'id')])
+            ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
@@ -70,7 +70,7 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect one hit).
+     * Get document types (expect one hit).
      *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
@@ -81,12 +81,60 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesDocumentTypeExpectOneHit(): void
+    public function testGetDocumentTypeEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_types_1', $this->documentTypeContext)
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
-            ->setNamespaces(['create_document_type']);
+            ->setNamespaces(['create_document_type_group']);
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Create document type notebook (needed for a Document entity).
+     *
+     * POST /api/v1/document_types
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testCreateNeededDocumentTypeNotebookEntity(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 1))
+            ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * Get documents (expect two hits).
+     *
+     * GET /api/v1/document_types
+     * application/ld+json; charset=utf-8
+     *
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function testGetDocumentTypeEntitiesExpectTwoHits(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('list_document_types_2', $this->documentTypeContext)
+            ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
+            ->setNamespaces(['create_document_type_group', 'create_document_type_notebook']);
 
         /* Make the test */
         $this->makeTest($testCase);
@@ -114,7 +162,7 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Create first document.
+     * Create group document.
      *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
@@ -125,13 +173,13 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function testCreateGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_1')
+        $testCase = $this->getApiTestCaseWrapper('create_document_group')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray())
-            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_1', 'id')])
+            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
@@ -155,14 +203,14 @@ class DocumentTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_documents_1')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
-            ->setNamespaces(['create_document_1']);
+            ->setNamespaces(['create_document_group']);
 
         /* Make the test */
         $this->makeTest($testCase);
     }
 
     /**
-     * Get first document with id x.
+     * Get group document with id x.
      *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
@@ -173,21 +221,21 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function testGetGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_1')
+        $testCase = $this->getApiTestCaseWrapper('get_document_group')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
-            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_1', 'id')])
+            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
-            ->addParameter(new ArrayHolder('create_document_1', 'id'));
+            ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
         $this->makeTest($testCase);
     }
 
     /**
-     * Update first document with id x.
+     * Update group document with id x.
      *
      * PUT /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
@@ -198,22 +246,22 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function testUpdateGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('update_document_1')
+        $testCase = $this->getApiTestCaseWrapper('update_document_group')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_UPDATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 1))
-            ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_1', 'id')])
+            ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
-            ->addParameter(new ArrayHolder('create_document_1', 'id'));
+            ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
         $this->makeTest($testCase);
     }
 
     /**
-     * Get updated first document with id x.
+     * Get updated group document with id x.
      *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
@@ -224,20 +272,21 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function testGetUpdatedGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_1_updated')
+        $testCase = $this->getApiTestCaseWrapper('get_document_group_updated')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
-            ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_1', 'id')])
+            ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
-            ->addParameter(new ArrayHolder('create_document_1', 'id'));
+            ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
         $this->makeTest($testCase);
     }
 
-    /**Create second document.
+    /**
+     * Create notebook document.
      *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
@@ -248,13 +297,13 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function testCreateNotebookEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_2')
+        $testCase = $this->getApiTestCaseWrapper('create_document_notebook')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
-            ->setBody($this->documentDataProvider->getEntityArray())
-            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')])
+            ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 1))
+            ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
@@ -278,14 +327,14 @@ class DocumentTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_documents_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
-            ->setNamespaces(['update_document_1', 'create_document_2',]);
+            ->setNamespaces(['update_document_group', 'create_document_notebook',]);
 
         /* Make the test */
         $this->makeTest($testCase);
     }
 
     /**
-     * Get second document with id x.
+     * Get notebook document with id x.
      *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
@@ -296,21 +345,21 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function testGetNotebookEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_2')
+        $testCase = $this->getApiTestCaseWrapper('get_document_notebook')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
-            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_2', 'id')])
+            ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
-            ->addParameter(new ArrayHolder('create_document_2', 'id'));
+            ->addParameter(new ArrayHolder('create_document_notebook', 'id'));
 
         /* Make the test */
         $this->makeTest($testCase);
     }
 
     /**
-     * Delete first document with id x.
+     * Delete group document with id x.
      *
      * DELETE /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
@@ -321,14 +370,14 @@ class DocumentTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function testDeleteGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('delete_document_1')
+        $testCase = $this->getApiTestCaseWrapper('delete_document_group')
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_DELETE)
-            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_1', 'id')])
+            ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
-            ->addParameter(new ArrayHolder('create_document_1', 'id'));
+            ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
         $this->makeTest($testCase);
@@ -351,7 +400,7 @@ class DocumentTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_documents_1_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
-            ->setNamespaces(['create_document_2']);
+            ->setNamespaces(['create_document_notebook']);
 
         /* Make the test */
         $this->makeTest($testCase);

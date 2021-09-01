@@ -64,7 +64,7 @@ class Graph extends BaseEntity
 
     #[ORM\ManyToOne(targetEntity: Role::class)]
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'id')]
-    private ?Role $role;
+    private ?Role $role = null;
 
     #[ORM\ManyToOne(targetEntity: GraphType::class)]
     #[ORM\JoinColumn(name: 'graph_type_id', referencedColumnName: 'id')]

@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace App\Tests\Api;
+namespace App\Tests\Api\Library;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;

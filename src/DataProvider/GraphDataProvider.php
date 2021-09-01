@@ -26,10 +26,8 @@
 
 namespace App\DataProvider;
 
-use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
 use App\Entity\Graph;
-use App\Entity\Tag;
 
 /**
  * Class GraphDataProvider

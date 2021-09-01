@@ -26,7 +26,6 @@
 
 namespace App\DataProvider;
 
-use App\DataFixtures\DocumentTypeFixtures;
 use App\Entity\BaseEntity;
 use App\Entity\GraphType;
 
@@ -54,15 +53,23 @@ class GraphTypeDataProvider extends BaseDataProvider
     public function getArray(int $recordNumber = 0): array
     {
         $data = [
+
+            // graph_type bidirectional
             [
                 'title' => 'Bidirectional 1',
                 'titleReverse' =>  'Bidirectional Reverse 1',
                 'graphType' => self::DIRECTION_TYPE_BIDIRECTIONAL,
-            ], [
+            ],
+
+            // graph_type unidirectional
+            [
                 'title' => 'Unidirectional 2',
                 'titleReverse' =>  'Unidirectional Reverse 2',
                 'graphType' => self::DIRECTION_TYPE_UNIDIRECTIONAL,
-            ], [
+            ],
+
+            // graph_type not directed
+            [
                 'title' => 'Not directed 3',
                 'titleReverse' =>  'Not directed Reverse 3',
                 'graphType' => self::DIRECTION_TYPE_NOT_DIRECTED,

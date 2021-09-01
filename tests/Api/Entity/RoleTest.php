@@ -28,8 +28,8 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
 use App\Exception\YadsException;
-use App\Tests\Api\ApiTestCaseWrapper;
-use App\Tests\Api\BaseApiTestCase;
+use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -65,7 +65,8 @@ class RoleTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create first role.
+    /**
+     * Create first role.
      *
      * POST /api/v1/roles
      * application/ld+json; charset=utf-8
