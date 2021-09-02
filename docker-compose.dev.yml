@@ -3,8 +3,8 @@ version: "3.7"
 # configure services
 services:
 
-    # PHP 8.0.9 container with apache 2.4
-    yads-apache:
+    # PHP 8.0.10 container with apache 2.4
+    apache:
         build:
             dockerfile: ${PHP_APACHE_SERVER_DOCKERFILE}
             context: docker/.
@@ -46,8 +46,8 @@ services:
             - db
             - db-test
 
-    # PHP 8.0.9 cli container
-    yads:
+    # PHP 8.0.10 cli container
+    php:
         build:
             dockerfile: ${PHP_CLI_DOCKERFILE}
             context: docker/.
@@ -89,11 +89,8 @@ services:
             - db
             - db-test
 
-    # MariaDB 10.6.3 Server
+    # MariaDB 10.6.4 Server
     db:
-        build:
-            dockerfile: ${MARIADB_SERVER_DOCKERFILE}
-            context: docker/.
         image: "${MARIADB_SERVER_IMAGE_NAME}"
         container_name: "${MARIADB_SERVER_CONTAINER_NAME}"
         hostname: "${MARIADB_SERVER_HOSTNAME}"
@@ -107,14 +104,12 @@ services:
             MARIADB_DATABASE: "${MARIADB_SERVER_DB}"
         volumes:
             - mariadb-data:/var/lib/mysql
+            - ./docker/conf.d/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
         networks:
             - network-internal
 
-    # MariaDB 10.6.3 Server
+    # MariaDB 10.6.4 Server
     db-test:
-        build:
-            dockerfile: ${MARIADB_SERVER_DOCKERFILE}
-            context: docker/.
         image: "${MARIADB_SERVER_IMAGE_NAME}"
         container_name: "${MARIADB_SERVER_CONTAINER_NAME_TEST}"
         hostname: "${MARIADB_SERVER_HOSTNAME_TEST}"
@@ -126,6 +121,8 @@ services:
             MARIADB_USER: "${MARIADB_SERVER_USER_TEST}"
             MARIADB_PASSWORD: "${MARIADB_SERVER_PASSWORD_TEST}"
             MARIADB_DATABASE: "${MARIADB_SERVER_DB_TEST}"
+        volumes:
+            - ./docker/conf.d/mysqld.cnf:/etc/mysql/conf.d/mysqld.cnf
         networks:
             - network-internal
 
