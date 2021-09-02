@@ -1,5 +1,5 @@
-# Use PHP 8.0.9 image
-FROM php:8.0.9-apache
+# Use PHP 8.0.10 image
+FROM php:8.0.10-apache
 
 # Working dir
 WORKDIR /var/www/html
