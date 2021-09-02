@@ -39,17 +39,45 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class DocumentTagTest
  *
+ * Create document types:
+ * ----------------------
+ * - Create needed document type group entity
+ * - Create needed document type notebook entity
+ *
+ * Create tags:
+ * ------------
+ * - Create needed tag entity
+ *
+ * Create documents:
+ * -----------------
+ * - Create needed document entity 1
+ * - Create needed document entity 2
+ *
+ * Tag tasks:
+ * ----------
+ * - Get entities expect empty list
+ * - Create first entity
+ * - Get entities expect one hit
+ * - Get first entity
+ * - Update first entity
+ * - Get updated first entity
+ * - Create second entity
+ * - Get entities expect two hits
+ * - Get second entity
+ * - Delete first entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class DocumentTagTest extends BaseApiTestCase
 {
     /**
-     * Create document type group (needed for a DocumentTag entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 1) Create document type group (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -70,11 +98,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create document type notebook (needed for a DocumentTag entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 2) Create document type notebook (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -95,11 +123,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create tag (needed for a DocumentTag entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 1) Create tag (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -120,11 +148,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create document 1 (needed for a DocumentTag entity).
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 1) Create document 1 (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -145,11 +173,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create document 2 (needed for a DocumentTag entity).
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 2) Create document 2 (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -170,11 +198,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (empty).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 1) Get document_tags (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -190,11 +218,12 @@ class DocumentTagTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create first document_tag.
-     *
+    /**
      * POST /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 2) Create first document_tag.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -216,11 +245,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (expect one hit).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 3) Get document_tags (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -240,11 +269,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get first document_tag with id x.
-     *
      * GET /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 4) Get first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -265,11 +294,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Update first document_tag with id x.
-     *
      * PUT /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 5) Update first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -291,11 +320,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated first document_tag with id x.
-     *
      * GET /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 6) Get updated first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -315,11 +344,12 @@ class DocumentTagTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create second document_tag.
-     *
+    /**
      * POST /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 7) Create second document_tag.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -341,11 +371,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (expect two hits).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 8) Get document_tags (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -365,11 +395,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get second document_tag with id x.
-     *
      * GET /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 9) Get second document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -390,11 +420,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Delete first document_tag with id x.
-     *
      * DELETE /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 10) Delete first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -415,11 +445,11 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (expect one hit).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 11) Get document_tags (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
