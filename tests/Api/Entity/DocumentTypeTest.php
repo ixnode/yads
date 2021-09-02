@@ -39,7 +39,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class DocumentTypeTest
  *
- * document type tasks:
+ * Document type tasks:
  * --------------------
  * - Get entities expect empty list
  * - Create first entity

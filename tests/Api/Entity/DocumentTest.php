@@ -39,14 +39,14 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class DocumentTest
  *
- * document type tasks:
+ * Document type tasks:
  * --------------------
  * - Create needed document type group entity
  * - Get document type entities expect one hit
  * - Create needed document type notebook entity
  * - Get document type entities expect two hits
  *
- * document tasks:
+ * Document tasks:
  * ---------------
  * - Get entities expect empty list
  * - Create group entity

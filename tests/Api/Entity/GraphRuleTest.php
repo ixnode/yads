@@ -39,24 +39,49 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class GraphRuleTest
  *
+ * Create document types:
+ * ----------------------
+ * - Create needed document type entity 1
+ * - Create needed document type entity 2
+ * - Create needed document type entity 3
+ * - Create needed document type entity 4
+ *
+ * Create graph types:
+ * -------------------
+ * - Create needed graph type
+ *
+ * Graph rules task:
+ * -------------------
+ * - Get entities expect empty list
+ * - Create first entity
+ * - Get entities expect one hit
+ * - Get first entity
+ * - Update first entity
+ * - Get updated first entity
+ * - Create second entity
+ * - Get entities expect two hits
+ * - Get second entity
+ * - Delete first entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class GraphRuleTest extends BaseApiTestCase
 {
     /**
-     * Create document type 1 (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 1) Create document type 1 (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeEntity1(): void
+    public function createNeededDocumentTypeEntity1(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_1', $this->documentTypeContext)
@@ -70,18 +95,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Create document type 2 (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 2) Create document type 2 (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeEntity2(): void
+    public function createNeededDocumentTypeEntity2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_2', $this->documentTypeContext)
@@ -95,18 +120,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Create document type 3 (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 3) Create document type 3 (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeEntity3(): void
+    public function createNeededDocumentTypeEntity3(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_3', $this->documentTypeContext)
@@ -120,18 +145,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Create document type 4 (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 4) Create document type 4 (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeEntity4(): void
+    public function createNeededDocumentTypeEntity4(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_4', $this->documentTypeContext)
@@ -145,18 +170,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Create graph type (needed for a Graph entity).
-     *
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 1) Create graph type (needed for a Graph entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededGraphType(): void
+    public function createNeededGraphType(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type', $this->graphTypeContext)
@@ -170,18 +195,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Get graph_rules (empty).
-     *
      * GET /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 1) Get graph_rules (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_rules_empty');
@@ -191,18 +216,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Create first graphRule.
-     *
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 2) Create first graphRule.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_rule_1')
@@ -217,18 +242,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Get graph_rules (expect one hit).
-     *
      * GET /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 3) Get graph_rules (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_rules_1')
@@ -241,18 +266,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Get first graph_rule with id x.
-     *
      * GET /api/v1/graph_rules/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 4) Get first graph_rule with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_rule_1')
@@ -266,18 +291,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Update first graph_rule with id x.
-     *
      * PUT /api/v1/graph_rules/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 5) Update first graph_rule with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_graph_rule_1')
@@ -292,18 +317,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated first graph_rule with id x.
-     *
      * GET /api/v1/graph_rules/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 6) Get updated first graph_rule with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_rule_1_updated')
@@ -316,18 +341,19 @@ class GraphRuleTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create second graph_rule.
-     *
+    /**
      * POST /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 7) Create second graph_rule.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function createSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_rule_2')
@@ -342,18 +368,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Get graph_rules (expect two hits).
-     *
      * GET /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 8) Get graph_rules (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_rules_2')
@@ -366,18 +392,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Get second graph_rule with id x.
-     *
      * GET /api/v1/graph_rules/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 9) Get second graph_rule with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_rule_2')
@@ -391,18 +417,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Delete first graph_rule with id x.
-     *
      * DELETE /api/v1/graph_rules/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 10) Delete first graph_rule with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_graph_rule_1')
@@ -416,18 +442,18 @@ class GraphRuleTest extends BaseApiTestCase
     }
 
     /**
-     * Get graph_rules (expect one hit).
-     *
      * GET /api/v1/graph_rules
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphRule: 11) Get graph_rules (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_rules_1_2')
