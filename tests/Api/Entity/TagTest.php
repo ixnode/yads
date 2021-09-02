@@ -39,24 +39,38 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class TagTest
  *
+ * Tag tasks:
+ * ----------
+ * - Get entities expect empty list
+ * - Create first entity
+ * - Get entities expect one hit
+ * - Get first entity
+ * - Update first entity
+ * - Get updated first entity
+ * - Create second entity
+ * - Get entities expect two hits
+ * - Get second entity
+ * - Delete first entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class TagTest extends BaseApiTestCase
 {
     /**
-     * Get tags (empty).
-     *
      * GET /api/v1/tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 1) Get tags (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_tags_empty');
@@ -65,18 +79,19 @@ class TagTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create first tag.
-     *
+    /**
      * POST /api/v1/tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 2) Create first tag.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_tag_1')
@@ -91,18 +106,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Get tags (expect one hit).
-     *
      * GET /api/v1/tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 3) Get tags (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_tags_1')
@@ -115,18 +130,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Get first tag with id x.
-     *
      * GET /api/v1/tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 4) Get first tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_tag_1')
@@ -140,18 +155,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Update first tag with id x.
-     *
      * PUT /api/v1/tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 5) Update first tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_tag_1')
@@ -166,18 +181,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated first tag with id x.
-     *
      * GET /api/v1/tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 6) Get updated first tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_tag_1_updated')
@@ -190,18 +205,19 @@ class TagTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create second tag.
-     *
+    /**
      * POST /api/v1/tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 7) Create second tag.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function createSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_tag_2')
@@ -216,18 +232,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Get tags (expect two hits).
-     *
      * GET /api/v1/tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 8) Get tags (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_tags_2')
@@ -240,18 +256,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Get second tag with id x.
-     *
      * GET /api/v1/tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 9) Get second tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_tag_2')
@@ -265,18 +281,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Delete first tag with id x.
-     *
      * DELETE /api/v1/tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 10) Delete first tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_tag_1')
@@ -290,18 +306,18 @@ class TagTest extends BaseApiTestCase
     }
 
     /**
-     * Get tags (expect one hit).
-     *
      * GET /api/v1/tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 11) Get tags (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_tags_1_2')
