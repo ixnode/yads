@@ -39,24 +39,38 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class DocumentTypeTest
  *
+ * Document type tasks:
+ * --------------------
+ * - Get entities expect empty list
+ * - Create first entity
+ * - Get entities expect one hit
+ * - Get first entity
+ * - Update first entity
+ * - Get updated first entity
+ * - Create second entity
+ * - Get entities expect two hits
+ * - Get second entity
+ * - Delete first entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class DocumentTypeTest extends BaseApiTestCase
 {
     /**
-     * Get document_types (empty).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 1) Get document_types (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_types_empty');
@@ -65,18 +79,19 @@ class DocumentTypeTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create first document_type.
-     *
+    /**
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 2) Create first document_type.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_1')
@@ -91,18 +106,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_types (expect one hit).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 3) Get document_types (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_types_1')
@@ -115,18 +130,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get first document_type with id x.
-     *
      * GET /api/v1/document_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 4) Get first document_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_type_1')
@@ -140,18 +155,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Update first document_type with id x.
-     *
      * PUT /api/v1/document_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 5) Update first document_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_document_type_1')
@@ -166,18 +181,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated first document_type with id x.
-     *
      * GET /api/v1/document_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 6) Get updated first document_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_type_1_updated')
@@ -190,18 +205,18 @@ class DocumentTypeTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create second document_type.
-     *
+    /**
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
-     * @throws ClientExceptionInterface
+     * @test
+     * @testdox DocumentType: 7) Create second document_type.
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function createSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_2')
@@ -216,18 +231,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_types (expect two hits).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 8) Get document_types (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_types_2')
@@ -240,18 +255,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get second document_type with id x.
-     *
      * GET /api/v1/document_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 9) Get second document_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_type_2')
@@ -265,18 +280,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Delete first document_type with id x.
-     *
      * DELETE /api/v1/document_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 10) Delete first document_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_document_type_1')
@@ -290,18 +305,18 @@ class DocumentTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_types (expect one hit).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 11) Get document_types (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_types_1_2')

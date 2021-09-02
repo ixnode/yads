@@ -39,24 +39,38 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class GraphTypeTest
  *
+ * Graph type tasks:
+ * -----------------
+ * - Get entities expect empty list
+ * - Create first entity
+ * - Get entities expect one hit
+ * - Get first entity
+ * - Update first entity
+ * - Get updated first entity
+ * - Create second entity
+ * - Get entities expect two hits
+ * - Get second entity
+ * - Delete first entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class GraphTypeTest extends BaseApiTestCase
 {
     /**
-     * Get graph_types (empty).
-     *
      * GET /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 1) Get graph_types (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_types_empty');
@@ -65,18 +79,19 @@ class GraphTypeTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create first graph_type.
-     *
+    /**
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 2) Create first graph_type.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_1')
@@ -91,18 +106,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get graph_types (expect one hit).
-     *
      * GET /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 3) Get graph_types (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_types_1')
@@ -115,18 +130,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get first graph_type with id x.
-     *
      * GET /api/v1/graph_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 4) Get first graph_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_type_1')
@@ -140,18 +155,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Update first graph_type with id x.
-     *
      * PUT /api/v1/graph_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 5) Update first graph_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_graph_type_1')
@@ -166,18 +181,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated first graph_type with id x.
-     *
      * GET /api/v1/graph_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 6) Get updated first graph_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_type_1_updated')
@@ -190,18 +205,19 @@ class GraphTypeTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create second graph_type.
-     *
+    /**
      * POST /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 7) Create second graph_type.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function createSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_2')
@@ -216,18 +232,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get graph_types (expect two hits).
-     *
      * GET /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 8) Get graph_types (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_types_2')
@@ -240,18 +256,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get second graph_type with id x.
-     *
      * GET /api/v1/graph_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 9) Get second graph_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_type_2')
@@ -265,18 +281,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Delete first graph_type with id x.
-     *
      * DELETE /api/v1/graph_types/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 10) Delete first graph_type with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_graph_type_1')
@@ -290,18 +306,18 @@ class GraphTypeTest extends BaseApiTestCase
     }
 
     /**
-     * Get graph_types (expect one hit).
-     *
      * GET /api/v1/graph_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox GraphType: 11) Get graph_types (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_graph_types_1_2')

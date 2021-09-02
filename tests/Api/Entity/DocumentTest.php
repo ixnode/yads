@@ -39,24 +39,45 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class DocumentTest
  *
+ * Document type tasks:
+ * --------------------
+ * - Create needed document type group entity
+ * - Get document type entities expect one hit
+ * - Create needed document type notebook entity
+ * - Get document type entities expect two hits
+ *
+ * Document tasks:
+ * ---------------
+ * - Get entities expect empty list
+ * - Create group entity
+ * - Get entities expect one hit
+ * - Get group entity
+ * - Update group entity
+ * - Get updated group entity
+ * - Create notebook entity
+ * - Get entities expect two hits
+ * - Get notebook entity
+ * - Delete group entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class DocumentTest extends BaseApiTestCase
 {
     /**
-     * Create document type group (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 1) Create document type group (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeGroupEntity(): void
+    public function createNeededDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
@@ -70,18 +91,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get document types (expect one hit).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 2) Get document types (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetDocumentTypeEntitiesExpectOneHit(): void
+    public function getDocumentTypeEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_types_1', $this->documentTypeContext)
@@ -93,18 +114,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Create document type notebook (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 3) Create document type notebook (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeNotebookEntity(): void
+    public function createNeededDocumentTypeNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
@@ -118,18 +139,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect two hits).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 4) Get documents (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetDocumentTypeEntitiesExpectTwoHits(): void
+    public function getDocumentTypeEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_types_2', $this->documentTypeContext)
@@ -141,18 +162,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (empty).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 1) Get documents (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_documents_empty');
@@ -162,18 +183,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Create group document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 2) Create group document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateGroupEntity(): void
+    public function createGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_group')
@@ -187,18 +208,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect one hit).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 3) Get documents (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_documents_1')
@@ -210,18 +231,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get group document with id x.
-     *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 4) Get group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetGroupEntity(): void
+    public function getGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_group')
@@ -235,18 +256,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Update group document with id x.
-     *
      * PUT /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 5) Update group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateGroupEntity(): void
+    public function updateGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_document_group')
@@ -261,18 +282,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated group document with id x.
-     *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 6) Get updated group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedGroupEntity(): void
+    public function getUpdatedGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_group_updated')
@@ -286,18 +307,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Create notebook document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 7) Create notebook document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNotebookEntity(): void
+    public function createNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_notebook')
@@ -311,18 +332,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect two hits).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 8) Get documents (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_documents_2')
@@ -334,18 +355,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get notebook document with id x.
-     *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 9) Get notebook document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetNotebookEntity(): void
+    public function getNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_notebook')
@@ -359,18 +380,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Delete group document with id x.
-     *
      * DELETE /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 10) Delete group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteGroupEntity(): void
+    public function deleteGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_document_group')
@@ -384,18 +405,18 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect one hit).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 11) Get documents (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_documents_1_2')

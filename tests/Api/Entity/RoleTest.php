@@ -39,24 +39,38 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class RoleTest
  *
+ * Role tasks:
+ * -----------
+ * - Get entities expect empty list
+ * - Create first entity
+ * - Get entities expect one hit
+ * - Get first entity
+ * - Update first entity
+ * - Get updated first entity
+ * - Create second entity
+ * - Get entities expect two hits
+ * - Get second entity
+ * - Delete first entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class RoleTest extends BaseApiTestCase
 {
     /**
-     * Get roles (empty).
-     *
      * GET /api/v1/roles
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 1) Get roles (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_roles_empty');
@@ -66,18 +80,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Create first role.
-     *
      * POST /api/v1/roles
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 2) Create first role.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_role_1')
@@ -92,18 +106,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Get roles (expect one hit).
-     *
      * GET /api/v1/roles
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 3) Get roles (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_roles_1')
@@ -116,18 +130,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Get first role with id x.
-     *
      * GET /api/v1/roles/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 4) Get first role with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_role_1')
@@ -141,18 +155,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Update first role with id x.
-     *
      * PUT /api/v1/roles/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 5) Update first role with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_role_1')
@@ -167,18 +181,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated first role with id x.
-     *
      * GET /api/v1/roles/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 6) Get updated first role with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_role_1_updated')
@@ -191,18 +205,19 @@ class RoleTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create second role.
-     *
+    /**
      * POST /api/v1/roles
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 7) Create second role.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function createSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_role_2')
@@ -217,18 +232,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Get roles (expect two hits).
-     *
      * GET /api/v1/roles
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 8) Get roles (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_roles_2')
@@ -241,18 +256,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Get second role with id x.
-     *
      * GET /api/v1/roles/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 9) Get second role with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_role_2')
@@ -266,18 +281,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Delete first role with id x.
-     *
      * DELETE /api/v1/roles/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 10) Delete first role with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_role_1')
@@ -291,18 +306,18 @@ class RoleTest extends BaseApiTestCase
     }
 
     /**
-     * Get roles (expect one hit).
-     *
      * GET /api/v1/roles
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Role: 11) Get roles (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_roles_1_2')

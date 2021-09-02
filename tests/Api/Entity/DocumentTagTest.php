@@ -39,24 +39,52 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class DocumentTagTest
  *
+ * Create document types:
+ * ----------------------
+ * - Create needed document type group entity
+ * - Create needed document type notebook entity
+ *
+ * Create tags:
+ * ------------
+ * - Create needed tag entity
+ *
+ * Create documents:
+ * -----------------
+ * - Create needed document entity 1
+ * - Create needed document entity 2
+ *
+ * Tag tasks:
+ * ----------
+ * - Get entities expect empty list
+ * - Create first entity
+ * - Get entities expect one hit
+ * - Get first entity
+ * - Update first entity
+ * - Get updated first entity
+ * - Create second entity
+ * - Get entities expect two hits
+ * - Get second entity
+ * - Delete first entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class DocumentTagTest extends BaseApiTestCase
 {
     /**
-     * Create document type group (needed for a DocumentTag entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 1) Create document type group (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeGroupEntity(): void
+    public function createNeededDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
@@ -70,18 +98,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create document type notebook (needed for a DocumentTag entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 2) Create document type notebook (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeNotebookEntity(): void
+    public function createNeededDocumentTypeNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
@@ -95,18 +123,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create tag (needed for a DocumentTag entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Tag: 1) Create tag (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededTagEntity(): void
+    public function createNeededTagEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_tag', $this->tagContext)
@@ -120,18 +148,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create document 1 (needed for a DocumentTag entity).
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 1) Create document 1 (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentEntity1(): void
+    public function createNeededDocumentEntity1(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_1', $this->documentContext)
@@ -145,18 +173,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Create document 2 (needed for a DocumentTag entity).
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 2) Create document 2 (needed for a DocumentTag entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentEntity2(): void
+    public function createNeededDocumentEntity2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_2', $this->documentContext)
@@ -170,18 +198,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (empty).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 1) Get document_tags (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_empty');
@@ -190,18 +218,19 @@ class DocumentTagTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create first document_tag.
-     *
+    /**
      * POST /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 2) Create first document_tag.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_tag_1')
@@ -216,18 +245,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (expect one hit).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 3) Get document_tags (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_1')
@@ -240,18 +269,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get first document_tag with id x.
-     *
      * GET /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 4) Get first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_tag_1')
@@ -265,18 +294,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Update first document_tag with id x.
-     *
      * PUT /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 5) Update first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_document_tag_1')
@@ -291,18 +320,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated first document_tag with id x.
-     *
      * GET /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 6) Get updated first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_tag_1_updated')
@@ -315,18 +344,19 @@ class DocumentTagTest extends BaseApiTestCase
         $this->makeTest($testCase);
     }
 
-    /**Create second document_tag.
-     *
+    /**
      * POST /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 7) Create second document_tag.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function secondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_tag_2')
@@ -341,18 +371,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (expect two hits).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 8) Get document_tags (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_2')
@@ -365,18 +395,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get second document_tag with id x.
-     *
      * GET /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 9) Get second document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_tag_2')
@@ -390,18 +420,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Delete first document_tag with id x.
-     *
      * DELETE /api/v1/document_tags/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 10) Delete first document_tag with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_document_tag_1')
@@ -415,18 +445,18 @@ class DocumentTagTest extends BaseApiTestCase
     }
 
     /**
-     * Get document_tags (expect one hit).
-     *
      * GET /api/v1/document_tags
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentTag: 11) Get document_tags (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_1_2')
