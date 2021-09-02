@@ -39,17 +39,38 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 /**
  * Class DocumentTest
  *
+ * document type tasks:
+ * --------------------
+ * - Create needed document type group entity
+ * - Get document type entities expect one hit
+ * - Create needed document type notebook entity
+ * - Get document type entities expect two hits
+ *
+ * document tasks:
+ * ---------------
+ * - Get entities expect empty list
+ * - Create group entity
+ * - Get entities expect one hit
+ * - Get group entity
+ * - Update group entity
+ * - Get updated group entity
+ * - Create notebook entity
+ * - Get entities expect two hits
+ * - Get notebook entity
+ * - Delete group entity
+ * - Get entities expect one hit
+ *
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
 class DocumentTest extends BaseApiTestCase
 {
     /**
-     * Create document type group (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 1) Create document type group (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -70,11 +91,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get document types (expect one hit).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 2) Get document types (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -93,11 +114,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Create document type notebook (needed for a Document entity).
-     *
      * POST /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 3) Create document type notebook (needed for a Document entity).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -118,11 +139,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect two hits).
-     *
      * GET /api/v1/document_types
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox DocumentType: 4) Get documents (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -141,11 +162,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (empty).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 1) Get documents (empty).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -162,11 +183,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Create group document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 2) Create group document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -187,11 +208,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect one hit).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 3) Get documents (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -210,11 +231,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get group document with id x.
-     *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 4) Get group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -235,11 +256,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Update group document with id x.
-     *
      * PUT /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 5) Update group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -261,11 +282,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get updated group document with id x.
-     *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 6) Get updated group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -286,11 +307,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Create notebook document.
-     *
      * POST /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 7) Create notebook document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -311,11 +332,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect two hits).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 8) Get documents (expect two hits).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -334,11 +355,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get notebook document with id x.
-     *
      * GET /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 9) Get notebook document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -359,11 +380,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Delete group document with id x.
-     *
      * DELETE /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 10) Delete group document with id x.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -384,11 +405,11 @@ class DocumentTest extends BaseApiTestCase
     }
 
     /**
-     * Get documents (expect one hit).
-     *
      * GET /api/v1/documents
      * application/ld+json; charset=utf-8
      *
+     * @test
+     * @testdox Document: 11) Get documents (expect one hit).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface

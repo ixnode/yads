@@ -84,7 +84,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeGroupEntity(): void
+    public function createNeededDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
@@ -109,7 +109,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentTypeNotebookEntity(): void
+    public function createNeededDocumentTypeNotebookEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
@@ -134,7 +134,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededTagEntity(): void
+    public function createNeededTagEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_tag', $this->tagContext)
@@ -159,7 +159,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentEntity1(): void
+    public function createNeededDocumentEntity1(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_1', $this->documentContext)
@@ -184,7 +184,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateNeededDocumentEntity2(): void
+    public function createNeededDocumentEntity2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_2', $this->documentContext)
@@ -209,7 +209,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectEmptyList(): void
+    public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_empty');
@@ -230,7 +230,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateFirstEntity(): void
+    public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_tag_1')
@@ -256,7 +256,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit(): void
+    public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_1')
@@ -280,7 +280,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetFirstEntity(): void
+    public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_tag_1')
@@ -305,7 +305,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testUpdateFirstEntity(): void
+    public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_document_tag_1')
@@ -331,7 +331,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetUpdatedFirstEntity(): void
+    public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_tag_1_updated')
@@ -356,7 +356,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testCreateSecondEntity(): void
+    public function secondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_tag_2')
@@ -382,7 +382,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectTwoHits(): void
+    public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_2')
@@ -406,7 +406,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetSecondEntity(): void
+    public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_tag_2')
@@ -431,7 +431,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testDeleteFirstEntity(): void
+    public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_document_tag_1')
@@ -456,7 +456,7 @@ class DocumentTagTest extends BaseApiTestCase
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function testGetEntitiesExpectOneHit2(): void
+    public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('list_document_tags_1_2')
