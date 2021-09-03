@@ -24,7 +24,7 @@
  * SOFTWARE.
  */
 
-namespace App\Tests\Api\Entity;
+namespace App\Tests\Api;
 
 use App\Exception\YadsException;
 use App\Tests\Api\Library\ApiTestCaseWrapper;
