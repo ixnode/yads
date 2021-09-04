@@ -36,10 +36,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class VersionController extends AbstractController
 {
-    const VERSION_FILE_NAME = 'VERSION';
-
-    const APP_NAME = 'YADS';
-
     protected AppVersion $appVersion;
 
     /**

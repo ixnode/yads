@@ -34,13 +34,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Class ShowVersionCommand
+ * Class VersionCommand
  *
  * @author Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2021-09-04)
  * @package App\Command
  */
-class ShowVersionCommand extends Command
+class VersionCommand extends Command
 {
     /** @var string The default command name */
     protected static $defaultName = 'version:show';
@@ -68,10 +68,10 @@ class ShowVersionCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName(ShowVersionCommand::$defaultName)
+            ->setName(VersionCommand::$defaultName)
             ->setDescription('Shows the version')
             ->setDefinition([
-                new InputArgument('type', InputArgument::REQUIRED, 'The version type.'),
+                new InputArgument('type', InputArgument::OPTIONAL, 'The version type.', self::NAME_APP),
             ])
             ->setHelp(<<<'EOT'
 The <info>version:show</info> shows version:
