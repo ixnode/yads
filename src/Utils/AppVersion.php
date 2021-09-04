@@ -27,7 +27,6 @@
 namespace App\Utils;
 
 use App\Exception\FileNotExistsException;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
