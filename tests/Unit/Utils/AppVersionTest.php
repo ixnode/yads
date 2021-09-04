@@ -24,45 +24,52 @@
  * SOFTWARE.
  */
 
-namespace App\Controller;
+namespace App\Tests\Unit\Utils;
 
 use App\Exception\FileNotExistsException;
 use App\Utils\AppVersion;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class VersionController extends AbstractController
+/**
+ * Class AppVersionTest
+ *
+ * @author Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2021-09-04)
+ * @package App\Tests\Unit\Utils
+ */
+final class AppVersionTest extends WebTestCase
 {
-    const VERSION_FILE_NAME = 'VERSION';
-
-    const APP_NAME = 'YADS';
-
-    protected AppVersion $appVersion;
-
     /**
-     * VersionController constructor
-     *
-     * @param AppVersion $appVersion
+     * This method is called before each test.
      */
-    public function __construct(AppVersion $appVersion)
+    public static function setUpBeforeClass(): void
     {
-        $this->appVersion = $appVersion;
+        // boot kernel, so we have access to self::$kernel
+        self::bootKernel();
     }
 
     /**
-     * Shows the app version
-     *
-     * @param Request $request
-     * @param KernelInterface $appKernel
-     * @return JsonResponse
+     * @test
+     * @testdox 1) Test AppVersion class.
+     * @return void
      * @throws FileNotExistsException
      */
-    #[Route(path: '/api/v1/version/app.{_format}', name: 'api_version_app', methods: ['GET'])]
-    public function showVersion(Request $request, KernelInterface $appKernel): JsonResponse
+    public function version(): void
     {
-        return new JsonResponse($this->appVersion->getVersion(), 200, []);
+        /* Arrange */
+        $appVersion = new AppVersion(self::$kernel);
+        $versionFile = sprintf('%s/%s', self::$kernel->getProjectDir(), AppVersion::VERSION_FILE_NAME);
+
+        /* Act */
+        $expected = [
+            'appName' => AppVersion::APP_NAME,
+            'appVersion' => file_get_contents($versionFile),
+            'phpVersion' => phpversion(),
+        ];
+
+        /* Assert */
+        $this->assertFileExists($versionFile);
+        $this->assertInstanceOf(AppVersion::class, $appVersion);
+        $this->assertEquals($expected, $appVersion->getVersion());
     }
 }
