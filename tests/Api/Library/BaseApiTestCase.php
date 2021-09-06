@@ -93,6 +93,8 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     const REQUEST_TYPE_UPDATE = 'update';
 
+    const REQUEST_TYPE_PATCH = 'patch';
+
     const REQUEST_TYPE_DELETE = 'delete';
 
     static ArrayHolder $arrayHolder;

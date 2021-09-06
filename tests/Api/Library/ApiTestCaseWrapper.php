@@ -39,6 +39,7 @@ use App\Exception\RaceConditionApiRequestException;
 use App\Exception\UnknownRequestTypeException;
 use App\Exception\YadsException;
 use App\Utils\ArrayHolder;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -63,6 +64,8 @@ final class ApiTestCaseWrapper
     const REQUEST_TYPE_CREATE = 'create';
 
     const REQUEST_TYPE_UPDATE = 'update';
+
+    const REQUEST_TYPE_PATCH = 'patch';
 
     const REQUEST_TYPE_DELETE = 'delete';
 
@@ -598,7 +601,7 @@ final class ApiTestCaseWrapper
         $requestType = $this->getRequestType();
 
         return match ($requestType) {
-            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ, self::REQUEST_TYPE_UPDATE => Response::HTTP_OK,
+            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ, self::REQUEST_TYPE_UPDATE, self::REQUEST_TYPE_PATCH => Response::HTTP_OK,
             self::REQUEST_TYPE_CREATE => Response::HTTP_CREATED,
             self::REQUEST_TYPE_DELETE => Response::HTTP_NO_CONTENT,
             default => throw new UnknownRequestTypeException($requestType),
@@ -659,8 +662,23 @@ final class ApiTestCaseWrapper
             self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ => Request::METHOD_GET,
             self::REQUEST_TYPE_CREATE => Request::METHOD_POST,
             self::REQUEST_TYPE_UPDATE => Request::METHOD_PUT,
+            self::REQUEST_TYPE_PATCH => Request::METHOD_PATCH,
             self::REQUEST_TYPE_DELETE => Request::METHOD_DELETE,
             default => throw new UnknownRequestTypeException($requestType),
+        };
+    }
+
+    /**
+     * Returns the content type according to request method.
+     *
+     * @return string
+     * @throws UnknownRequestTypeException
+     */
+    public function getContentTypeAccordingToRequestMethod(): string
+    {
+        return match ($this->getRequestMethod()) {
+            Request::METHOD_PATCH => self::MIME_TYPE_MERGE_JSON,
+            default => self::MIME_TYPE_LD_JSON,
         };
     }
 
@@ -668,12 +686,13 @@ final class ApiTestCaseWrapper
      * Returns the header for request.
      *
      * @return string[]
+     * @throws UnknownRequestTypeException
      */
     public function getHeaders(): array
     {
         return [
             'accept' => $this->accept,
-            'Content-Type' => $this->contentType,
+            'Content-Type' => $this->getContentTypeAccordingToRequestMethod(),
         ];
     }
 
@@ -682,6 +701,7 @@ final class ApiTestCaseWrapper
      *
      * @return string[][]
      * @throws JsonEncodeException
+     * @throws UnknownRequestTypeException
      */
     public function getOptions(): array
     {
@@ -692,7 +712,11 @@ final class ApiTestCaseWrapper
             'headers' => $this->getHeaders(),
         ];
 
-        if (in_array($requestType, [BaseApiTestCase::REQUEST_TYPE_CREATE, BaseApiTestCase::REQUEST_TYPE_UPDATE])) {
+        if (in_array($requestType, [
+            BaseApiTestCase::REQUEST_TYPE_CREATE,
+            BaseApiTestCase::REQUEST_TYPE_UPDATE,
+            BaseApiTestCase::REQUEST_TYPE_PATCH,
+        ])) {
             $options = array_merge_recursive($options, ['body' => $body]);
         }
 
@@ -749,6 +773,7 @@ final class ApiTestCaseWrapper
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws Exception
      */
     public function getExpectedApiResponseArray(): ?array
     {
@@ -781,6 +806,7 @@ final class ApiTestCaseWrapper
             /* Returns full context for type create */
             case self::REQUEST_TYPE_CREATE:
             case self::REQUEST_TYPE_UPDATE:
+            case self::REQUEST_TYPE_PATCH:
             case self::REQUEST_TYPE_READ:
                 if (!array_key_exists(self::ID_NAME, $responseArray)) {
                     throw new MissingKeyException(self::ID_NAME, __METHOD__);

@@ -503,7 +503,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 4) Create task document.
+     * @testdox Document: 4) Create (open) task document [create_document_task].
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -621,6 +621,35 @@ class FullTest extends BaseApiTestCase
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_notebook_and_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * PUT /api/v1/documents/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @test
+     * @testdox Document Update data full: 1) Close task document [create_document_task].
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function updateGroupEntity(): void
+    {
+        $body = $this->documentDataProvider->getEntityArray(recordNumber: 3);
+        $body['data']['completedOn'] = '2021-09-06T23:05:00';
+
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('update_document_task', $this->documentContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_PATCH)
+            ->setBody($body)
+            ->setExpected($body + ['id' => new ArrayHolder('create_document_task', 'id')])
+            ->setUnset(['createdAt', 'updatedAt',])
+            ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
         $this->makeTest($testCase);

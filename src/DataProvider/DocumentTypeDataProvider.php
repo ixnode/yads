@@ -184,19 +184,37 @@ class DocumentTypeDataProvider extends BaseDataProvider
                             'maxLength' => 65535,
                             'description' => 'The description of the task.',
                         ],
-                        'has_date_of_completion' => [
-                            'type' => 'boolean',
-                        ],
-                        'date_of_completion' => [
-                            'type' => 'string',
+                        'completionDate' => [
+                            'type' => [
+                                0 => 'string',
+                                1 => 'null',
+                            ],
                             'format' => 'date',
+                            'default' => NULL,
                             'description' => 'The date on which this task must be completed.',
+                        ],
+                        'completionTime' => [
+                            'type' => [
+                                0 => 'string',
+                                1 => 'null',
+                            ],
+                            'format' => 'time',
+                            'default' => NULL,
+                            'description' => 'The time on which this task must be completed. completionDate was set and null means full day.',
+                        ],
+                        'completedOn' => [
+                            'type' => [
+                                0 => 'string',
+                                1 => 'null',
+                            ],
+                            'format' => 'date-time',
+                            'default' => NULL,
+                            'description' => 'The date on which the task was done.',
                         ],
                     ],
                     'required' => [
                         0 => 'title',
                         1 => 'description',
-                        2 => 'has_date_of_completion',
                     ],
                 ],
                 'defaults' => [
