@@ -27,34 +27,46 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\DocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Validator\DocumentValidator;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Document
+ * Class DocumentData
+ *
+ * This is a helper class for the Document entity (only data values).
  *
  * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-04)
+ * @version 1.0 (2021-09-07)
  * @package App\Entity
  */
 #[ApiResource]
-#[ORM\Table(name: 'document')]
-#[ORM\Index(columns: ['document_type_id'], name: 'IDX_D8698A7661232A4F')]
-#[ORM\Entity(repositoryClass: DocumentRepository::class), ORM\HasLifecycleCallbacks]
-#[Assert\Callback([DocumentValidator::class, 'validate'])]
-class Document extends BaseEntity
+class DocumentData
 {
+    #[ORM\Id]
+    protected int $id;
+
     /**
      * @var array[]
      */
     #[ORM\Column(name: 'data', type: 'json', length: 0, nullable: false)]
     private array $data;
 
-    #[ORM\ManyToOne(targetEntity: DocumentType::class)]
-    #[ORM\JoinColumn(name: 'document_type_id', referencedColumnName: 'id')]
-    private DocumentType $documentType;
+    /**
+     * @param int $id
+     */
+    public function __construct(int $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Returns the id of this entity.
+     *
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     /**
      * Returns data values of this entity as array.
@@ -75,29 +87,6 @@ class Document extends BaseEntity
     public function setData(array $data): self
     {
         $this->data = $data;
-
-        return $this;
-    }
-
-    /**
-     * Gets the document type of this entity.
-     *
-     * @return DocumentType
-     */
-    public function getDocumentType(): DocumentType
-    {
-        return $this->documentType;
-    }
-
-    /**
-     * Sets the document type of this entity.
-     *
-     * @param DocumentType $documentType
-     * @return $this
-     */
-    public function setDocumentType(DocumentType $documentType): self
-    {
-        $this->documentType = $documentType;
 
         return $this;
     }
