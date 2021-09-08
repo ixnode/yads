@@ -5,13 +5,11 @@ namespace App\DataProvider;
 use ApiPlatform\Core\DataProvider\ItemDataProviderInterface;
 use ApiPlatform\Core\DataProvider\RestrictedDataProviderInterface;
 use App\Entity\Document;
-use App\Entity\DocumentData;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use stdClass;
 
-final class DocumentDataItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
+final class DocumentItemDataProvider implements ItemDataProviderInterface, RestrictedDataProviderInterface
 {
     private DocumentRepository $documentRepository;
 
@@ -47,7 +45,7 @@ final class DocumentDataItemDataProvider implements ItemDataProviderInterface, R
      */
     public function supports(string $resourceClass, string $operationName = null, array $context = []): bool
     {
-        return DocumentData::class === $resourceClass;
+        return Document::class === $resourceClass;
     }
 
     /**
@@ -55,19 +53,10 @@ final class DocumentDataItemDataProvider implements ItemDataProviderInterface, R
      * @param int[]|int|object|string $id
      * @param ?string $operationName
      * @param string[] $context
-     * @return ?stdClass
+     * @return ?Document
      */
-    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?stdClass
+    public function getItem(string $resourceClass, $id, string $operationName = null, array $context = []): ?Document
     {
-        /** @var DocumentData $document */
-        $document = $this->documentRepository->find($id);
-
-        // Create generic class
-        $obj = new stdClass();
-        foreach ($document->getData() as $key => $value) {
-            $obj->{$key} = $value;
-        }
-
-        return $obj;
+        return $this->documentRepository->find($id);
     }
 }

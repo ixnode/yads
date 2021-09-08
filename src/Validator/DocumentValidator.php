@@ -27,6 +27,7 @@
 namespace App\Validator;
 
 use App\Entity\Document;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use JsonSchema\Validator;
 
@@ -40,13 +41,23 @@ use JsonSchema\Validator;
 class DocumentValidator
 {
     /**
-     * Function to validate given Document object.
+     * Returns the request method
+     *
+     * @todo Fix me. This is a workaround.
+     * @return string
+     */
+    public static function getRequestMethod(): string
+    {
+        return array_key_exists('REQUEST_METHOD', $_SERVER) ? strtoupper($_SERVER['REQUEST_METHOD']) : Request::METHOD_GET;
+    }
+
+    /**
+     * Do the validation.
      *
      * @param Document $object
-     * @param ExecutionContextInterface $context
-     * @return void
+     * @return mixed[]
      */
-    public static function validate(Document $object, ExecutionContextInterface $context): void
+    public static function doValidate(Document $object): array
     {
         /* Get data */
         $data = (object)$object->getData();
@@ -58,9 +69,30 @@ class DocumentValidator
         $validator = new Validator();
         $validator->validate($data, $schema);
 
-        if (!$validator->isValid()) {
+        if ($validator->isValid()) {
+            return [];
+        }
 
-            foreach ($validator->getErrors() as $error) {
+        return $validator->getErrors();
+    }
+
+    /**
+     * Function to validate given Document object.
+     *
+     * @param Document $object
+     * @param ExecutionContextInterface $context
+     * @return void
+     */
+    public static function validate(Document $object, ExecutionContextInterface $context): void
+    {
+        if (self::getRequestMethod() === Request::METHOD_PATCH) {
+            return;
+        }
+
+        $validationErrors = self::doValidate($object);
+
+        if (count($validationErrors) > 0) {
+            foreach ($validationErrors as $error) {
                 $context->buildViolation($error['message'])
                     ->atPath('data')
                     ->setCode('422')
