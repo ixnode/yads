@@ -24,70 +24,39 @@
  * SOFTWARE.
  */
 
-namespace App\Entity;
+namespace App\Validator\Document;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraint;
 
 /**
- * Class DocumentData
+ * Class SchemaValid
  *
- * This is a helper class for the Document entity (only data values).
- *
- * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-09-07)
- * @package App\Entity
+ * @Annotation
+ * @package App\Validator\Constraint
  */
-#[ApiResource]
-class DocumentData
+#[\Attribute()]
+class SchemaValid extends Constraint
 {
-    #[ORM\Id]
-    protected int $id;
+    public string $messageSchemaInvalid = 'constraints.document.schemaInvalid';
+    public string $messageNotExists = 'constraints.document.notExists';
 
     /**
-     * @var array[]
+     * Returns the ConstraintValidator class.
+     *
+     * @return string
      */
-    #[ORM\Column(name: 'data', type: 'json', length: 0, nullable: false)]
-    private array $data;
-
-    /**
-     * @param int $id
-     */
-    public function __construct(int $id)
+    public function validatedBy(): string
     {
-        $this->id = $id;
+        return sprintf('%s%s', static::class, 'Validator');
     }
 
     /**
-     * Returns the id of this entity.
+     * getTargets method to be able to use this constraint on a class.
      *
-     * @return int
+     * @return string
      */
-    public function getId(): int
+    public function getTargets(): string
     {
-        return $this->id;
-    }
-
-    /**
-     * Returns data values of this entity as array.
-     *
-     * @return array[]
-     */
-    public function getData(): array
-    {
-        return $this->data;
-    }
-
-    /**
-     * Sets data values of this entity from array.
-     *
-     * @param array[] $data
-     * @return $this
-     */
-    public function setData(array $data): self
-    {
-        $this->data = $data;
-
-        return $this;
+        return self::CLASS_CONSTRAINT;
     }
 }

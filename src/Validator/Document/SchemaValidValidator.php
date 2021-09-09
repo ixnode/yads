@@ -24,29 +24,45 @@
  * SOFTWARE.
  */
 
-namespace App\Validator;
+namespace App\Validator\Document;
 
 use App\Entity\Document;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\ConstraintValidator;
 use JsonSchema\Validator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 /**
- * Class DocumentValidator
+ * Class SchemaValidValidator
  *
  * @author Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2021-08-04)
  * @package App\Validator
  */
-class DocumentValidator
+class SchemaValidValidator extends ConstraintValidator
 {
+    protected EntityManagerInterface $entityManager;
+
+    /**
+     * SchemaValidValidator constructor
+     *
+     * @param EntityManagerInterface $entityManager
+     */
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     /**
      * Returns the request method
      *
      * @todo Fix me. This is a workaround.
      * @return string
      */
-    public static function getRequestMethod(): string
+    public function getRequestMethod(): string
     {
         return array_key_exists('REQUEST_METHOD', $_SERVER) ? strtoupper($_SERVER['REQUEST_METHOD']) : Request::METHOD_GET;
     }
@@ -57,7 +73,7 @@ class DocumentValidator
      * @param Document $object
      * @return mixed[]
      */
-    public static function doValidate(Document $object): array
+    public function doValidate(Document $object): array
     {
         /* Get data */
         $data = (object)$object->getData();
@@ -79,21 +95,54 @@ class DocumentValidator
     /**
      * Function to validate given Document object.
      *
-     * @param Document $object
-     * @param ExecutionContextInterface $context
+     * @param mixed $value
+     * @param Constraint $constraint
      * @return void
      */
-    public static function validate(Document $object, ExecutionContextInterface $context): void
+    public function validate(mixed $value, Constraint $constraint): void
     {
-        if (self::getRequestMethod() === Request::METHOD_PATCH) {
+        // Change the value name. For recognition reasons.
+        $document = $value;
+
+        // Unexpected constraint.
+        if (!$constraint instanceof SchemaValid) {
+            throw new UnexpectedTypeException($constraint, SchemaValid::class);
+        }
+
+        // User-defined constraints should ignore null and empty values so that other constraints (NotBlank, NotNull, etc.) can take care of them.
+        if ($document === null || $document === '') {
             return;
         }
 
-        $validationErrors = self::doValidate($object);
+        // Check that given value is instance of graph.
+        if (!$document instanceof Document) {
+            throw new UnexpectedValueException($document, Document::class);
+        }
+
+        if (self::getRequestMethod() === Request::METHOD_PATCH) {
+            $documentNew = clone $document;
+
+            $documentRepository = $this->entityManager->getRepository(Document::class);
+            $documentPrevious = $documentRepository->findOneBy(['id' => $document->getId()]);
+
+            if ($documentPrevious === null) {
+                $this->context->buildViolation($constraint->messageNotExists)
+                    ->atPath('data')
+                    ->setCode('422')
+                    ->addViolation();
+                return;
+            }
+
+            $this->entityManager->refresh($documentPrevious);
+
+            $document->setData(array_merge($documentPrevious->getData(), $documentNew->getData()));
+        }
+
+        $validationErrors = $this->doValidate($document);
 
         if (count($validationErrors) > 0) {
             foreach ($validationErrors as $error) {
-                $context->buildViolation($error['message'])
+                $this->context->buildViolation($error['message'])
                     ->atPath('data')
                     ->setCode('422')
                     ->addViolation();

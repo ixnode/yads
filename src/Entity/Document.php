@@ -29,8 +29,7 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\DocumentRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Validator\DocumentValidator;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AcmeAssert;
 
 /**
  * Class Document
@@ -43,7 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'document')]
 #[ORM\Index(columns: ['document_type_id'], name: 'IDX_D8698A7661232A4F')]
 #[ORM\Entity(repositoryClass: DocumentRepository::class), ORM\HasLifecycleCallbacks]
-#[Assert\Callback([DocumentValidator::class, 'validate'])]
+#[AcmeAssert\Document\SchemaValid()]
 class Document extends BaseEntity
 {
     /**
