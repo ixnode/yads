@@ -79,9 +79,9 @@ final class ApiTestCaseWorker
 
     const HEADER_NAME_CONTENT_TYPE = 'content-type';
 
-    const LINE_BREAK = "\n";
-
     const ID_NAME = 'id';
+
+    protected static ArrayHolder $arrayHolder;
 
     protected string $name;
 
@@ -111,8 +111,6 @@ final class ApiTestCaseWorker
     protected ?string $charset = self::CHARSET_UTF8;
 
     protected ?Client $apiClient = null;
-
-    protected ?ArrayHolder $arrayHolder = null;
 
     protected ?ResponseInterface $apiResponse = null;
 
@@ -486,24 +484,22 @@ final class ApiTestCaseWorker
     /**
      * Returns the array holder.
      *
-     * @return ?ArrayHolder
+     * @return ArrayHolder
      */
-    public function getArrayHolder(): ?ArrayHolder
+    public static function getArrayHolder(): ArrayHolder
     {
-        return $this->arrayHolder;
+        return self::$arrayHolder;
     }
 
     /**
      * Sets the array holder.
      *
      * @param ArrayHolder $arrayHolder
-     * @return self
+     * @return void
      */
-    public function setArrayHolder(ArrayHolder $arrayHolder): self
+    public static function setArrayHolder(ArrayHolder $arrayHolder): void
     {
-        $this->arrayHolder = $arrayHolder;
-
-        return $this;
+        self::$arrayHolder = $arrayHolder;
     }
 
     /**
@@ -645,11 +641,7 @@ final class ApiTestCaseWorker
 
         foreach ($parameters as &$parameter) {
             if ($parameter instanceof ArrayHolder) {
-                if ($this->arrayHolder === null) {
-                    throw new MissingArrayHolderException(__METHOD__);
-                }
-
-                $parameter = $parameter->conjure($this->arrayHolder);
+                $parameter = $parameter->conjure(self::$arrayHolder);
             }
         }
 
@@ -767,7 +759,7 @@ final class ApiTestCaseWorker
 
         $this->apiResponse = $this->apiClient->request($this->getRequestMethod(), $this->getEndpoint(), $this->getOptions());
 
-        $this->arrayHolder?->add($this->getName(), $this->getApiResponseArray());
+        self::$arrayHolder->add($this->getName(), $this->getApiResponseArray());
 
         return $this->apiResponse;
     }
@@ -789,10 +781,6 @@ final class ApiTestCaseWorker
             throw new RaceConditionApiRequestException(__METHOD__);
         }
 
-        if ($this->arrayHolder === null) {
-            throw new MissingArrayHolderException(__METHOD__);
-        }
-
         $responseArray = $this->getApiResponseArray();
 
         switch ($this->requestType) {
@@ -803,7 +791,7 @@ final class ApiTestCaseWorker
                 foreach ($this->namespaces as $namespace) {
                     /* Remove key '@context' from arrayHolder */
                     $member[] = array_filter(
-                        $this->arrayHolder->get($namespace),
+                        self::$arrayHolder->get($namespace),
                         function (string $key) { return $key !== '@context'; },
                         ARRAY_FILTER_USE_KEY
                     );
@@ -826,7 +814,7 @@ final class ApiTestCaseWorker
                 /* Translate ArrayHolder */
                 foreach($expected as &$item) {
                     if ($item instanceof ArrayHolder) {
-                        $item = $item->conjure($this->arrayHolder);
+                        $item = $item->conjure(self::$arrayHolder);
                     }
                 }
 

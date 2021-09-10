@@ -27,7 +27,6 @@
 namespace App\Tests\Api\Library;
 
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
 use App\Context\DocumentContext;
 use App\Context\DocumentTagContext;
@@ -79,8 +78,6 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     const OUTPUT_WIDTH = 75;
 
-    static ArrayHolder $arrayHolder;
-
     protected static bool $keepDataBetweenTests = false;
 
     protected static ?Application $application = null;
@@ -128,7 +125,7 @@ abstract class BaseApiTestCase extends ApiTestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$arrayHolder = new ArrayHolder();
+        ApiTestCaseWorker::setArrayHolder(new ArrayHolder());
 
         /* If setup is already done. Stop here. */
         if (self::$setUpDone && self::$keepDataBetweenTests) {
@@ -177,7 +174,8 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Returns the base context of this class;
+     * Returns the base context of this class.
+     * Can be overwriten by extended classes.
      *
      * @return ?BaseContext
      */
@@ -208,7 +206,6 @@ abstract class BaseApiTestCase extends ApiTestCase
             $this->expectExceptionMessage($exceptionHolder->getMessage());
         }
         $testCase->setApiClient(self::createClient());
-        $testCase->setArrayHolder(self::$arrayHolder);
 
         /* Act */
         $testCase->requestApi();
@@ -379,6 +376,6 @@ abstract class BaseApiTestCase extends ApiTestCase
      */
     protected function getArrayHolder(): ArrayHolder
     {
-        return self::$arrayHolder;
+        return ApiTestCaseWorker::getArrayHolder();
     }
 }
