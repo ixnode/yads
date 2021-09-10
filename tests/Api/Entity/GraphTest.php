@@ -322,9 +322,9 @@ class GraphTest extends BaseApiTestCase
     {
         /* Arrange: Build body */
         $body = [
-            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_group', '@id'), // n
-            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_notebook', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type', '@id'),
+            'documentTypeSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_group', '@id'), // n
+            'documentTypeTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_notebook', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type', '@id'),
         ];
 
         /* Arrange: Build API test case wrapper */
@@ -356,9 +356,9 @@ class GraphTest extends BaseApiTestCase
     {
         /* Arrange: Build body */
         $body = [
-            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_group', '@id'), // n
-            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_note', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type', '@id'),
+            'documentTypeSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_group', '@id'), // n
+            'documentTypeTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_note', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type', '@id'),
         ];
 
         /* Arrange: Build API test case wrapper */
@@ -390,9 +390,9 @@ class GraphTest extends BaseApiTestCase
     {
         /* Arrange: Build body */
         $body = [
-            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_group', '@id'), // n
-            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_task', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type', '@id'),
+            'documentTypeSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_group', '@id'), // n
+            'documentTypeTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_task', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type', '@id'),
         ];
 
         /* Arrange: Build API test case wrapper */

@@ -82,7 +82,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 1️⃣  DocumentType: 1) Create "group".
+     * @testdox DocumentType: 1) Create "group".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -108,7 +108,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 1️⃣  DocumentType: 2) Create "notebook".
+     * @testdox DocumentType: 2) Create "notebook".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -134,7 +134,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 1️⃣  DocumentType: 3) Create "note".
+     * @testdox DocumentType: 3) Create "note".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -160,7 +160,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 1️⃣  DocumentType: 4) Create "task".
+     * @testdox DocumentType: 4) Create "task".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -186,7 +186,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 2️⃣  GraphType: 1) Create "bidirectional".
+     * @testdox GraphType: 1) Create "bidirectional".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -212,7 +212,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 2️⃣  GraphType: 2) Create "unidirectional".
+     * @testdox GraphType: 2) Create "unidirectional".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -238,7 +238,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 2️⃣  GraphType: 3) Create "not directed".
+     * @testdox GraphType: 3) Create "not directed".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -264,7 +264,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 3️⃣  Role: 1) Create Role.
+     * @testdox Role: 1) Create Role.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -290,7 +290,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 4️⃣  GraphRule: 1) "notebook" connects "note".
+     * @testdox GraphRule: 1) "notebook" connects "note".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -302,9 +302,9 @@ class FullTest extends BaseApiTestCase
     {
         /* Arrange: Build body */
         $body = [
-            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_notebook', '@id'), // n
-            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_note', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'documentTypeSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_notebook', '@id'), // n
+            'documentTypeTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_note', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
         ];
 
         /* Arrange: Build API test case wrapper */
@@ -324,7 +324,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 4️⃣  GraphRule: 2) "notebook" connects "task".
+     * @testdox GraphRule: 2) "notebook" connects "task".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -336,9 +336,9 @@ class FullTest extends BaseApiTestCase
     {
         /* Arrange: Build body */
         $body = [
-            'documentTypeSource' => $this->getArrayHolder()->get('create_document_type_notebook', '@id'), // n
-            'documentTypeTarget' => $this->getArrayHolder()->get('create_document_type_task', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'documentTypeSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_notebook', '@id'), // n
+            'documentTypeTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_task', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
         ];
 
         /* Arrange: Build API test case wrapper */
@@ -358,7 +358,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 5️⃣  Document/Group: 1) [invalid] Create group document with missing title.
+     * @testdox Document/Group: 1) [invalid] Create group document with missing title.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -369,7 +369,7 @@ class FullTest extends BaseApiTestCase
     public function createInvalidDocumentGroupMissingTitleEntity(): void
     {
         $body = [
-            'documentType' => $this->getArrayHolder()->get('create_document_type_group', '@id'),
+            'documentType' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_group', '@id'),
             'data' => [
                 'description' => 'test 1',
             ],
@@ -392,7 +392,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 5️⃣  Document/Group: 2) [invalid] Create group document with unknown field.
+     * @testdox Document/Group: 2) [invalid] Create group document with unknown field.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -403,7 +403,7 @@ class FullTest extends BaseApiTestCase
     public function createInvalidDocumentGroupUnknownFieldEntity(): void
     {
         $body = [
-            'documentType' => $this->getArrayHolder()->get('create_document_type_group', '@id'),
+            'documentType' => ApiTestCaseWorker::getArrayHolder()->get('create_document_type_group', '@id'),
             'data' => [
                 'title' => 'test 1',
                 'description' => 'test 1',
@@ -428,7 +428,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 5️⃣  Document/Group: 3) Create group document.
+     * @testdox Document/Group: 3) Create group document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -453,7 +453,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 5️⃣  Document/Notebook: 4) Create notebook document.
+     * @testdox Document/Notebook: 4) Create notebook document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -478,7 +478,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 5️⃣  Document/Note: 5) Create note document.
+     * @testdox Document/Note: 5) Create note document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -503,7 +503,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 5️⃣  Document/Task: 6) Create task document (not yet done).
+     * @testdox Document/Task: 6) Create task document (not yet done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -528,7 +528,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 6️⃣  Graph: 1) [invalid] Create note and task connection.
+     * @testdox Graph: 1) [invalid] Create note and task connection.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -539,9 +539,9 @@ class FullTest extends BaseApiTestCase
     public function createInvalidGraphNoteTaskEntity(): void
     {
         $body = [
-            'documentSource' => $this->getArrayHolder()->get('create_document_note', '@id'), // n
-            'documentTarget' => $this->getArrayHolder()->get('create_document_task', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'documentSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_note', '@id'), // n
+            'documentTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_task', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
             'graphTypeReversed' => false,
             'weight' => 10,
         ];
@@ -563,7 +563,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 6️⃣  Graph: 2) Create notebook and note connection.
+     * @testdox Graph: 2) Create notebook and note connection.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -574,9 +574,9 @@ class FullTest extends BaseApiTestCase
     public function createGraphNotebookNoteEntity(): void
     {
         $body = [
-            'documentSource' => $this->getArrayHolder()->get('create_document_notebook', '@id'), // n
-            'documentTarget' => $this->getArrayHolder()->get('create_document_note', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'documentSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_notebook', '@id'), // n
+            'documentTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_note', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
             'graphTypeReversed' => false,
             'weight' => 10,
         ];
@@ -597,7 +597,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 6️⃣  Graph: 3) Create notebook and task connection.
+     * @testdox Graph: 3) Create notebook and task connection.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -608,9 +608,9 @@ class FullTest extends BaseApiTestCase
     public function createGraphNotebookTaskEntity(): void
     {
         $body = [
-            'documentSource' => $this->getArrayHolder()->get('create_document_notebook', '@id'), // n
-            'documentTarget' => $this->getArrayHolder()->get('create_document_task', '@id'), // 1
-            'graphType' => $this->getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
+            'documentSource' => ApiTestCaseWorker::getArrayHolder()->get('create_document_notebook', '@id'), // n
+            'documentTarget' => ApiTestCaseWorker::getArrayHolder()->get('create_document_task', '@id'), // 1
+            'graphType' => ApiTestCaseWorker::getArrayHolder()->get('create_graph_type_unidirectional', '@id'),
             'graphTypeReversed' => false,
             'weight' => 10,
         ];
@@ -631,7 +631,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 7️⃣  Document/Task: 1) Get task document (not yet done).
+     * @testdox Document/Task: 1) Get task document (not yet done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -659,7 +659,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 7️⃣  Document/Task: 2) Update task document (empty data).
+     * @testdox Document/Task: 2) Update task document (empty data).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -690,7 +690,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 7️⃣  Document/Task: 3) Get task document (not yet done).
+     * @testdox Document/Task: 3) Get task document (not yet done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -718,7 +718,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 7️⃣  Document/Task: 4) Close task document (empty data) [create_document_task].
+     * @testdox Document/Task: 4) Close task document (empty data) [create_document_task].
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -754,7 +754,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox 7️⃣  Document/Task: 5) Get task document (done).
+     * @testdox Document/Task: 5) Get task document (done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface

@@ -131,11 +131,11 @@ abstract class BaseApiTestCase extends ApiTestCase
             return;
         }
 
-        /* Create application */
-        self::createApplication();
+        /* Build the db helper */
+        $dbHelper = new DbHelper(static::createClient()->getKernel());
 
         /* Empty test table */
-        DbHelper::printAndExecuteCommands([
+        $dbHelper->printAndExecuteCommands([
             '/* Drop schema */' => 'doctrine:schema:drop --force --env=%(environment)s',
             '/* Create schema */' => 'doctrine:schema:create --env=%(environment)s',
             '/* Load fixtures */' => 'doctrine:fixtures:load -n --env=%(environment)s --group=test',
@@ -222,7 +222,7 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Returns the API test case for this test.
+     * Returns the API test caseworker.
      *
      * @param string $name
      * @param BaseContext|null $baseContext
@@ -240,45 +240,5 @@ abstract class BaseApiTestCase extends ApiTestCase
         }
 
         return new ApiTestCaseWorker($name, $baseContext);
-    }
-
-    /**
-     * Creates the application if needed.
-     *
-     * @return Application
-     */
-    protected static function createApplication(): Application
-    {
-        /* Application already exists. */
-        if ((self::$application instanceof Application) && self::$keepDataBetweenTests) {
-            return self::$application;
-        }
-
-        $client = static::createClient();
-
-        self::$application = new Application($client->getKernel());
-        self::$application->setAutoExit(false);
-
-        return self::$application;
-    }
-
-    /**
-     * Returns the current application.
-     *
-     * @return Application
-     */
-    public static function getApplication(): Application
-    {
-        return self::createApplication();
-    }
-
-    /**
-     * Return ArrayHolder
-     *
-     * @return ArrayHolder
-     */
-    protected function getArrayHolder(): ArrayHolder
-    {
-        return ApiTestCaseWorker::getArrayHolder();
     }
 }

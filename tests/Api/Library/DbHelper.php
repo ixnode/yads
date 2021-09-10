@@ -26,9 +26,10 @@
 
 namespace App\Tests\Api\Library;
 
-use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use Exception;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 /**
  * Class DbHelper
@@ -38,11 +39,35 @@ use Symfony\Component\Console\Input\StringInput;
  * @see Documentation at https://api-platform.com/docs/distribution/testing/.
  * @package App\Tests\Api
  */
-class DbHelper extends ApiTestCase
+class DbHelper
 {
     const LINE_BREAK = "\n";
 
     const OUTPUT_WIDTH = 75;
+
+    protected Application $application;
+
+    /**
+     * DbHelper constructor.
+     *
+     * @param KernelInterface $kernel
+     * @param bool $autoExit
+     */
+    public function __construct(KernelInterface $kernel, bool $autoExit = false)
+    {
+        $this->application = new Application($kernel);
+        $this->application->setAutoExit($autoExit);
+    }
+
+    /**
+     * Returns the application for this test.
+     *
+     * @return Application
+     */
+    public function getApplication(): Application
+    {
+        return $this->application;
+    }
 
     /**
      * Replaces and returns the configured commands.
@@ -51,12 +76,10 @@ class DbHelper extends ApiTestCase
      * @return string[]
      * @throws Exception
      */
-    protected static function translateCommands(array $commands): array
+    protected function translateCommands(array $commands): array
     {
-        $application = BaseApiTestCase::getApplication();
-
         /* Gets the environment */
-        $environment = $application->getKernel()->getEnvironment();
+        $environment = $this->application->getKernel()->getEnvironment();
 
         $replaceElements = [
             '%(environment)s' => $environment,
@@ -80,34 +103,34 @@ class DbHelper extends ApiTestCase
      * @return void
      * @throws Exception
      */
-    public static function printAndExecuteCommands(array $command): void
+    public function printAndExecuteCommands(array $command): void
     {
         /* translate the given command array. */
-        $commands = self::translateCommands($command);
+        $commands = $this->translateCommands($command);
 
         /* Print Header */
         print self::LINE_BREAK;
-        print '┏━'.self::strRepeatUntil('━', self::OUTPUT_WIDTH).'━┓'.self::LINE_BREAK;
-        print '┃ '.self::strRepeatUntil(' ', self::OUTPUT_WIDTH, 'PREPARE THE DATABASE').' ┃'.self::LINE_BREAK;
-        print '┣━'.self::strRepeatUntil('━', self::OUTPUT_WIDTH).'━┫'.self::LINE_BREAK;
+        print '┏━'.$this->strRepeatUntil('━', self::OUTPUT_WIDTH).'━┓'.self::LINE_BREAK;
+        print '┃ '.$this->strRepeatUntil(' ', self::OUTPUT_WIDTH, 'PREPARE THE DATABASE').' ┃'.self::LINE_BREAK;
+        print '┣━'.$this->strRepeatUntil('━', self::OUTPUT_WIDTH).'━┫'.self::LINE_BREAK;
 
         /* Execute commands */
         $number = 0;
         foreach ($commands as $comment => $command) {
             if ($number > 0) {
-                print '┠─'.self::strRepeatUntil('─', self::OUTPUT_WIDTH).'─┨'."\n";
+                print '┠─'.$this->strRepeatUntil('─', self::OUTPUT_WIDTH).'─┨'."\n";
             }
 
-            print '┃ '.self::strRepeatUntil(' ', self::OUTPUT_WIDTH, $comment).' ┃'.self::LINE_BREAK;
-            print '┃ '.self::strRepeatUntil(' ', self::OUTPUT_WIDTH, sprintf('$ bin/console %s', $command)).' ┃'.self::LINE_BREAK;
-            self::runCommand($command);
-            print '┃ '.self::strRepeatUntil(' ', self::OUTPUT_WIDTH, '~ Done.').' ┃'.self::LINE_BREAK;
+            print '┃ '.$this->strRepeatUntil(' ', self::OUTPUT_WIDTH, $comment).' ┃'.self::LINE_BREAK;
+            print '┃ '.$this->strRepeatUntil(' ', self::OUTPUT_WIDTH, sprintf('$ bin/console %s', $command)).' ┃'.self::LINE_BREAK;
+            $this->runCommand($command);
+            print '┃ '.$this->strRepeatUntil(' ', self::OUTPUT_WIDTH, '~ Done.').' ┃'.self::LINE_BREAK;
 
             $number++;
         }
 
         /* Print Footer */
-        print '┗━'.self::strRepeatUntil('━', self::OUTPUT_WIDTH).'━┛'."\n";
+        print '┗━'.$this->strRepeatUntil('━', self::OUTPUT_WIDTH).'━┛'."\n";
         print "\n";
     }
 
@@ -119,7 +142,7 @@ class DbHelper extends ApiTestCase
      * @param string $alreadyIssued
      * @return string
      */
-    public static function strRepeatUntil(string $char, int $length, string $alreadyIssued = ''): string
+    public function strRepeatUntil(string $char, int $length, string $alreadyIssued = ''): string
     {
         return $alreadyIssued.str_repeat($char, $length - strlen($alreadyIssued));
     }
@@ -131,12 +154,10 @@ class DbHelper extends ApiTestCase
      * @return int
      * @throws Exception
      */
-    protected static function runCommand(string $command): int
+    protected function runCommand(string $command): int
     {
-        $application = BaseApiTestCase::getApplication();
-
         $command = sprintf('%s --quiet', $command);
 
-        return $application->run(new StringInput($command));
+        return $this->application->run(new StringInput($command));
     }
 }
