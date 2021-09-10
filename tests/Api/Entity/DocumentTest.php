@@ -86,7 +86,7 @@ class DocumentTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -109,7 +109,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_type_group']);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -134,7 +134,7 @@ class DocumentTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -157,7 +157,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_type_group', 'create_document_type_notebook']);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -178,7 +178,7 @@ class DocumentTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWorker('list_documents_empty');
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -203,7 +203,7 @@ class DocumentTest extends BaseApiTestCase
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -226,7 +226,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_group']);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -251,7 +251,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -277,7 +277,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -302,7 +302,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -327,7 +327,7 @@ class DocumentTest extends BaseApiTestCase
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -350,7 +350,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['update_document_group', 'create_document_notebook',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -375,7 +375,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_notebook', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -400,7 +400,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -423,7 +423,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_notebook']);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 

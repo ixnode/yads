@@ -93,7 +93,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -118,7 +118,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -143,7 +143,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -168,7 +168,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -193,7 +193,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -214,7 +214,7 @@ class DocumentTagTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWorker('list_document_tags_empty');
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -240,7 +240,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -264,7 +264,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setNamespaces(['create_document_tag_1'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -289,7 +289,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -315,7 +315,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -340,7 +340,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -366,7 +366,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -390,7 +390,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setNamespaces(['update_document_tag_1', 'create_document_tag_2', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -415,7 +415,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_tag_2', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -440,7 +440,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -464,7 +464,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setNamespaces(['create_document_tag_2'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 

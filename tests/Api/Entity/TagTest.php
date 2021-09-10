@@ -75,7 +75,7 @@ class TagTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWorker('list_tags_empty');
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -101,7 +101,7 @@ class TagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -125,7 +125,7 @@ class TagTest extends BaseApiTestCase
             ->setNamespaces(['create_tag_1'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -150,7 +150,7 @@ class TagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -176,7 +176,7 @@ class TagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -201,7 +201,7 @@ class TagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -227,7 +227,7 @@ class TagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -251,7 +251,7 @@ class TagTest extends BaseApiTestCase
             ->setNamespaces(['update_tag_1', 'create_tag_2', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -276,7 +276,7 @@ class TagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_2', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -301,7 +301,7 @@ class TagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -325,7 +325,7 @@ class TagTest extends BaseApiTestCase
             ->setNamespaces(['create_tag_2'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 

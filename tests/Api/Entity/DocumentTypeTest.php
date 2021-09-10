@@ -75,7 +75,7 @@ class DocumentTypeTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWorker('list_document_types_empty');
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -101,7 +101,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -125,7 +125,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setNamespaces(['create_document_type_1'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -150,7 +150,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -176,7 +176,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -201,7 +201,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -226,7 +226,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -250,7 +250,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setNamespaces(['update_document_type_1', 'create_document_type_2', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -275,7 +275,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_type_2', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -300,7 +300,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -324,7 +324,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->setNamespaces(['create_document_type_2'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 

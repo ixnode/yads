@@ -90,7 +90,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -115,7 +115,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -140,7 +140,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_document_type_3', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -165,7 +165,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_type_4', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -190,7 +190,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setExpected($this->graphTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_type', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -211,7 +211,7 @@ class GraphRuleTest extends BaseApiTestCase
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWorker('list_graph_rules_empty');
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -237,7 +237,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -261,7 +261,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setNamespaces(['create_graph_rule_1'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -286,7 +286,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_graph_rule_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -312,7 +312,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_graph_rule_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -337,7 +337,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_graph_rule_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -363,7 +363,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -387,7 +387,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setNamespaces(['update_graph_rule_1', 'create_graph_rule_2', ])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -412,7 +412,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_graph_rule_2', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -437,7 +437,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_graph_rule_1', 'id'));
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
@@ -461,7 +461,7 @@ class GraphRuleTest extends BaseApiTestCase
             ->setNamespaces(['create_graph_rule_2'])
         ;
 
-        /* Make the test */
+        /* Run the test */
         $testCase->runTest($this);
     }
 
