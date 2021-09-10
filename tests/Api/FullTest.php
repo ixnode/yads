@@ -503,7 +503,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 4) Create (open) task document [create_document_task].
+     * @testdox Document: 4) Create (open) task document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -627,11 +627,39 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
+     * POST /api/v1/documents
+     * application/ld+json; charset=utf-8
+     *
+     * @test
+     * @testdox Task: 1) Get task document (open).
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function getDocumentTaskEntity1(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_document_task_1', $this->documentContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected(
+                $this->documentDataProvider->getEntityArray(recordNumber: 3),
+                ['id' => new ArrayHolder('create_document_task', 'id')]
+            )
+            ->setUnset(['createdAt', 'updatedAt',])
+            ->addParameter(new ArrayHolder('create_document_task', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
      * PATCH /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 1) Update task document (empty data) [create_document_task].
+     * @testdox Task: 2) Update task document (empty data).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -658,11 +686,39 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
+     * POST /api/v1/documents
+     * application/ld+json; charset=utf-8
+     *
+     * @test
+     * @testdox Task: 3) Get task document (open).
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function getDocumentTaskEntity2(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_document_task_2', $this->documentContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected(
+                $this->documentDataProvider->getEntityArray(recordNumber: 3),
+                ['id' => new ArrayHolder('create_document_task', 'id')]
+            )
+            ->setUnset(['createdAt', 'updatedAt',])
+            ->addParameter(new ArrayHolder('create_document_task', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
      * PATCH /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 2) Close task document (empty data) [create_document_task].
+     * @testdox Task: 4) Close task document (empty data) [create_document_task].
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -684,6 +740,35 @@ class FullTest extends BaseApiTestCase
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
                 $body,
+                ['id' => new ArrayHolder('create_document_task', 'id')]
+            )
+            ->setUnset(['createdAt', 'updatedAt',])
+            ->addParameter(new ArrayHolder('create_document_task', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * POST /api/v1/documents
+     * application/ld+json; charset=utf-8
+     *
+     * @test
+     * @testdox Task: 5) Get task document (open).
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function getDocumentTaskEntity3(): void
+    {
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('get_document_task_3', $this->documentContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setExpected(
+                $this->documentDataProvider->getEntityArray(recordNumber: 3),
+                ['data' => ['completedOn' => '2021-09-06T23:05:00', ], ],
                 ['id' => new ArrayHolder('create_document_task', 'id')]
             )
             ->setUnset(['createdAt', 'updatedAt',])
