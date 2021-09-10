@@ -627,27 +627,65 @@ class FullTest extends BaseApiTestCase
     }
 
     /**
-     * PUT /api/v1/documents/[id]
+     * PATCH /api/v1/documents/[id]
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document Update data full: 1) Close task document [create_document_task].
+     * @testdox Document: 1) Update task document (empty data) [create_document_task].
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
      * @throws YadsException
      */
-    public function updateGroupEntity(): void
+    public function updateDocumentTaskEntity(): void
     {
-        $body = $this->documentDataProvider->getEntityArray(recordNumber: 3);
-        $body['data']['completedOn'] = '2021-09-06T23:05:00';
+        $body = ['data' => []];
+
+        /* Build API test case wrapper */
+        $testCase = $this->getApiTestCaseWrapper('update_document_task_empty', $this->documentContext)
+            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_PATCH)
+            ->setBody($body)
+            ->setExpected(
+                $this->documentDataProvider->getEntityArray(recordNumber: 3),
+                ['id' => new ArrayHolder('create_document_task', 'id')]
+            )
+            ->setUnset(['createdAt', 'updatedAt',])
+            ->addParameter(new ArrayHolder('create_document_task', 'id'));
+
+        /* Make the test */
+        $this->makeTest($testCase);
+    }
+
+    /**
+     * PATCH /api/v1/documents/[id]
+     * application/ld+json; charset=utf-8
+     *
+     * @test
+     * @testdox Document: 2) Close task document (empty data) [create_document_task].
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     */
+    public function updateDocumentTaskCloseEntity(): void
+    {
+        $body = [
+            'data' => [
+                'completedOn' => '2021-09-06T23:05:00',
+            ]
+        ];
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_document_task', $this->documentContext)
             ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_PATCH)
             ->setBody($body)
-            ->setExpected($body + ['id' => new ArrayHolder('create_document_task', 'id')])
+            ->setExpected(
+                $this->documentDataProvider->getEntityArray(recordNumber: 3),
+                $body,
+                ['id' => new ArrayHolder('create_document_task', 'id')]
+            )
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 

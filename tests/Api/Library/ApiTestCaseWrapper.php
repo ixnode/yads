@@ -268,11 +268,19 @@ final class ApiTestCaseWrapper
     /**
      * Sets the expected array of this test case wrapper as array.
      *
-     * @param ?mixed[] $expected
      * @return self
      */
-    public function setExpected(?array $expected): self
+    public function setExpected(): self
     {
+        /** @var array[] $arguments */
+        $arguments = func_get_args();
+
+        $expected = array();
+
+        foreach ($arguments as $argument) {
+            $expected = array_merge_recursive($expected, $argument);
+        }
+
         $this->expected = $expected;
 
         return $this;

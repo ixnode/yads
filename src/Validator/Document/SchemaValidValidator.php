@@ -27,8 +27,10 @@
 namespace App\Validator\Document;
 
 use App\Entity\Document;
+use App\Exception\RequestNotExistsException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use JsonSchema\Validator;
@@ -46,25 +48,36 @@ class SchemaValidValidator extends ConstraintValidator
 {
     protected EntityManagerInterface $entityManager;
 
+    protected RequestStack $requestStack;
+
     /**
      * SchemaValidValidator constructor
      *
      * @param EntityManagerInterface $entityManager
+     * @param RequestStack $requestStack
      */
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, RequestStack $requestStack)
     {
         $this->entityManager = $entityManager;
+
+        $this->requestStack = $requestStack;
     }
 
     /**
      * Returns the request method
      *
-     * @todo Fix me. This is a workaround.
      * @return string
+     * @throws RequestNotExistsException
      */
     public function getRequestMethod(): string
     {
-        return array_key_exists('REQUEST_METHOD', $_SERVER) ? strtoupper($_SERVER['REQUEST_METHOD']) : Request::METHOD_GET;
+        $request = $this->requestStack->getMainRequest();
+
+        if ($request === null) {
+            throw new RequestNotExistsException('main request');
+        }
+
+        return $request->getMethod();
     }
 
     /**
@@ -98,6 +111,7 @@ class SchemaValidValidator extends ConstraintValidator
      * @param mixed $value
      * @param Constraint $constraint
      * @return void
+     * @throws RequestNotExistsException
      */
     public function validate(mixed $value, Constraint $constraint): void
     {
