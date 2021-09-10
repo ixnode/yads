@@ -73,10 +73,10 @@ class RoleTest extends BaseApiTestCase
     public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_roles_empty');
+        $testCase = $this->getApiTestCaseWorker('list_roles_empty');
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -94,7 +94,7 @@ class RoleTest extends BaseApiTestCase
     public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_role_1')
+        $testCase = $this->getApiTestCaseWorker('create_role_1')
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->roleDataProvider->getEntityArray())
             ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_1', 'id')])
@@ -102,7 +102,7 @@ class RoleTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -120,13 +120,13 @@ class RoleTest extends BaseApiTestCase
     public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_roles_1')
+        $testCase = $this->getApiTestCaseWorker('list_roles_1')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
             ->setNamespaces(['create_role_1'])
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -144,14 +144,14 @@ class RoleTest extends BaseApiTestCase
     public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_role_1')
+        $testCase = $this->getApiTestCaseWorker('get_role_1')
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -169,7 +169,7 @@ class RoleTest extends BaseApiTestCase
     public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('update_role_1')
+        $testCase = $this->getApiTestCaseWorker('update_role_1')
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_UPDATE)
             ->setBody($this->roleDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->roleDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_role_1', 'id')])
@@ -177,7 +177,7 @@ class RoleTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -195,14 +195,14 @@ class RoleTest extends BaseApiTestCase
     public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_role_1_updated')
+        $testCase = $this->getApiTestCaseWorker('get_role_1_updated')
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->roleDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_role_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -220,7 +220,7 @@ class RoleTest extends BaseApiTestCase
     public function createSecondEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_role_2')
+        $testCase = $this->getApiTestCaseWorker('create_role_2')
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->roleDataProvider->getEntityArray())
             ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_2', 'id')])
@@ -228,7 +228,7 @@ class RoleTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -246,13 +246,13 @@ class RoleTest extends BaseApiTestCase
     public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_roles_2')
+        $testCase = $this->getApiTestCaseWorker('list_roles_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
             ->setNamespaces(['update_role_1', 'create_role_2', ])
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -270,14 +270,14 @@ class RoleTest extends BaseApiTestCase
     public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_role_2')
+        $testCase = $this->getApiTestCaseWorker('get_role_2')
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_role_2', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -295,14 +295,14 @@ class RoleTest extends BaseApiTestCase
     public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('delete_role_1')
+        $testCase = $this->getApiTestCaseWorker('delete_role_1')
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_DELETE)
             ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -320,13 +320,13 @@ class RoleTest extends BaseApiTestCase
     public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_roles_1_2')
+        $testCase = $this->getApiTestCaseWorker('list_roles_1_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
             ->setNamespaces(['create_role_2'])
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**

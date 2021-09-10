@@ -185,7 +185,7 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Makes the actual test
+     * Runs the actual test.
      *
      * @param ApiTestCaseWorker $testCase
      * @param ExceptionHolder|null $exceptionHolder
@@ -197,7 +197,7 @@ abstract class BaseApiTestCase extends ApiTestCase
      * @throws RaceConditionApiRequestException
      * @throws UnknownRequestTypeException
      */
-    public function makeTest(ApiTestCaseWorker $testCase, ?ExceptionHolder $exceptionHolder = null): void
+    public function executeTest(ApiTestCaseWorker $testCase, ?ExceptionHolder $exceptionHolder = null): void
     {
         /* Arrange */
         if ($exceptionHolder !== null) {
@@ -227,7 +227,7 @@ abstract class BaseApiTestCase extends ApiTestCase
      * @return ApiTestCaseWorker
      * @throws MissingContextException
      */
-    public function getApiTestCaseWrapper(string $name, BaseContext $baseContext = null): ApiTestCaseWorker
+    public function getApiTestCaseWorker(string $name, BaseContext $baseContext = null): ApiTestCaseWorker
     {
         if ($baseContext === null) {
             $baseContext = $this->getContext();

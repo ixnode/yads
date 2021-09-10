@@ -576,8 +576,6 @@ final class ApiTestCaseWorker
         return $this;
     }
 
-
-
     /**
      * Returns the API status code.
      *
@@ -618,7 +616,6 @@ final class ApiTestCaseWorker
      * @return string
      * @throws MissingApiClientException
      * @throws ContainerLoadException
-     * @throws MissingArrayHolderException
      * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function getEndpoint(): string

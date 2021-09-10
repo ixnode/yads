@@ -92,7 +92,7 @@ class FullTest extends BaseApiTestCase
     public function createDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_type_group', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray())
             ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
@@ -100,7 +100,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -118,7 +118,7 @@ class FullTest extends BaseApiTestCase
     public function createDocumentTypeNotebookEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_type_notebook', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
@@ -126,7 +126,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -144,7 +144,7 @@ class FullTest extends BaseApiTestCase
     public function createDocumentTypeNoteEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type_note', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_type_note', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_document_type_note', 'id')])
@@ -152,7 +152,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -170,7 +170,7 @@ class FullTest extends BaseApiTestCase
     public function createDocumentTypeTaskEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type_task', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_type_task', $this->documentTypeContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_type_task', 'id')])
@@ -178,7 +178,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -196,7 +196,7 @@ class FullTest extends BaseApiTestCase
     public function createGraphTypeBidirectionalEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_type_bidirectional', $this->graphTypeContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_type_bidirectional', $this->graphTypeContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphTypeDataProvider->getEntityArray())
             ->setExpected($this->graphTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_type_bidirectional', 'id')])
@@ -204,7 +204,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -222,7 +222,7 @@ class FullTest extends BaseApiTestCase
     public function createGraphTypeUnidirectionalEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_type_unidirectional', $this->graphTypeContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_type_unidirectional', $this->graphTypeContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphTypeDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->graphTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_graph_type_unidirectional', 'id')])
@@ -230,7 +230,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -248,7 +248,7 @@ class FullTest extends BaseApiTestCase
     public function createGraphTypeNotDirectedEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_type_not_directed', $this->graphTypeContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_type_not_directed', $this->graphTypeContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphTypeDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->graphTypeDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_graph_type_not_directed', 'id')])
@@ -256,7 +256,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -274,7 +274,7 @@ class FullTest extends BaseApiTestCase
     public function createRoleEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_role', $this->roleContext)
+        $testCase = $this->getApiTestCaseWorker('create_role', $this->roleContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->roleDataProvider->getEntityArray())
             ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role', 'id')])
@@ -282,7 +282,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -308,7 +308,7 @@ class FullTest extends BaseApiTestCase
         ];
 
         /* Arrange: Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_rule_notebook_note', $this->graphRuleContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_rule_notebook_note', $this->graphRuleContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_notebook_note', 'id')])
@@ -316,7 +316,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Act & Assert: Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -342,7 +342,7 @@ class FullTest extends BaseApiTestCase
         ];
 
         /* Arrange: Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_rule_notebook_task', $this->graphRuleContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_rule_notebook_task', $this->graphRuleContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_notebook_task', 'id')])
@@ -350,7 +350,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Act & Assert: Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -377,14 +377,14 @@ class FullTest extends BaseApiTestCase
         $exceptionHolder = new ExceptionHolder(ClientException::class, 422, 'The property title is required');
 
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_group_invalid_missing_title', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_group_invalid_missing_title', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_document_group_invalid_missing_title', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase, $exceptionHolder);
+        $this->executeTest($testCase, $exceptionHolder);
     }
 
     /**
@@ -413,14 +413,14 @@ class FullTest extends BaseApiTestCase
         $exceptionHolder = new ExceptionHolder(ClientException::class, 422, 'The property unknown is not defined and the definition does not allow additional properties');
 
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_group_invalid', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_group_invalid', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_document_group_invalid', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase, $exceptionHolder);
+        $this->executeTest($testCase, $exceptionHolder);
     }
 
     /**
@@ -438,14 +438,14 @@ class FullTest extends BaseApiTestCase
     public function createDocumentGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_group', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_group', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray())
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -463,14 +463,14 @@ class FullTest extends BaseApiTestCase
     public function createDocumentNotebookEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_notebook', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_notebook', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -488,14 +488,14 @@ class FullTest extends BaseApiTestCase
     public function createDocumentNoteEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_note', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_note', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_document_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -513,14 +513,14 @@ class FullTest extends BaseApiTestCase
     public function createDocumentTaskEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_task', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('create_document_task', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -548,14 +548,14 @@ class FullTest extends BaseApiTestCase
         $exceptionHolder = new ExceptionHolder(ClientException::class, 422, 'It is not allowed to link document type "note" (source) with document type "task" (target) and relation type "unidirectional".');
 
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_note_and_task', $this->graphContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_note_and_task', $this->graphContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_note_and_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase, $exceptionHolder);
+        $this->executeTest($testCase, $exceptionHolder);
     }
 
     /**
@@ -582,14 +582,14 @@ class FullTest extends BaseApiTestCase
         ];
 
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_notebook_and_note', $this->graphContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_notebook_and_note', $this->graphContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_notebook_and_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -616,14 +616,14 @@ class FullTest extends BaseApiTestCase
         ];
 
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_graph_notebook_and_task', $this->graphContext)
+        $testCase = $this->getApiTestCaseWorker('create_graph_notebook_and_task', $this->graphContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_notebook_and_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -641,7 +641,7 @@ class FullTest extends BaseApiTestCase
     public function getDocumentTaskEntity1(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_task_1', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('get_document_task_1', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
@@ -651,7 +651,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -671,7 +671,7 @@ class FullTest extends BaseApiTestCase
         $body = ['data' => []];
 
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('update_document_task_empty', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('update_document_task_empty', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_PATCH)
             ->setBody($body)
             ->setExpected(
@@ -682,7 +682,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -700,7 +700,7 @@ class FullTest extends BaseApiTestCase
     public function getDocumentTaskEntity2(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_task_2', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('get_document_task_2', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
@@ -710,7 +710,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -734,7 +734,7 @@ class FullTest extends BaseApiTestCase
         ];
 
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('update_document_task', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('update_document_task', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_PATCH)
             ->setBody($body)
             ->setExpected(
@@ -746,7 +746,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 
     /**
@@ -764,7 +764,7 @@ class FullTest extends BaseApiTestCase
     public function getDocumentTaskEntity3(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_task_3', $this->documentContext)
+        $testCase = $this->getApiTestCaseWorker('get_document_task_3', $this->documentContext)
             ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
@@ -775,6 +775,6 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->makeTest($testCase);
+        $this->executeTest($testCase);
     }
 }
