@@ -28,7 +28,7 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
 use App\Exception\YadsException;
-use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\ApiTestCaseWorker;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -95,7 +95,7 @@ class TagTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->tagDataProvider->getEntityArray())
             ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -145,7 +145,7 @@ class TagTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
@@ -170,7 +170,7 @@ class TagTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_UPDATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_UPDATE)
             ->setBody($this->tagDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -196,7 +196,7 @@ class TagTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_tag_1_updated')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
@@ -221,7 +221,7 @@ class TagTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_tag_2')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->tagDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -271,7 +271,7 @@ class TagTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_tag_2')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_2', 'id'));
@@ -296,7 +296,7 @@ class TagTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_DELETE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_DELETE)
             ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));

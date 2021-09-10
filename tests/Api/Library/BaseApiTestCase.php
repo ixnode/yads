@@ -75,39 +75,17 @@ abstract class BaseApiTestCase extends ApiTestCase
 
     const MIME_TYPE_MERGE_JSON = 'application/merge-patch+json';
 
-    const CHARSET_UTF8 = 'utf-8';
-
-    const HEADER_NAME_CONTENT_TYPE = 'content-type';
-
     const LINE_BREAK = "\n";
 
-    const ID_NAME = 'id';
-
     const OUTPUT_WIDTH = 75;
-
-    const REQUEST_TYPE_LIST = 'list';
-
-    const REQUEST_TYPE_READ = 'read';
-
-    const REQUEST_TYPE_CREATE = 'create';
-
-    const REQUEST_TYPE_UPDATE = 'update';
-
-    const REQUEST_TYPE_PATCH = 'patch';
-
-    const REQUEST_TYPE_DELETE = 'delete';
 
     static ArrayHolder $arrayHolder;
 
     protected static bool $keepDataBetweenTests = false;
 
-    protected ?string $apiPrefix = null;
-
     protected static ?Application $application = null;
 
     protected static bool $setUpDone = false;
-
-
 
     protected DocumentDataProvider $documentDataProvider;
 
@@ -211,7 +189,7 @@ abstract class BaseApiTestCase extends ApiTestCase
     /**
      * Makes the actual test
      *
-     * @param ApiTestCaseWrapper $testCase
+     * @param ApiTestCaseWorker $testCase
      * @param ExceptionHolder|null $exceptionHolder
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
@@ -221,7 +199,7 @@ abstract class BaseApiTestCase extends ApiTestCase
      * @throws RaceConditionApiRequestException
      * @throws UnknownRequestTypeException
      */
-    public function makeTest(ApiTestCaseWrapper $testCase, ?ExceptionHolder $exceptionHolder = null): void
+    public function makeTest(ApiTestCaseWorker $testCase, ?ExceptionHolder $exceptionHolder = null): void
     {
         /* Arrange */
         if ($exceptionHolder !== null) {
@@ -238,7 +216,7 @@ abstract class BaseApiTestCase extends ApiTestCase
         /* Assert */
         $this->assertResponseIsSuccessful();
         if ($testCase->getMimeType() !== null) {
-            $this->assertResponseHeaderSame(ApiTestCaseWrapper::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
+            $this->assertResponseHeaderSame(ApiTestCaseWorker::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
         }
         $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
         $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
@@ -249,10 +227,10 @@ abstract class BaseApiTestCase extends ApiTestCase
      *
      * @param string $name
      * @param BaseContext|null $baseContext
-     * @return ApiTestCaseWrapper
+     * @return ApiTestCaseWorker
      * @throws MissingContextException
      */
-    public function getApiTestCaseWrapper(string $name, BaseContext $baseContext = null): ApiTestCaseWrapper
+    public function getApiTestCaseWrapper(string $name, BaseContext $baseContext = null): ApiTestCaseWorker
     {
         if ($baseContext === null) {
             $baseContext = $this->getContext();
@@ -262,29 +240,7 @@ abstract class BaseApiTestCase extends ApiTestCase
             throw new MissingContextException(__METHOD__);
         }
 
-        return new ApiTestCaseWrapper($name, $baseContext);
-    }
-
-    /**
-     * Returns the endpoint of given parameters and path.
-     *
-     * @param Client $client
-     * @param string $path
-     * @param string[]|int[] $parameter
-     * @return string
-     * @throws Exception
-     */
-    protected function getEndpoint(Client $client, string $path, array $parameter=array()): string
-    {
-        $container = $client->getContainer();
-
-        if ($container === null) {
-            throw new Exception('Container could not be loaded.');
-        }
-
-        $baseUrl = $container->getParameter('api.base_url');
-
-        return implode('/', [$baseUrl, $path, ...$parameter]);
+        return new ApiTestCaseWorker($name, $baseContext);
     }
 
     /**
@@ -373,21 +329,6 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Returns the header for request.
-     *
-     * @param string $accept
-     * @param string $contentType
-     * @return string[]
-     */
-    public function getHeaders(string $accept = self::MIME_TYPE_JSON, string $contentType = self::MIME_TYPE_JSON): array
-    {
-        return [
-            'accept' => $accept,
-            'Content-Type' => $contentType,
-        ];
-    }
-
-    /**
      * Runs the given command.
      *
      * @param string $command
@@ -429,22 +370,6 @@ abstract class BaseApiTestCase extends ApiTestCase
     protected static function getApplication(): Application
     {
         return self::createApplication();
-    }
-
-    /**
-     * Returns the MIME Type of given components.
-     *
-     * @param string $type
-     * @param string|null $charset
-     * @return string
-     */
-    protected static function getMimeType(string $type, string $charset = null): string
-    {
-        if ($charset !== null) {
-            $type = sprintf('%s; charset=%s', $type, $charset);
-        }
-
-        return $type;
     }
 
     /**

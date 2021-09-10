@@ -28,7 +28,7 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
 use App\Exception\YadsException;
-use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\ApiTestCaseWorker;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use Exception;
@@ -96,7 +96,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray())
             ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -121,7 +121,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -146,7 +146,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_note', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_document_type_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -171,7 +171,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_task', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_type_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -196,7 +196,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_1', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray())
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -221,7 +221,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_2', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -246,7 +246,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_3', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_document_3', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -271,7 +271,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_4', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_4', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -296,7 +296,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type', $this->graphTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphTypeDataProvider->getEntityArray())
             ->setExpected($this->graphTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_type', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -329,7 +329,7 @@ class GraphTest extends BaseApiTestCase
 
         /* Arrange: Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_rule_group_notebook', $this->graphRuleContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_group_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -363,7 +363,7 @@ class GraphTest extends BaseApiTestCase
 
         /* Arrange: Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_rule_group_note', $this->graphRuleContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_group_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -397,7 +397,7 @@ class GraphTest extends BaseApiTestCase
 
         /* Arrange: Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_rule_group_task', $this->graphRuleContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_group_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -444,7 +444,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphDataProvider->getEntityArray())
             ->setExpected($this->graphDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -492,7 +492,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->graphDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_graph_1', 'id'));
@@ -517,7 +517,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_graph_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_UPDATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_UPDATE)
             ->setBody($this->graphDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->graphDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_graph_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
@@ -543,7 +543,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_1_updated')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->graphDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_graph_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_graph_1', 'id'));
@@ -568,7 +568,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_2')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->graphDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_graph_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -616,7 +616,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_graph_2')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->graphDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_graph_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_graph_2', 'id'));
@@ -641,7 +641,7 @@ class GraphTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('delete_graph_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_DELETE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_DELETE)
             ->setExpected($this->graphDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_graph_1', 'id'));

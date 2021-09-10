@@ -49,13 +49,13 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Class ApiTestCaseWrapper
+ * Class ApiTestCaseWorker
  *
  * @author Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2021-08-10)
  * @package App\Tests\Api
  */
-final class ApiTestCaseWrapper
+final class ApiTestCaseWorker
 {
     const REQUEST_TYPE_LIST = 'list';
 
@@ -721,9 +721,9 @@ final class ApiTestCaseWrapper
         ];
 
         if (in_array($requestType, [
-            BaseApiTestCase::REQUEST_TYPE_CREATE,
-            BaseApiTestCase::REQUEST_TYPE_UPDATE,
-            BaseApiTestCase::REQUEST_TYPE_PATCH,
+            self::REQUEST_TYPE_CREATE,
+            self::REQUEST_TYPE_UPDATE,
+            self::REQUEST_TYPE_PATCH,
         ])) {
             $options = array_merge_recursive($options, ['body' => $body]);
         }

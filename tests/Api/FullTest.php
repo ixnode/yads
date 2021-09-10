@@ -27,7 +27,7 @@
 namespace App\Tests\Api;
 
 use App\Exception\YadsException;
-use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\ApiTestCaseWorker;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use App\Utils\ExceptionHolder;
@@ -82,7 +82,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox DocumentType: 1) Create "group".
+     * @testdox 1️⃣  DocumentType: 1) Create "group".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -93,7 +93,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray())
             ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -108,7 +108,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox DocumentType: 2) Create "notebook".
+     * @testdox 1️⃣  DocumentType: 2) Create "notebook".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -119,7 +119,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -134,7 +134,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox DocumentType: 3) Create "note".
+     * @testdox 1️⃣  DocumentType: 3) Create "note".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -145,7 +145,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_note', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_document_type_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -160,7 +160,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox DocumentType: 4) Create "task".
+     * @testdox 1️⃣  DocumentType: 4) Create "task".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -171,7 +171,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_type_task', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_type_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -186,7 +186,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox GraphType: 1) Create "bidirectional".
+     * @testdox 2️⃣  GraphType: 1) Create "bidirectional".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -197,7 +197,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_bidirectional', $this->graphTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphTypeDataProvider->getEntityArray())
             ->setExpected($this->graphTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_graph_type_bidirectional', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -212,7 +212,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox GraphType: 2) Create "unidirectional".
+     * @testdox 2️⃣  GraphType: 2) Create "unidirectional".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -223,7 +223,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_unidirectional', $this->graphTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphTypeDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->graphTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_graph_type_unidirectional', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -238,7 +238,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox GraphType: 3) Create "not directed".
+     * @testdox 2️⃣  GraphType: 3) Create "not directed".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -249,7 +249,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_type_not_directed', $this->graphTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->graphTypeDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->graphTypeDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_graph_type_not_directed', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -264,7 +264,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Role: 1) Create Role.
+     * @testdox 3️⃣  Role: 1) Create Role.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -275,7 +275,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_role', $this->roleContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->roleDataProvider->getEntityArray())
             ->setExpected($this->roleDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_role', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -290,7 +290,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox GraphRule: 1) "notebook" connects "note".
+     * @testdox 4️⃣  GraphRule: 1) "notebook" connects "note".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -309,7 +309,7 @@ class FullTest extends BaseApiTestCase
 
         /* Arrange: Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_rule_notebook_note', $this->graphRuleContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_notebook_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -324,7 +324,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox GraphRule: 2) "notebook" connects "task".
+     * @testdox 4️⃣  GraphRule: 2) "notebook" connects "task".
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -343,7 +343,7 @@ class FullTest extends BaseApiTestCase
 
         /* Arrange: Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_rule_notebook_task', $this->graphRuleContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_rule_notebook_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
@@ -358,7 +358,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Invalid Document: 1) Create group document with missing title.
+     * @testdox 5️⃣  Document/Group: 1) [invalid] Create group document with missing title.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -378,7 +378,7 @@ class FullTest extends BaseApiTestCase
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_group_invalid_missing_title', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_document_group_invalid_missing_title', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -392,7 +392,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Invalid Document: 2) Create group document with unknown field.
+     * @testdox 5️⃣  Document/Group: 2) [invalid] Create group document with unknown field.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -414,7 +414,7 @@ class FullTest extends BaseApiTestCase
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_group_invalid', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_document_group_invalid', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -428,7 +428,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 1) Create group document.
+     * @testdox 5️⃣  Document/Group: 3) Create group document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -439,7 +439,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_group', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray())
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -453,7 +453,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 2) Create notebook document.
+     * @testdox 5️⃣  Document/Notebook: 4) Create notebook document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -464,7 +464,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_notebook', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -478,7 +478,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 3) Create note document.
+     * @testdox 5️⃣  Document/Note: 5) Create note document.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -489,7 +489,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_note', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 2))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 2) + ['id' => new ArrayHolder('create_document_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -503,7 +503,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Document: 4) Create (open) task document.
+     * @testdox 5️⃣  Document/Task: 6) Create task document (not yet done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -514,7 +514,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_document_task', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 3))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 3) + ['id' => new ArrayHolder('create_document_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -528,7 +528,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Invalid Graph: 1) Create note and task connection.
+     * @testdox 6️⃣  Graph: 1) [invalid] Create note and task connection.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -549,7 +549,7 @@ class FullTest extends BaseApiTestCase
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_note_and_task', $this->graphContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_note_and_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -563,7 +563,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Graph: 1) Create notebook and note connection.
+     * @testdox 6️⃣  Graph: 2) Create notebook and note connection.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -583,7 +583,7 @@ class FullTest extends BaseApiTestCase
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_notebook_and_note', $this->graphContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_notebook_and_note', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -597,7 +597,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Graph: 1) Create notebook and task connection.
+     * @testdox 6️⃣  Graph: 3) Create notebook and task connection.
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -617,7 +617,7 @@ class FullTest extends BaseApiTestCase
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('create_graph_notebook_and_task', $this->graphContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($body)
             ->setExpected($body + ['id' => new ArrayHolder('create_graph_notebook_and_task', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
@@ -631,7 +631,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Task: 1) Get task document (open).
+     * @testdox 7️⃣  Document/Task: 1) Get task document (not yet done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -642,7 +642,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_task_1', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
                 ['id' => new ArrayHolder('create_document_task', 'id')]
@@ -659,7 +659,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Task: 2) Update task document (empty data).
+     * @testdox 7️⃣  Document/Task: 2) Update task document (empty data).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -672,7 +672,7 @@ class FullTest extends BaseApiTestCase
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_document_task_empty', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_PATCH)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_PATCH)
             ->setBody($body)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
@@ -690,7 +690,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Task: 3) Get task document (open).
+     * @testdox 7️⃣  Document/Task: 3) Get task document (not yet done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -701,7 +701,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_task_2', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
                 ['id' => new ArrayHolder('create_document_task', 'id')]
@@ -718,7 +718,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Task: 4) Close task document (empty data) [create_document_task].
+     * @testdox 7️⃣  Document/Task: 4) Close task document (empty data) [create_document_task].
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -735,7 +735,7 @@ class FullTest extends BaseApiTestCase
 
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('update_document_task', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_PATCH)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_PATCH)
             ->setBody($body)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
@@ -754,7 +754,7 @@ class FullTest extends BaseApiTestCase
      * application/ld+json; charset=utf-8
      *
      * @test
-     * @testdox Task: 5) Get task document (open).
+     * @testdox 7️⃣  Document/Task: 5) Get task document (done).
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
@@ -765,7 +765,7 @@ class FullTest extends BaseApiTestCase
     {
         /* Build API test case wrapper */
         $testCase = $this->getApiTestCaseWrapper('get_document_task_3', $this->documentContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected(
                 $this->documentDataProvider->getEntityArray(recordNumber: 3),
                 ['data' => ['completedOn' => '2021-09-06T23:05:00', ], ],
