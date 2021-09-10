@@ -28,6 +28,7 @@ namespace App\Validator\Document;
 
 use App\Entity\Document;
 use App\Exception\RequestNotExistsException;
+use App\Utils\ArrayBuilder;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -149,7 +150,7 @@ class SchemaValidValidator extends ConstraintValidator
 
             $this->entityManager->refresh($documentPrevious);
 
-            $document->setData(array_merge($documentPrevious->getData(), $documentNew->getData()));
+            $document->setData((new ArrayBuilder($documentPrevious->getData(), $documentNew->getData()))->get());
         }
 
         $validationErrors = $this->doValidate($document);
