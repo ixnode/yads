@@ -76,7 +76,7 @@ class RoleTest extends BaseApiTestCase
         $testCase = $this->getApiTestCaseWorker('list_roles_empty');
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -102,7 +102,7 @@ class RoleTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -126,7 +126,7 @@ class RoleTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -151,7 +151,7 @@ class RoleTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -177,7 +177,7 @@ class RoleTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -202,7 +202,7 @@ class RoleTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -228,7 +228,7 @@ class RoleTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -252,7 +252,7 @@ class RoleTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -277,7 +277,7 @@ class RoleTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_role_2', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -302,7 +302,7 @@ class RoleTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_role_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -326,7 +326,7 @@ class RoleTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**

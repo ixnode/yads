@@ -187,41 +187,6 @@ abstract class BaseApiTestCase extends ApiTestCase
     }
 
     /**
-     * Runs the actual test.
-     *
-     * @param ApiTestCaseWorker $testCase
-     * @param ExceptionHolder|null $exceptionHolder
-     * @throws ClientExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     * @throws YadsException
-     * @throws RaceConditionApiRequestException
-     * @throws UnknownRequestTypeException
-     */
-    public function executeTest(ApiTestCaseWorker $testCase, ?ExceptionHolder $exceptionHolder = null): void
-    {
-        /* Arrange */
-        if ($exceptionHolder !== null) {
-            $this->expectException($exceptionHolder->getClass());
-            $this->expectExceptionCode($exceptionHolder->getCode());
-            $this->expectExceptionMessage($exceptionHolder->getMessage());
-        }
-        $testCase->setApiClient(self::createClient());
-
-        /* Act */
-        $testCase->requestApi();
-
-        /* Assert */
-        $this->assertResponseIsSuccessful();
-        if ($testCase->getMimeType() !== null) {
-            $this->assertResponseHeaderSame(ApiTestCaseWorker::HEADER_NAME_CONTENT_TYPE, $testCase->getMimeType());
-        }
-        $this->assertEquals($testCase->getExpectedApiStatusCode(), $testCase->getApiStatusCode());
-        $this->assertEquals($testCase->getExpectedApiResponseArray(), $testCase->getApiResponseArray());
-    }
-
-    /**
      * Returns the API test caseworker.
      *
      * @param string $name
@@ -239,6 +204,6 @@ abstract class BaseApiTestCase extends ApiTestCase
             throw new MissingContextException(__METHOD__);
         }
 
-        return new ApiTestCaseWorker($name, $baseContext);
+        return new ApiTestCaseWorker($name, $baseContext, self::createClient());
     }
 }

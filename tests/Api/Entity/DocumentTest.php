@@ -87,7 +87,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -110,7 +110,7 @@ class DocumentTest extends BaseApiTestCase
             ->setNamespaces(['create_document_type_group']);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -135,7 +135,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -158,7 +158,7 @@ class DocumentTest extends BaseApiTestCase
             ->setNamespaces(['create_document_type_group', 'create_document_type_notebook']);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -179,7 +179,7 @@ class DocumentTest extends BaseApiTestCase
         $testCase = $this->getApiTestCaseWorker('list_documents_empty');
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -204,7 +204,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -227,7 +227,7 @@ class DocumentTest extends BaseApiTestCase
             ->setNamespaces(['create_document_group']);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -252,7 +252,7 @@ class DocumentTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -278,7 +278,7 @@ class DocumentTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -303,7 +303,7 @@ class DocumentTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -328,7 +328,7 @@ class DocumentTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -351,7 +351,7 @@ class DocumentTest extends BaseApiTestCase
             ->setNamespaces(['update_document_group', 'create_document_notebook',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -376,7 +376,7 @@ class DocumentTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_notebook', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -401,7 +401,7 @@ class DocumentTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -424,7 +424,7 @@ class DocumentTest extends BaseApiTestCase
             ->setNamespaces(['create_document_notebook']);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**

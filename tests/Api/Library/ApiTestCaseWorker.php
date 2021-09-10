@@ -26,10 +26,10 @@
 
 namespace App\Tests\Api\Library;
 
+use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
 use App\Exception\ClassNotInitializedWithNamespaceAndIndexException;
-use App\Exception\MissingArrayHolderException;
 use App\Exception\ContainerLoadException;
 use App\Exception\JsonDecodeException;
 use App\Exception\JsonEncodeException;
@@ -39,6 +39,7 @@ use App\Exception\RaceConditionApiRequestException;
 use App\Exception\UnknownRequestTypeException;
 use App\Exception\YadsException;
 use App\Utils\ArrayHolder;
+use App\Utils\ExceptionHolder;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -85,9 +86,11 @@ final class ApiTestCaseWorker
 
     protected string $name;
 
-    protected string $requestType;
-
     protected BaseContext $baseContext;
+
+    protected Client $client;
+
+    protected string $requestType;
 
     /** @var ?mixed[]  */
     protected ?array $body;
@@ -110,26 +113,26 @@ final class ApiTestCaseWorker
 
     protected ?string $charset = self::CHARSET_UTF8;
 
-    protected ?Client $apiClient = null;
-
     protected ?ResponseInterface $apiResponse = null;
 
     /**
      * ApiTestCaseWrapper constructor
      *
      * @param string $name
-     * @param string $requestType
      * @param BaseContext $baseContext
+     * @param Client $client
+     * @param string $requestType
      * @param ?mixed[] $body
      * @param ?mixed[] $expected
      * @param ?mixed[] $unset
      * @param mixed[] $namespaces
      * @param mixed[] $parameters
      */
-    public function __construct(string $name, BaseContext $baseContext, string $requestType = self::REQUEST_TYPE_LIST, ?array $body = null, ?array $expected = [], ?array $unset = [], array $namespaces = [], array $parameters = [])
+    public function __construct(string $name, BaseContext $baseContext, Client $client, string $requestType = self::REQUEST_TYPE_LIST, ?array $body = null, ?array $expected = [], ?array $unset = [], array $namespaces = [], array $parameters = [])
     {
         $this->name = $name;
         $this->baseContext = $baseContext;
+        $this->client = $client;
         $this->requestType = $requestType;
         $this->body = $body;
         $this->expected = $expected;
@@ -459,29 +462,6 @@ final class ApiTestCaseWorker
     }
 
     /**
-     * Returns the API client.
-     *
-     * @return ?Client
-     */
-    public function getApiClient(): ?Client
-    {
-        return $this->apiClient;
-    }
-
-    /**
-     * Sets the API client.
-     *
-     * @param Client $apiClient
-     * @return self
-     */
-    public function setApiClient(Client $apiClient): self
-    {
-        $this->apiClient = $apiClient;
-
-        return $this;
-    }
-
-    /**
      * Returns the array holder.
      *
      * @return ArrayHolder
@@ -500,6 +480,40 @@ final class ApiTestCaseWorker
     public static function setArrayHolder(ArrayHolder $arrayHolder): void
     {
         self::$arrayHolder = $arrayHolder;
+    }
+
+    /**
+     * Runs the actual test.
+     *
+     * @param ApiTestCase $testCase
+     * @param ?ExceptionHolder $exceptionHolder
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws RaceConditionApiRequestException
+     * @throws UnknownRequestTypeException
+     */
+    public function runTest(ApiTestCase $testCase, ?ExceptionHolder $exceptionHolder = null): void
+    {
+        /* Arrange */
+        if ($exceptionHolder !== null) {
+            $testCase->expectException($exceptionHolder->getClass());
+            $testCase->expectExceptionCode($exceptionHolder->getCode());
+            $testCase->expectExceptionMessage($exceptionHolder->getMessage());
+        }
+
+        /* Act */
+        $this->requestApi();
+
+        /* Assert */
+        $testCase->assertResponseIsSuccessful();
+        if ($this->getMimeType() !== null) {
+            $testCase->assertResponseHeaderSame(ApiTestCaseWorker::HEADER_NAME_CONTENT_TYPE, $this->getMimeType());
+        }
+        $testCase->assertEquals($this->getExpectedApiStatusCode(), $this->getApiStatusCode());
+        $testCase->assertEquals($this->getExpectedApiResponseArray(), $this->getApiResponseArray());
     }
 
     /**
@@ -614,19 +628,14 @@ final class ApiTestCaseWorker
      * Returns the endpoint of given parameters and path.
      *
      * @return string
-     * @throws MissingApiClientException
      * @throws ContainerLoadException
      * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function getEndpoint(): string
     {
-        if ($this->apiClient === null) {
-            throw new MissingApiClientException(__METHOD__);
-        }
-
         $path = $this->baseContext->getPathName();
 
-        $container = $this->apiClient->getContainer();
+        $container = $this->client->getContainer();
 
         if ($container === null) {
             throw new ContainerLoadException(__METHOD__);
@@ -750,11 +759,7 @@ final class ApiTestCaseWorker
      */
     public function requestApi(): ResponseInterface
     {
-        if ($this->apiClient === null) {
-            throw new MissingApiClientException(__METHOD__);
-        }
-
-        $this->apiResponse = $this->apiClient->request($this->getRequestMethod(), $this->getEndpoint(), $this->getOptions());
+        $this->apiResponse = $this->client->request($this->getRequestMethod(), $this->getEndpoint(), $this->getOptions());
 
         self::$arrayHolder->add($this->getName(), $this->getApiResponseArray());
 

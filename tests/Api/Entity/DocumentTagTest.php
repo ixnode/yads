@@ -94,7 +94,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -119,7 +119,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -144,7 +144,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -169,7 +169,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -194,7 +194,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -215,7 +215,7 @@ class DocumentTagTest extends BaseApiTestCase
         $testCase = $this->getApiTestCaseWorker('list_document_tags_empty');
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -241,7 +241,7 @@ class DocumentTagTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -265,7 +265,7 @@ class DocumentTagTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -290,7 +290,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -316,7 +316,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -341,7 +341,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -367,7 +367,7 @@ class DocumentTagTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -391,7 +391,7 @@ class DocumentTagTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -416,7 +416,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_tag_2', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -441,7 +441,7 @@ class DocumentTagTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_tag_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -465,7 +465,7 @@ class DocumentTagTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**

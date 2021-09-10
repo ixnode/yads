@@ -76,7 +76,7 @@ class DocumentTypeTest extends BaseApiTestCase
         $testCase = $this->getApiTestCaseWorker('list_document_types_empty');
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -102,7 +102,7 @@ class DocumentTypeTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -126,7 +126,7 @@ class DocumentTypeTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -151,7 +151,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -177,7 +177,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -202,7 +202,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -227,7 +227,7 @@ class DocumentTypeTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -251,7 +251,7 @@ class DocumentTypeTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -276,7 +276,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_type_2', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -301,7 +301,7 @@ class DocumentTypeTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_type_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -325,7 +325,7 @@ class DocumentTypeTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**

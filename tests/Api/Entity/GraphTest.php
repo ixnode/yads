@@ -102,7 +102,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -127,7 +127,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -152,7 +152,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -177,7 +177,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -202,7 +202,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -227,7 +227,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -252,7 +252,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -277,7 +277,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -302,7 +302,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -336,7 +336,7 @@ class GraphTest extends BaseApiTestCase
         ;
 
         /* Act & Assert: Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -370,7 +370,7 @@ class GraphTest extends BaseApiTestCase
         ;
 
         /* Act & Assert: Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -404,7 +404,7 @@ class GraphTest extends BaseApiTestCase
         ;
 
         /* Act & Assert: Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -425,7 +425,7 @@ class GraphTest extends BaseApiTestCase
         $testCase = $this->getApiTestCaseWorker('list_graphs_empty');
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -450,7 +450,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -473,7 +473,7 @@ class GraphTest extends BaseApiTestCase
             ->setNamespaces(['create_graph_1']);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -498,7 +498,7 @@ class GraphTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_graph_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -524,7 +524,7 @@ class GraphTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_graph_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -549,7 +549,7 @@ class GraphTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_graph_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -574,7 +574,7 @@ class GraphTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -597,7 +597,7 @@ class GraphTest extends BaseApiTestCase
             ->setNamespaces(['update_graph_1', 'create_graph_2',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -622,7 +622,7 @@ class GraphTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_graph_2', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -647,7 +647,7 @@ class GraphTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_graph_1', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -670,7 +670,7 @@ class GraphTest extends BaseApiTestCase
             ->setNamespaces(['create_graph_2']);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**

@@ -100,7 +100,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -126,7 +126,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -152,7 +152,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -178,7 +178,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -204,7 +204,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -230,7 +230,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -256,7 +256,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -282,7 +282,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -316,7 +316,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Act & Assert: Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -350,7 +350,7 @@ class FullTest extends BaseApiTestCase
         ;
 
         /* Act & Assert: Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -384,7 +384,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase, $exceptionHolder);
+        $testCase->runTest($this, $exceptionHolder);
     }
 
     /**
@@ -420,7 +420,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase, $exceptionHolder);
+        $testCase->runTest($this, $exceptionHolder);
     }
 
     /**
@@ -445,7 +445,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -470,7 +470,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -495,7 +495,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -520,7 +520,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -555,7 +555,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase, $exceptionHolder);
+        $testCase->runTest($this, $exceptionHolder);
     }
 
     /**
@@ -589,7 +589,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -623,7 +623,7 @@ class FullTest extends BaseApiTestCase
             ->setUnset(['createdAt', 'updatedAt',]);
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -651,7 +651,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -682,7 +682,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -710,7 +710,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -746,7 +746,7 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 
     /**
@@ -775,6 +775,6 @@ class FullTest extends BaseApiTestCase
             ->addParameter(new ArrayHolder('create_document_task', 'id'));
 
         /* Make the test */
-        $this->executeTest($testCase);
+        $testCase->runTest($this);
     }
 }
