@@ -41,6 +41,9 @@ class ArrayBuilder
     /** @var mixed[] $replace */
     protected array $replace;
 
+    /** @var mixed[] $keysToDelete */
+    protected array $keysToDelete;
+
     /**
      * ArrayBuilder constructor.
      *
@@ -51,6 +54,67 @@ class ArrayBuilder
     {
         $this->base = $base;
         $this->replace = $replace;
+        $this->keysToDelete = [];
+    }
+
+    /**
+     * Find keys to delete.
+     *
+     * @param mixed[] $replace
+     * @return void
+     */
+    protected function findKeysToDelete(array $replace): void
+    {
+        foreach ($replace as $key => $value) {
+            switch (gettype($value)) {
+                case 'array':
+                    // Todo
+                    break;
+
+                default:
+                    $matches = [];
+                    if (preg_match('~^-(.+)~', strval($key), $matches)) {
+                        $this->keysToDelete[$matches[1]] = $matches[0];
+                    }
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Delete keys.
+     *
+     * @param mixed[] $keysToDelete
+     * @return void
+     */
+    protected function deleteKeys(array $keysToDelete): void
+    {
+        foreach ($keysToDelete as $key => $keyDelete) {
+            switch (gettype($keyDelete)) {
+                case 'array':
+                    // Todo
+                    break;
+
+                default:
+                    if (array_key_exists($key, $this->base)) {
+                        unset($this->base[$key]);
+                    }
+                    if (array_key_exists($keyDelete, $this->replace)) {
+                        unset($this->replace[$keyDelete]);
+                    }
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Build array.
+     *
+     * @return mixed[]
+     */
+    protected function buildArray(): array
+    {
+        return array_replace_recursive($this->base, $this->replace);
     }
 
     /**
@@ -60,28 +124,12 @@ class ArrayBuilder
      */
     public function get(): array
     {
-        $removeKeys = [];
-
-        /* Search for -keys */
-        foreach ($this->replace as $key => $value) {
-            $matches = [];
-            if (preg_match('~^-(.+)~', strval($key), $matches)) {
-                $removeKeys[] = $matches[1];
-            }
-        }
+        // Find keys to delete
+        $this->findKeysToDelete($this->replace);
 
         /* Remove -keys from base and replace arrays. */
-        foreach ($removeKeys as $removeKey) {
-            $minusKey = sprintf('-%s', $removeKey);
+        $this->deleteKeys($this->keysToDelete);
 
-            if (array_key_exists($removeKey, $this->base)) {
-                unset($this->base[$removeKey]);
-            }
-            if (array_key_exists($minusKey, $this->replace)) {
-                unset($this->replace[$minusKey]);
-            }
-        }
-
-        return array_replace_recursive($this->base, $this->replace);
+        return $this->buildArray();
     }
 }

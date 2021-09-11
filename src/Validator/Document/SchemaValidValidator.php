@@ -150,7 +150,9 @@ class SchemaValidValidator extends ConstraintValidator
 
             $this->entityManager->refresh($documentPrevious);
 
-            $document->setData((new ArrayBuilder($documentPrevious->getData(), $documentNew->getData()))->get());
+            $arrayBuilder = new ArrayBuilder($documentPrevious->getData(), $documentNew->getData());
+
+            $document->setData($arrayBuilder->get());
         }
 
         $validationErrors = $this->doValidate($document);

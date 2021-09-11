@@ -96,6 +96,11 @@ final class ArrayBuilderTest extends TestCase
             [++$number, 'Remove build', ['title' => 'Title', 'description' => 'Description', ], [], ['title' => 'Title', 'description' => 'Description', ], ],
             [++$number, 'Remove build', ['title' => 'Title', 'description' => 'Description', ], ['title' => null], ['title' => null, 'description' => 'Description', ], ],
             [++$number, 'Remove build', ['title' => 'Title', 'description' => 'Description', ], ['-title' => null], ['description' => 'Description', ], ],
+
+            /**
+             * Remove complex builds
+             */
+            [++$number, 'Remove complex build', ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], [], ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], ],
         ];
     }
 }
