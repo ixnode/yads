@@ -24,23 +24,34 @@
  * SOFTWARE.
  */
 
-namespace App\Exception;
+namespace App\Repository;
 
-use Throwable;
+use App\Entity\Document;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-final class FileNotExistsException extends YadsException
+/**
+ * Class DocumentRepository
+ *
+ * @author Björn Hempel <bjoern@hempel.li>
+ * @version 1.0 (2021-09-07)
+ * @package App\Repository
+ * @extends ServiceEntityRepository<Document>
+ * @method ?Document find($id, $lockMode = null, $lockVersion = null)
+ * @method ?Document findOneBy(array $criteria, array $orderBy = null)
+ * @method Document[] findAll()
+ * @method Document[] findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Document[] findByName(string $name)
+ */
+class DocumentRepository extends ServiceEntityRepository
 {
-    const ERROR_MESSAGE = 'Unable to find file "%s".';
-
     /**
-     * FileNotExistsException constructor.
+     * DocumentRepository constructor.
      *
-     * @param string $message
-     * @param int $code
-     * @param ?Throwable $previous
+     * @param ManagerRegistry $registry
      */
-    public function __construct(string $message, int $code = 0, Throwable $previous = null)
+    public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct(sprintf(self::ERROR_MESSAGE, $message), $code, $previous);
+        parent::__construct($registry, Document::class);
     }
 }

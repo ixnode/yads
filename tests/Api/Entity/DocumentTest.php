@@ -28,7 +28,7 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
 use App\Exception\YadsException;
-use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\ApiTestCaseWorker;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -80,14 +80,14 @@ class DocumentTest extends BaseApiTestCase
     public function createNeededDocumentTypeGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type_group', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+        $testCase = $this->getApiTestCaseWorker('create_document_type_group', $this->documentTypeContext)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray())
             ->setExpected($this->documentTypeDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_type_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -105,12 +105,12 @@ class DocumentTest extends BaseApiTestCase
     public function getDocumentTypeEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_document_types_1', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWorker('list_document_types_1', $this->documentTypeContext)
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_type_group']);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -128,14 +128,14 @@ class DocumentTest extends BaseApiTestCase
     public function createNeededDocumentTypeNotebookEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_type_notebook', $this->documentTypeContext)
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+        $testCase = $this->getApiTestCaseWorker('create_document_type_notebook', $this->documentTypeContext)
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentTypeDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentTypeDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_type_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -153,12 +153,12 @@ class DocumentTest extends BaseApiTestCase
     public function getDocumentTypeEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_document_types_2', $this->documentTypeContext)
+        $testCase = $this->getApiTestCaseWorker('list_document_types_2', $this->documentTypeContext)
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_type_group', 'create_document_type_notebook']);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -176,10 +176,10 @@ class DocumentTest extends BaseApiTestCase
     public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_documents_empty');
+        $testCase = $this->getApiTestCaseWorker('list_documents_empty');
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -197,14 +197,14 @@ class DocumentTest extends BaseApiTestCase
     public function createGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_group')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+        $testCase = $this->getApiTestCaseWorker('create_document_group')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray())
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -222,12 +222,12 @@ class DocumentTest extends BaseApiTestCase
     public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_documents_1')
+        $testCase = $this->getApiTestCaseWorker('list_documents_1')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_group']);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -245,14 +245,14 @@ class DocumentTest extends BaseApiTestCase
     public function getGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_group')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+        $testCase = $this->getApiTestCaseWorker('get_document_group')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -270,15 +270,15 @@ class DocumentTest extends BaseApiTestCase
     public function updateGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('update_document_group')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_UPDATE)
+        $testCase = $this->getApiTestCaseWorker('update_document_group')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_UPDATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -296,14 +296,14 @@ class DocumentTest extends BaseApiTestCase
     public function getUpdatedGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_group_updated')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+        $testCase = $this->getApiTestCaseWorker('get_document_group_updated')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -321,14 +321,14 @@ class DocumentTest extends BaseApiTestCase
     public function createNotebookEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_document_notebook')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+        $testCase = $this->getApiTestCaseWorker('create_document_notebook')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->documentDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',]);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -346,12 +346,12 @@ class DocumentTest extends BaseApiTestCase
     public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_documents_2')
+        $testCase = $this->getApiTestCaseWorker('list_documents_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['update_document_group', 'create_document_notebook',]);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -369,14 +369,14 @@ class DocumentTest extends BaseApiTestCase
     public function getNotebookEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_document_notebook')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+        $testCase = $this->getApiTestCaseWorker('get_document_notebook')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->documentDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_document_notebook', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_notebook', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -394,14 +394,14 @@ class DocumentTest extends BaseApiTestCase
     public function deleteGroupEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('delete_document_group')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_DELETE)
+        $testCase = $this->getApiTestCaseWorker('delete_document_group')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_DELETE)
             ->setExpected($this->documentDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_document_group', 'id')])
             ->setUnset(['createdAt', 'updatedAt',])
             ->addParameter(new ArrayHolder('create_document_group', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -419,12 +419,12 @@ class DocumentTest extends BaseApiTestCase
     public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_documents_1_2')
+        $testCase = $this->getApiTestCaseWorker('list_documents_1_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt',]])
             ->setNamespaces(['create_document_notebook']);
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**

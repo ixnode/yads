@@ -28,9 +28,9 @@ namespace App\Exception;
 
 use Throwable;
 
-final class FileNotExistsException extends YadsException
+final class RequestNotExistsException extends YadsException
 {
-    const ERROR_MESSAGE = 'Unable to find file "%s".';
+    const ERROR_MESSAGE = 'Unable to get the request (%s).';
 
     /**
      * FileNotExistsException constructor.

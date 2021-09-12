@@ -26,10 +26,10 @@
 
 namespace App\Tests\Api\Library;
 
+use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Core\Bridge\Symfony\Bundle\Test\Client;
 use App\Context\BaseContext;
 use App\Exception\ClassNotInitializedWithNamespaceAndIndexException;
-use App\Exception\MissingArrayHolderException;
 use App\Exception\ContainerLoadException;
 use App\Exception\JsonDecodeException;
 use App\Exception\JsonEncodeException;
@@ -39,6 +39,8 @@ use App\Exception\RaceConditionApiRequestException;
 use App\Exception\UnknownRequestTypeException;
 use App\Exception\YadsException;
 use App\Utils\ArrayHolder;
+use App\Utils\ExceptionHolder;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -48,13 +50,13 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * Class ApiTestCaseWrapper
+ * Class ApiTestCaseWorker
  *
  * @author Björn Hempel <bjoern@hempel.li>
  * @version 1.0 (2021-08-10)
  * @package App\Tests\Api
  */
-final class ApiTestCaseWrapper
+final class ApiTestCaseWorker
 {
     const REQUEST_TYPE_LIST = 'list';
 
@@ -63,6 +65,8 @@ final class ApiTestCaseWrapper
     const REQUEST_TYPE_CREATE = 'create';
 
     const REQUEST_TYPE_UPDATE = 'update';
+
+    const REQUEST_TYPE_PATCH = 'patch';
 
     const REQUEST_TYPE_DELETE = 'delete';
 
@@ -76,15 +80,17 @@ final class ApiTestCaseWrapper
 
     const HEADER_NAME_CONTENT_TYPE = 'content-type';
 
-    const LINE_BREAK = "\n";
-
     const ID_NAME = 'id';
+
+    protected static ArrayHolder $arrayHolder;
 
     protected string $name;
 
-    protected string $requestType;
-
     protected BaseContext $baseContext;
+
+    protected Client $client;
+
+    protected string $requestType;
 
     /** @var ?mixed[]  */
     protected ?array $body;
@@ -107,28 +113,26 @@ final class ApiTestCaseWrapper
 
     protected ?string $charset = self::CHARSET_UTF8;
 
-    protected ?Client $apiClient = null;
-
-    protected ?ArrayHolder $arrayHolder = null;
-
     protected ?ResponseInterface $apiResponse = null;
 
     /**
      * ApiTestCaseWrapper constructor
      *
      * @param string $name
-     * @param string $requestType
      * @param BaseContext $baseContext
+     * @param Client $client
+     * @param string $requestType
      * @param ?mixed[] $body
      * @param ?mixed[] $expected
      * @param ?mixed[] $unset
      * @param mixed[] $namespaces
      * @param mixed[] $parameters
      */
-    public function __construct(string $name, BaseContext $baseContext, string $requestType = self::REQUEST_TYPE_LIST, ?array $body = null, ?array $expected = [], ?array $unset = [], array $namespaces = [], array $parameters = [])
+    public function __construct(string $name, BaseContext $baseContext, Client $client, string $requestType = self::REQUEST_TYPE_LIST, ?array $body = null, ?array $expected = [], ?array $unset = [], array $namespaces = [], array $parameters = [])
     {
         $this->name = $name;
         $this->baseContext = $baseContext;
+        $this->client = $client;
         $this->requestType = $requestType;
         $this->body = $body;
         $this->expected = $expected;
@@ -265,11 +269,19 @@ final class ApiTestCaseWrapper
     /**
      * Sets the expected array of this test case wrapper as array.
      *
-     * @param ?mixed[] $expected
      * @return self
      */
-    public function setExpected(?array $expected): self
+    public function setExpected(): self
     {
+        /** @var array[] $arguments */
+        $arguments = func_get_args();
+
+        $expected = array();
+
+        foreach ($arguments as $argument) {
+            $expected = array_merge_recursive($expected, $argument);
+        }
+
         $this->expected = $expected;
 
         return $this;
@@ -450,49 +462,58 @@ final class ApiTestCaseWrapper
     }
 
     /**
-     * Returns the API client.
-     *
-     * @return ?Client
-     */
-    public function getApiClient(): ?Client
-    {
-        return $this->apiClient;
-    }
-
-    /**
-     * Sets the API client.
-     *
-     * @param Client $apiClient
-     * @return self
-     */
-    public function setApiClient(Client $apiClient): self
-    {
-        $this->apiClient = $apiClient;
-
-        return $this;
-    }
-
-    /**
      * Returns the array holder.
      *
-     * @return ?ArrayHolder
+     * @return ArrayHolder
      */
-    public function getArrayHolder(): ?ArrayHolder
+    public static function getArrayHolder(): ArrayHolder
     {
-        return $this->arrayHolder;
+        return self::$arrayHolder;
     }
 
     /**
      * Sets the array holder.
      *
      * @param ArrayHolder $arrayHolder
-     * @return self
+     * @return void
      */
-    public function setArrayHolder(ArrayHolder $arrayHolder): self
+    public static function setArrayHolder(ArrayHolder $arrayHolder): void
     {
-        $this->arrayHolder = $arrayHolder;
+        self::$arrayHolder = $arrayHolder;
+    }
 
-        return $this;
+    /**
+     * Runs the actual test.
+     *
+     * @param ApiTestCase $testCase
+     * @param ?ExceptionHolder $exceptionHolder
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws YadsException
+     * @throws RaceConditionApiRequestException
+     * @throws UnknownRequestTypeException
+     */
+    public function runTest(ApiTestCase $testCase, ?ExceptionHolder $exceptionHolder = null): void
+    {
+        /* Arrange */
+        if ($exceptionHolder !== null) {
+            $testCase->expectException($exceptionHolder->getClass());
+            $testCase->expectExceptionCode($exceptionHolder->getCode());
+            $testCase->expectExceptionMessage($exceptionHolder->getMessage());
+        }
+
+        /* Act */
+        $this->requestApi();
+
+        /* Assert */
+        $testCase->assertResponseIsSuccessful();
+        if ($this->getMimeType() !== null) {
+            $testCase->assertResponseHeaderSame(ApiTestCaseWorker::HEADER_NAME_CONTENT_TYPE, $this->getMimeType());
+        }
+        $testCase->assertEquals($this->getExpectedApiStatusCode(), $this->getApiStatusCode());
+        $testCase->assertEquals($this->getExpectedApiResponseArray(), $this->getApiResponseArray());
     }
 
     /**
@@ -569,8 +590,6 @@ final class ApiTestCaseWrapper
         return $this;
     }
 
-
-
     /**
      * Returns the API status code.
      *
@@ -598,7 +617,7 @@ final class ApiTestCaseWrapper
         $requestType = $this->getRequestType();
 
         return match ($requestType) {
-            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ, self::REQUEST_TYPE_UPDATE => Response::HTTP_OK,
+            self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ, self::REQUEST_TYPE_UPDATE, self::REQUEST_TYPE_PATCH => Response::HTTP_OK,
             self::REQUEST_TYPE_CREATE => Response::HTTP_CREATED,
             self::REQUEST_TYPE_DELETE => Response::HTTP_NO_CONTENT,
             default => throw new UnknownRequestTypeException($requestType),
@@ -609,20 +628,14 @@ final class ApiTestCaseWrapper
      * Returns the endpoint of given parameters and path.
      *
      * @return string
-     * @throws MissingApiClientException
      * @throws ContainerLoadException
-     * @throws MissingArrayHolderException
      * @throws ClassNotInitializedWithNamespaceAndIndexException
      */
     public function getEndpoint(): string
     {
-        if ($this->apiClient === null) {
-            throw new MissingApiClientException(__METHOD__);
-        }
-
         $path = $this->baseContext->getPathName();
 
-        $container = $this->apiClient->getContainer();
+        $container = $this->client->getContainer();
 
         if ($container === null) {
             throw new ContainerLoadException(__METHOD__);
@@ -634,11 +647,7 @@ final class ApiTestCaseWrapper
 
         foreach ($parameters as &$parameter) {
             if ($parameter instanceof ArrayHolder) {
-                if ($this->arrayHolder === null) {
-                    throw new MissingArrayHolderException(__METHOD__);
-                }
-
-                $parameter = $parameter->conjure($this->arrayHolder);
+                $parameter = $parameter->conjure(self::$arrayHolder);
             }
         }
 
@@ -659,8 +668,23 @@ final class ApiTestCaseWrapper
             self::REQUEST_TYPE_LIST, self::REQUEST_TYPE_READ => Request::METHOD_GET,
             self::REQUEST_TYPE_CREATE => Request::METHOD_POST,
             self::REQUEST_TYPE_UPDATE => Request::METHOD_PUT,
+            self::REQUEST_TYPE_PATCH => Request::METHOD_PATCH,
             self::REQUEST_TYPE_DELETE => Request::METHOD_DELETE,
             default => throw new UnknownRequestTypeException($requestType),
+        };
+    }
+
+    /**
+     * Returns the content type according to request method.
+     *
+     * @return string
+     * @throws UnknownRequestTypeException
+     */
+    public function getContentTypeAccordingToRequestMethod(): string
+    {
+        return match ($this->getRequestMethod()) {
+            Request::METHOD_PATCH => self::MIME_TYPE_MERGE_JSON,
+            default => self::MIME_TYPE_LD_JSON,
         };
     }
 
@@ -668,12 +692,13 @@ final class ApiTestCaseWrapper
      * Returns the header for request.
      *
      * @return string[]
+     * @throws UnknownRequestTypeException
      */
     public function getHeaders(): array
     {
         return [
             'accept' => $this->accept,
-            'Content-Type' => $this->contentType,
+            'Content-Type' => $this->getContentTypeAccordingToRequestMethod(),
         ];
     }
 
@@ -682,6 +707,7 @@ final class ApiTestCaseWrapper
      *
      * @return string[][]
      * @throws JsonEncodeException
+     * @throws UnknownRequestTypeException
      */
     public function getOptions(): array
     {
@@ -692,7 +718,11 @@ final class ApiTestCaseWrapper
             'headers' => $this->getHeaders(),
         ];
 
-        if (in_array($requestType, [BaseApiTestCase::REQUEST_TYPE_CREATE, BaseApiTestCase::REQUEST_TYPE_UPDATE])) {
+        if (in_array($requestType, [
+            self::REQUEST_TYPE_CREATE,
+            self::REQUEST_TYPE_UPDATE,
+            self::REQUEST_TYPE_PATCH,
+        ])) {
             $options = array_merge_recursive($options, ['body' => $body]);
         }
 
@@ -729,13 +759,9 @@ final class ApiTestCaseWrapper
      */
     public function requestApi(): ResponseInterface
     {
-        if ($this->apiClient === null) {
-            throw new MissingApiClientException(__METHOD__);
-        }
+        $this->apiResponse = $this->client->request($this->getRequestMethod(), $this->getEndpoint(), $this->getOptions());
 
-        $this->apiResponse = $this->apiClient->request($this->getRequestMethod(), $this->getEndpoint(), $this->getOptions());
-
-        $this->arrayHolder?->add($this->getName(), $this->getApiResponseArray());
+        self::$arrayHolder->add($this->getName(), $this->getApiResponseArray());
 
         return $this->apiResponse;
     }
@@ -749,15 +775,12 @@ final class ApiTestCaseWrapper
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      * @throws ServerExceptionInterface
+     * @throws Exception
      */
     public function getExpectedApiResponseArray(): ?array
     {
         if ($this->apiResponse === null) {
             throw new RaceConditionApiRequestException(__METHOD__);
-        }
-
-        if ($this->arrayHolder === null) {
-            throw new MissingArrayHolderException(__METHOD__);
         }
 
         $responseArray = $this->getApiResponseArray();
@@ -770,7 +793,7 @@ final class ApiTestCaseWrapper
                 foreach ($this->namespaces as $namespace) {
                     /* Remove key '@context' from arrayHolder */
                     $member[] = array_filter(
-                        $this->arrayHolder->get($namespace),
+                        self::$arrayHolder->get($namespace),
                         function (string $key) { return $key !== '@context'; },
                         ARRAY_FILTER_USE_KEY
                     );
@@ -781,6 +804,7 @@ final class ApiTestCaseWrapper
             /* Returns full context for type create */
             case self::REQUEST_TYPE_CREATE:
             case self::REQUEST_TYPE_UPDATE:
+            case self::REQUEST_TYPE_PATCH:
             case self::REQUEST_TYPE_READ:
                 if (!array_key_exists(self::ID_NAME, $responseArray)) {
                     throw new MissingKeyException(self::ID_NAME, __METHOD__);
@@ -792,7 +816,7 @@ final class ApiTestCaseWrapper
                 /* Translate ArrayHolder */
                 foreach($expected as &$item) {
                     if ($item instanceof ArrayHolder) {
-                        $item = $item->conjure($this->arrayHolder);
+                        $item = $item->conjure(self::$arrayHolder);
                     }
                 }
 

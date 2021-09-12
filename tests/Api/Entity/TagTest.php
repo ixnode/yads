@@ -28,7 +28,7 @@ namespace App\Tests\Api\Entity;
 
 use App\Context\BaseContext;
 use App\Exception\YadsException;
-use App\Tests\Api\Library\ApiTestCaseWrapper;
+use App\Tests\Api\Library\ApiTestCaseWorker;
 use App\Tests\Api\Library\BaseApiTestCase;
 use App\Utils\ArrayHolder;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -73,10 +73,10 @@ class TagTest extends BaseApiTestCase
     public function getEntitiesExpectEmptyList(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_tags_empty');
+        $testCase = $this->getApiTestCaseWorker('list_tags_empty');
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -94,15 +94,15 @@ class TagTest extends BaseApiTestCase
     public function createFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+        $testCase = $this->getApiTestCaseWorker('create_tag_1')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->tagDataProvider->getEntityArray())
             ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -120,13 +120,13 @@ class TagTest extends BaseApiTestCase
     public function getEntitiesExpectOneHit(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_tags_1')
+        $testCase = $this->getApiTestCaseWorker('list_tags_1')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
             ->setNamespaces(['create_tag_1'])
         ;
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -144,14 +144,14 @@ class TagTest extends BaseApiTestCase
     public function getFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+        $testCase = $this->getApiTestCaseWorker('get_tag_1')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -169,15 +169,15 @@ class TagTest extends BaseApiTestCase
     public function updateFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('update_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_UPDATE)
+        $testCase = $this->getApiTestCaseWorker('update_tag_1')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_UPDATE)
             ->setBody($this->tagDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -195,14 +195,14 @@ class TagTest extends BaseApiTestCase
     public function getUpdatedFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_tag_1_updated')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+        $testCase = $this->getApiTestCaseWorker('get_tag_1_updated')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -220,15 +220,15 @@ class TagTest extends BaseApiTestCase
     public function createSecondEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('create_tag_2')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_CREATE)
+        $testCase = $this->getApiTestCaseWorker('create_tag_2')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_CREATE)
             ->setBody($this->tagDataProvider->getEntityArray(recordNumber: 1))
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
         ;
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -246,13 +246,13 @@ class TagTest extends BaseApiTestCase
     public function getEntitiesExpectTwoHits(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_tags_2')
+        $testCase = $this->getApiTestCaseWorker('list_tags_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
             ->setNamespaces(['update_tag_1', 'create_tag_2', ])
         ;
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -270,14 +270,14 @@ class TagTest extends BaseApiTestCase
     public function getSecondEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('get_tag_2')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_READ)
+        $testCase = $this->getApiTestCaseWorker('get_tag_2')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_READ)
             ->setExpected($this->tagDataProvider->getEntityArray(recordNumber: 1) + ['id' => new ArrayHolder('create_tag_2', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_2', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -295,14 +295,14 @@ class TagTest extends BaseApiTestCase
     public function deleteFirstEntity(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('delete_tag_1')
-            ->setRequestType(ApiTestCaseWrapper::REQUEST_TYPE_DELETE)
+        $testCase = $this->getApiTestCaseWorker('delete_tag_1')
+            ->setRequestType(ApiTestCaseWorker::REQUEST_TYPE_DELETE)
             ->setExpected($this->tagDataProvider->getEntityArray() + ['id' => new ArrayHolder('create_tag_1', 'id')])
             ->setUnset(['createdAt', 'updatedAt', ])
             ->addParameter(new ArrayHolder('create_tag_1', 'id'));
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**
@@ -320,13 +320,13 @@ class TagTest extends BaseApiTestCase
     public function getEntitiesExpectOneHit2(): void
     {
         /* Build API test case wrapper */
-        $testCase = $this->getApiTestCaseWrapper('list_tags_1_2')
+        $testCase = $this->getApiTestCaseWorker('list_tags_1_2')
             ->setUnset(['hydra:member' => ['createdAt', 'updatedAt', ]])
             ->setNamespaces(['create_tag_2'])
         ;
 
-        /* Make the test */
-        $this->makeTest($testCase);
+        /* Run the test */
+        $testCase->runTest($this);
     }
 
     /**

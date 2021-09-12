@@ -24,48 +24,23 @@
  * SOFTWARE.
  */
 
-namespace App\Validator;
+namespace App\Exception;
 
-use App\Entity\Document;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
-use JsonSchema\Validator;
+use Throwable;
 
-/**
- * Class DocumentValidator
- *
- * @author Björn Hempel <bjoern@hempel.li>
- * @version 1.0 (2021-08-04)
- * @package App\Validator
- */
-class DocumentValidator
+final class IndexNotExistsException extends YadsException
 {
+    const ERROR_MESSAGE = 'Unable to find index "%s".';
+
     /**
-     * Function to validate given Document object.
+     * FileNotExistsException constructor.
      *
-     * @param Document $object
-     * @param ExecutionContextInterface $context
-     * @return void
+     * @param string $message
+     * @param int $code
+     * @param ?Throwable $previous
      */
-    public static function validate(Document $object, ExecutionContextInterface $context): void
+    public function __construct(string $message, int $code = 0, Throwable $previous = null)
     {
-        /* Get data */
-        $data = (object)$object->getData();
-
-        /* Get schema */
-        $schema = (object)$object->getDocumentType()->getAllowedAttributes();
-
-        /* do the schema validation */
-        $validator = new Validator();
-        $validator->validate($data, $schema);
-
-        if (!$validator->isValid()) {
-
-            foreach ($validator->getErrors() as $error) {
-                $context->buildViolation($error['message'])
-                    ->atPath('data')
-                    ->setCode('422')
-                    ->addViolation();
-            }
-        }
+        parent::__construct(sprintf(self::ERROR_MESSAGE, $message), $code, $previous);
     }
 }

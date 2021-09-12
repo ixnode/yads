@@ -79,11 +79,22 @@ class DocumentDataProvider extends BaseDataProvider
             [
                 'documentType' => '/api/v1/document_types/4',
                 'data' => [
-                    'title' => 'test 4',
-                    'description' => 'test 4',
-                    'has_date_of_completion' => false,
+                    'title' => 'Submit income tax return',
+                    'description' => 'The income tax return must be completed.',
+                    'completionDate' => '2021-09-30',
+                    'completionTime' => '10:00:00',
                 ],
             ],
+//            [
+//                'documentType' => '/api/v1/document_types/4',
+//                'data' => [
+//                    'title' => 'Submit income tax return',
+//                    'description' => 'The income tax return must be completed.',
+//                    'completionDate' => '2021-09-30',
+//                    'completionTime' => '10:00:00',
+//                    'completedOn' => '2021-09-06T23:05:00',
+//                ],
+//            ],
         ];
 
         return array_key_exists($recordNumber, $data) ? $data[$recordNumber] : $data[0];

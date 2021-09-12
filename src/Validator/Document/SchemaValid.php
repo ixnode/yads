@@ -24,23 +24,39 @@
  * SOFTWARE.
  */
 
-namespace App\Exception;
+namespace App\Validator\Document;
 
-use Throwable;
+use Symfony\Component\Validator\Constraint;
 
-final class FileNotExistsException extends YadsException
+/**
+ * Class SchemaValid
+ *
+ * @Annotation
+ * @package App\Validator\Constraint
+ */
+#[\Attribute()]
+class SchemaValid extends Constraint
 {
-    const ERROR_MESSAGE = 'Unable to find file "%s".';
+    public string $messageSchemaInvalid = 'constraints.document.schemaInvalid';
+    public string $messageNotExists = 'constraints.document.notExists';
 
     /**
-     * FileNotExistsException constructor.
+     * Returns the ConstraintValidator class.
      *
-     * @param string $message
-     * @param int $code
-     * @param ?Throwable $previous
+     * @return string
      */
-    public function __construct(string $message, int $code = 0, Throwable $previous = null)
+    public function validatedBy(): string
     {
-        parent::__construct(sprintf(self::ERROR_MESSAGE, $message), $code, $previous);
+        return sprintf('%s%s', static::class, 'Validator');
+    }
+
+    /**
+     * getTargets method to be able to use this constraint on a class.
+     *
+     * @return string
+     */
+    public function getTargets(): string
+    {
+        return self::CLASS_CONSTRAINT;
     }
 }
