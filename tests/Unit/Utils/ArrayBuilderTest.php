@@ -27,7 +27,6 @@
 namespace App\Tests\Unit\Utils;
 
 use App\Utils\ArrayBuilder;
-use App\Utils\NamingConventionsConverter;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -101,6 +100,10 @@ final class ArrayBuilderTest extends TestCase
              * Remove complex builds
              */
             [++$number, 'Remove complex build', ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], [], ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], ],
+            [++$number, 'Remove complex build', ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], ['-titles' => null, ], ['description' => 'Description', ], ],
+            [++$number, 'Remove complex build', ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], ['titles' => ['-title2' => null, ]], ['titles' => ['title1' => 'Title 1', ], 'description' => 'Description', ], ],
+            [++$number, 'Remove complex build', ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], ['titles' => ['-title2' => null, ], '-description' => null], ['titles' => ['title1' => 'Title 1', ], ], ],
+            [++$number, 'Remove complex build', ['titles' => ['title1' => 'Title 1', 'title2' => 'Title 2', ], 'description' => 'Description', ], ['titles' => ['-title2' => null, 'title1' => '999', ], 'description' => 'Value 1', 'new' => '123', ], ['titles' => ['title1' => '999', ], 'description' => 'Value 1', 'new' => '123', ], ],
         ];
     }
 }

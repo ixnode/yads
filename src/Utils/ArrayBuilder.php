@@ -61,20 +61,22 @@ class ArrayBuilder
      * Find keys to delete.
      *
      * @param mixed[] $replace
+     * @param mixed[] $keysToDelete
      * @return void
      */
-    protected function findKeysToDelete(array $replace): void
+    protected function findKeysToDelete(array $replace, array &$keysToDelete): void
     {
         foreach ($replace as $key => $value) {
             switch (gettype($value)) {
                 case 'array':
-                    // Todo
+                    $keysToDelete[$key] = [];
+                    $this->findKeysToDelete($value, $keysToDelete[$key]);
                     break;
 
                 default:
                     $matches = [];
                     if (preg_match('~^-(.+)~', strval($key), $matches)) {
-                        $this->keysToDelete[$matches[1]] = $matches[0];
+                        $keysToDelete[$matches[1]] = $matches[0];
                     }
                     break;
             }
@@ -84,23 +86,25 @@ class ArrayBuilder
     /**
      * Delete keys.
      *
+     * @param mixed[] $replace
+     * @param mixed[] $base
      * @param mixed[] $keysToDelete
      * @return void
      */
-    protected function deleteKeys(array $keysToDelete): void
+    protected function deleteKeys(array &$base, array &$replace, array $keysToDelete): void
     {
-        foreach ($keysToDelete as $key => $keyDelete) {
-            switch (gettype($keyDelete)) {
+        foreach ($keysToDelete as $key => $value) {
+            switch (gettype($value)) {
                 case 'array':
-                    // Todo
+                    $this->deleteKeys($base[$key], $replace[$key], $value);
                     break;
 
                 default:
-                    if (array_key_exists($key, $this->base)) {
-                        unset($this->base[$key]);
+                    if (array_key_exists($key, $base)) {
+                        unset($base[$key]);
                     }
-                    if (array_key_exists($keyDelete, $this->replace)) {
-                        unset($this->replace[$keyDelete]);
+                    if (array_key_exists($value, $replace)) {
+                        unset($replace[$value]);
                     }
                     break;
             }
@@ -125,10 +129,10 @@ class ArrayBuilder
     public function get(): array
     {
         // Find keys to delete
-        $this->findKeysToDelete($this->replace);
+        $this->findKeysToDelete($this->replace, $this->keysToDelete);
 
         /* Remove -keys from base and replace arrays. */
-        $this->deleteKeys($this->keysToDelete);
+        $this->deleteKeys($this->base, $this->replace, $this->keysToDelete);
 
         return $this->buildArray();
     }
